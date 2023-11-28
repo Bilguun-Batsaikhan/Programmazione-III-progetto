@@ -31,6 +31,39 @@ public class Controller_List implements Initializable {
         newStage.show();
     }
 
+
+    @FXML
+    private void Inoltra() throws IOException {
+        Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Forward.fxml")));
+        Scene newScene = new Scene(newSceneRoot, 450 , 100);
+        // Imposta la nuova scena in una nuova finestra (Stage)
+        Stage newStage = new Stage();
+        newStage.setScene(newScene);
+        newStage.setTitle("Inoltra");
+        newStage.show();
+    }
+
+    @FXML
+    private void Reply() throws IOException {
+        Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/NewScene.fxml")));
+        Scene newScene = new Scene(newSceneRoot, 450 , 500);
+        // Imposta la nuova scena in una nuova finestra (Stage)
+        Stage newStage = new Stage();
+        newStage.setScene(newScene);
+        newStage.setTitle("Reply");
+        newStage.show();
+    }
+
+    @FXML
+    private void ReplyAll() throws IOException {
+        Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/NewScene.fxml")));
+        Scene newScene = new Scene(newSceneRoot, 450 , 500);
+        // Imposta la nuova scena in una nuova finestra (Stage)
+        Stage newStage = new Stage();
+        newStage.setScene(newScene);
+        newStage.setTitle("Reply All");
+        newStage.show();
+    }
     //Email.class
     String[] emailStrings = {"a", "b", "c", "d"};
     String[] contentsEmail = {"casa", "macchina", "albero", "cane", "gatto", "uccello", "fiore", "mare", "montagna"};
