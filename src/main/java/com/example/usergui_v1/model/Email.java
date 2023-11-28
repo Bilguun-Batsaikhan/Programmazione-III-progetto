@@ -3,10 +3,10 @@ package com.example.usergui_v1.model;
 import java.util.List;
 
 public class Email {
-    private String sender;
-    private List<String> recipients;
-    private String subject;
-    private String body;
+    private final String sender;
+    private final List<String> recipients;
+    private final String subject;
+    private final String body;
 
     // Constructor
     public Email(String sender, List<String> recipients, String subject, String body) {

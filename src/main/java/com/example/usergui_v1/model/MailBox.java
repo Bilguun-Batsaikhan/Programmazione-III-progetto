@@ -1,10 +1,9 @@
 package com.example.usergui_v1.model;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 
 public class MailBox {
-    private String mailBoxOwner;
+    private final String mailBoxOwner;
     ArrayList<Email> rEmails;
     ArrayList<Email> sEmails;
 
@@ -14,8 +13,8 @@ public class MailBox {
         this.mailBoxOwner = me;
     }
     public MailBox() {
-        this.rEmails = new ArrayList<Email>();
-        this.sEmails = new ArrayList<Email>();
+        this.rEmails = new ArrayList<>();
+        this.sEmails = new ArrayList<>();
         mailBoxOwner = "defualt@edu.unito.com";
         rEmails.add(new Email(mailBoxOwner, null, "first email", ""));
         rEmails.add(new Email(mailBoxOwner, null, "second email", ""));
