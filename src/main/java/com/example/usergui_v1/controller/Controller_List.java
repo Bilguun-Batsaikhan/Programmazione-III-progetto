@@ -1,5 +1,7 @@
 package com.example.usergui_v1.controller;
 
+import com.example.usergui_v1.model.Email;
+import com.example.usergui_v1.model.MailBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +13,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -18,7 +22,10 @@ public class Controller_List implements Initializable {
     @FXML
     private Label test;
     @FXML
-    private ListView<String> emailList;
+    private ListView<String> emailRlist;
+    @FXML
+    private ListView<String> emailSlist;
+    private MailBox mailBox = new MailBox();
 
     @FXML
     private void WriteEmail() throws IOException {
@@ -31,20 +38,19 @@ public class Controller_List implements Initializable {
         newStage.show();
     }
 
-    //Email.class
-    String[] emailStrings = {"a", "b", "c", "d"};
-    String[] contentsEmail = {"casa", "macchina", "albero", "cane", "gatto", "uccello", "fiore", "mare", "montagna"};
-//    @FXML
-//    protected void onHelloButtonClick() {
-//
-//    }
-    String currentEmail;
+    String currentSemail;
+    String currentRemail;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        emailList.getItems().addAll(emailStrings);
-        emailList.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
-            currentEmail = emailList.getSelectionModel().getSelectedItem();
-            test.setText(currentEmail);
+        emailRlist.getItems().addAll(mailBox.getrSubjectsEmail());
+        emailRlist.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            currentRemail = emailRlist.getSelectionModel().getSelectedItem();
+            test.setText(currentRemail);
+        });
+        emailSlist.getItems().addAll(mailBox.getrSubjectsEmail());
+        emailSlist.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            currentSemail = emailSlist.getSelectionModel().getSelectedItem();
+            test.setText(currentSemail);
         });
     }
 }
