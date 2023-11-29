@@ -13,13 +13,13 @@ import java.util.List;
 
 public class ControllerReply {
     @FXML
-    TextField Destinatario;
+    TextField Recipients;
 
     @FXML
-    private TextField Oggetto;
+    private TextField Subject;
 
     @FXML
-    private TextArea Testo;
+    private TextArea Body;
 
     @FXML
     private Label SuccessSend;
@@ -37,27 +37,16 @@ public class ControllerReply {
     }
 
     public void setRecipientstoReply(){
-        Destinatario.setText(selectedItem.getSender());
+        Recipients.setText(selectedItem.getSender());
     }
 
 
     @FXML
-    private void Invia(){
+    private void Send(){
         ArrayList<String> recipient = new ArrayList<>();
         recipient.add(selectedItem.getSender());
-        Email email = new Email(sender,recipient, Oggetto.getText(), Testo.getText(), LocalDateTime.now(), "134223");
+        Email email = new Email(sender,recipient, Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
         model.send(email);
         SuccessSend.setText("Mail sent correctly!");
-    }
-
-    private List<String> getDestinatari() {
-        String[] destinatari = Destinatario.getText().split(" ");
-        List<String> recipients = new ArrayList<>();
-        for (String s : destinatari) {
-            if (!s.isEmpty()) {
-                recipients.add(s);
-            }
-        }
-        return recipients;
     }
 }

@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 public class ControllerReplyAll {
     @FXML
-    private TextField Destinatario;
+    private TextField Recipients;
     @FXML
-    private TextField Oggetto;
+    private TextField Subject;
     @FXML
-    private TextArea Testo;
+    private TextArea Body;
     @FXML
     private Label SuccessSend;
 
@@ -31,12 +31,12 @@ public class ControllerReplyAll {
 
     public void setRecipientstoReply(){
         //DA RIMUOVERE QUELLO CHE MANDA LA RISPOSTA
-        Destinatario.setText(selectedItem.getRecipientsString() + "  " + selectedItem.getSender());
+        Recipients.setText(selectedItem.getRecipientsString() + "  " + selectedItem.getSender());
     }
 
     @FXML
-    private void Invia(){
-        Email email = new Email(sender,selectedItem.getRecipients(), Oggetto.getText(), Testo.getText(), LocalDateTime.now(), "134223");
+    private void Send(){
+        Email email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
         model.send(email);
         SuccessSend.setText("Mail sent correctly!");
     }

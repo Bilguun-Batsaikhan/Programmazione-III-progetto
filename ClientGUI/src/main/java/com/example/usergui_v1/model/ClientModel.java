@@ -31,7 +31,6 @@ public class ClientModel {
         sEmails.setAll(FXCollections.observableArrayList(mailBox.getsEmails()));
     }
 
-    // Metodi get e set che operano sulle property di JavaFX
     public StringProperty mailBoxOwnerProperty() {
         return mailBoxOwner;
     }

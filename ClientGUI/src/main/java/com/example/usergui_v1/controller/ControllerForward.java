@@ -15,7 +15,7 @@ public class ControllerForward {
     ClientModel model;
 
     @FXML
-    private TextField Destinatario;
+    private TextField Recipients;
 
     public void initialize(Email selectedItem, String sender, ClientModel model) {
         this.selectedItem = selectedItem;
@@ -25,15 +25,15 @@ public class ControllerForward {
 
     @FXML
     private void Invia(){
-        Email email = new Email(sender,getDestinatari(), selectedItem.getSubject(), selectedItem.getBody(), LocalDateTime.now(), "134223");
+        Email email = new Email(sender,getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), LocalDateTime.now(), "134223");
         model.send(email);
         //TODO JOptionPane per scrivere il pop up che ci sono stati dei problemi
     }
 
-    private List<String> getDestinatari() {
-        String[] destinatari = Destinatario.getText().split(" ");
+    private List<String> getRecipients() {
+        String[] recipients_array = Recipients.getText().split(" ");
         List<String> recipients = new ArrayList<>();
-        for (String s : destinatari) {
+        for (String s : recipients_array) {
             if (!s.isEmpty()) {
                 recipients.add(s);
             }
