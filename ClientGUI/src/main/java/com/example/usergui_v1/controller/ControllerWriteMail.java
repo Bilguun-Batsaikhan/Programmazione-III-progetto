@@ -1,5 +1,6 @@
 package com.example.usergui_v1.controller;
 
+import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -23,11 +24,20 @@ public class ControllerWriteMail {
     @FXML
     private Label SuccessSend;
 
+    String sender;
+    ClientModel model;
+
+    public void initialize(String sender, ClientModel model) {
+        this.sender = sender;
+        this.model = model;
+
+    }
     @FXML
     private void SendEmail(){
-        Email email = new Email("test",getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "123456");
-        System.out.println(email);
-        //JOptionPane per scrivere il pop up che ci sono stati dei problemi
+
+        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "134223");
+        model.send(email);
+      
         SuccessSend.setText("Mail sent correctly!");
     }
 
