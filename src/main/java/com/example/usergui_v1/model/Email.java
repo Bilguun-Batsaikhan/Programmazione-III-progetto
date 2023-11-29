@@ -1,7 +1,7 @@
 package com.example.usergui_v1.model;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Email {
@@ -28,8 +28,15 @@ public class Email {
         return sender;
     }
 
-    public List<String> getRecipients() {
+    public List<String> getRecipients(){
         return recipients;
+    }
+    public String getRecipientsString() {
+        StringBuilder recipientsString = new StringBuilder();
+        for (String recipient : recipients) {
+            recipientsString.append(recipient).append("   ");
+        }
+        return recipientsString.toString();
     }
 
     public String getSubject() {
@@ -40,8 +47,9 @@ public class Email {
         return body;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public String getTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return time.format(formatter);
     }
 
     public String getID() {
