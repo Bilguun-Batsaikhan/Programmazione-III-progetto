@@ -4,30 +4,38 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.Controller_List">
    <Button layoutX="67.0" layoutY="51.0" mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" text="Write new email" />
    <Label fx:id="User" layoutX="18.0" layoutY="21.0" text="Client 1 : nome.cognome@mail.com">
+
       <font>
          <Font name="System Bold" size="13.0" />
       </font>
    </Label>
+
    <Label fx:id="Oggetto" layoutX="267.0" layoutY="13.0" prefHeight="25.0" prefWidth="440.0" text="Title">
       <font>
          <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="270.0" layoutY="38.0" prefHeight="17.0" prefWidth="76.0" text="Sender" />
-   <Label fx:id="Testo" layoutX="270.0" layoutY="102.0" prefHeight="263.0" prefWidth="456.0" text="Text area" />
-   <Label layoutX="270.0" layoutY="55.0" prefHeight="17.0" prefWidth="76.0" text="Recipients" />
-   <Label layoutX="270.0" layoutY="71.0" prefHeight="17.0" prefWidth="65.0" text="Data:" />
-   <Button layoutX="275.0" layoutY="404.0" mnemonicParsing="false" onAction="#Remove" prefHeight="25.0" prefWidth="76.0" text="Delete" />
-   <Button layoutX="389.0" layoutY="404.0" mnemonicParsing="false" onAction="#Inoltra" prefHeight="25.0" prefWidth="76.0" text="Forward" />
-   <Button layoutX="513.0" layoutY="404.0" mnemonicParsing="false" onAction="#Reply" prefHeight="25.0" prefWidth="76.0" text="Reply" />
-   <Button layoutX="640.0" layoutY="404.0" mnemonicParsing="false" onAction="#ReplyAll" prefHeight="25.0" prefWidth="76.0" text="Reply all" />
-   <Label fx:id="Destinatari" layoutX="346.0" layoutY="55.0" prefHeight="17.0" prefWidth="347.0" />
-   <Label fx:id="Mittente" layoutX="346.0" layoutY="38.0" prefHeight="17.0" prefWidth="347.0" />
-   <Label fx:id="Data" layoutX="347.0" layoutY="71.0" prefHeight="17.0" prefWidth="347.0" />
-   <Separator layoutX="255.0" layoutY="-5.0" orientation="VERTICAL" prefHeight="101.0" prefWidth="0.0" />
+
+   <Label layoutX="270.0" layoutY="38.0" prefHeight="17.0" prefWidth="76.0" text="Sender:"/>
+   <Label layoutX="270.0" layoutY="102.0" prefHeight="263.0" prefWidth="456.0" text="Text area"/>
+   <Label layoutX="270.0" layoutY="55.0" prefHeight="17.0" prefWidth="76.0" text="Recipients:"/>
+   <Label layoutX="270.0" layoutY="71.0" prefHeight="17.0" prefWidth="65.0" text="Data:"/>
+   <Button layoutX="275.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Delete"/>
+   <Button layoutX="389.0" layoutY="404.0" mnemonicParsing="false" onAction="#Inoltra" prefHeight="25.0"
+           prefWidth="76.0" text="Forward"/>
+   <Button layoutX="513.0" layoutY="404.0" mnemonicParsing="false" onAction="#Reply" prefHeight="25.0" prefWidth="76.0"
+           text="Reply"/>
+   <Button layoutX="640.0" layoutY="404.0" mnemonicParsing="false" onAction="#ReplyAll" prefHeight="25.0"
+           prefWidth="76.0" text="Reply all"/>
+   <Label layoutX="339.0" layoutY="85.0" prefHeight="17.0" prefWidth="347.0"/>
+   <Label layoutX="339.0" layoutY="102.0" prefHeight="17.0" prefWidth="347.0"/>
+   <Label layoutX="339.0" layoutY="118.0" prefHeight="17.0" prefWidth="347.0"/>
+   <Separator layoutX="255.0" layoutY="-5.0" orientation="VERTICAL" prefHeight="101.0" prefWidth="0.0"/>
+
    <TitledPane animated="false" layoutY="94.0" prefHeight="170.0" prefWidth="258.0" text="Ricevute">
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="144.0" prefWidth="213.0">
          <ListView fx:id="emailRlist" layoutX="-1.0" layoutY="-1.0" prefHeight="145.0" prefWidth="258.0" />

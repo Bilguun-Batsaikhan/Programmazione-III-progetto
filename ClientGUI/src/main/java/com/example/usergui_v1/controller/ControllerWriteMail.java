@@ -34,8 +34,10 @@ public class ControllerWriteMail {
     }
     @FXML
     private void SendEmail(){
+
         Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "134223");
         model.send(email);
+      
         SuccessSend.setText("Mail sent correctly!");
     }
 

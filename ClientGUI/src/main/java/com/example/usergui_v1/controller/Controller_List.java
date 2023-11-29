@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -46,6 +47,7 @@ public class Controller_List implements Initializable {
     private StringProperty emailAddress = new SimpleStringProperty();
 
     @FXML
+
     private void Remove() throws IOException{
         model.remove(currentEmail);
     }
@@ -113,8 +115,6 @@ public class Controller_List implements Initializable {
         newStage.setTitle("Reply All");
         newStage.show();
     }
-
-    //TODO GESTIONE RIDIMENSIONE FINESTRA
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
