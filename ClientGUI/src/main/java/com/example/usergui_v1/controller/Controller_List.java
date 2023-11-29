@@ -16,7 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
+import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -51,16 +51,21 @@ public class Controller_List implements Initializable {
     }
     @FXML
     private void WriteEmail() throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/WriteEmail.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerWriteMail controller = loader.getController();
-        controller.initialize(emailAddress.get(),model);
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/WriteEmail.fxml")));
+            Parent newSceneRoot = loader.load();
+            ControllerWriteMail controller = loader.getController();
+            controller.initialize(emailAddress.get(),model);
 
-        Scene newScene = new Scene(newSceneRoot, 450 , 500);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-        newStage.setTitle("Nuova Mail");
-        newStage.show();
+            Scene newScene = new Scene(newSceneRoot, 450 , 500);
+            Stage newStage = new Stage();
+            newStage.setScene(newScene);
+            newStage.setTitle("Nuova Mail");
+            newStage.show();
+
+        } catch (NullPointerException e) {
+            System.out.println("The file doesn't exists" + e);
+        }
     }
 
     @FXML
@@ -73,7 +78,7 @@ public class Controller_List implements Initializable {
         Scene newScene = new Scene(newSceneRoot, 450 , 150);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-        newStage.setTitle("Inoltra");
+        newStage.setTitle("Forward");
         newStage.show();
     }
 
