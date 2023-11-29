@@ -1,5 +1,6 @@
 package com.example.usergui_v1.controller;
 
+import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -19,9 +20,13 @@ public class ControllerReplyAll {
     private Label SuccessSend;
 
     Email selectedItem;
+    String sender;
+    ClientModel model;
 
-    public void setEmailtoReply(Email selectedItem) {
+    public void initialize(Email selectedItem, String sender, ClientModel model) {
         this.selectedItem = selectedItem;
+        this.sender=sender;
+        this.model = model;
     }
 
     public void setRecipientstoReply(){
@@ -31,9 +36,8 @@ public class ControllerReplyAll {
 
     @FXML
     private void Invia(){
-        Email email = new Email("test",selectedItem.getRecipients(), Oggetto.getText(), Testo.getText(), LocalDateTime.now(), "134223");
-        System.out.println(email);
-        //TODO JOptionPane per scrivere il pop up che ci sono stati dei problemi
+        Email email = new Email(sender,selectedItem.getRecipients(), Oggetto.getText(), Testo.getText(), LocalDateTime.now(), "134223");
+        model.send(email);
         SuccessSend.setText("Mail sent correctly!");
     }
 
