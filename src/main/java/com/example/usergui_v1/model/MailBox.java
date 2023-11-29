@@ -1,10 +1,10 @@
 package com.example.usergui_v1.model;
 
-import java.util.AbstractList;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MailBox {
-    private String mailBoxOwner;
+    private final String mailBoxOwner;
     ArrayList<Email> rEmails;
     ArrayList<Email> sEmails;
 
@@ -14,18 +14,25 @@ public class MailBox {
         this.mailBoxOwner = me;
     }
     public MailBox() {
-        this.rEmails = new ArrayList<Email>();
-        this.sEmails = new ArrayList<Email>();
-        mailBoxOwner = "defualt@edu.unito.com";
-        rEmails.add(new Email(mailBoxOwner, null, "first email", ""));
-        rEmails.add(new Email(mailBoxOwner, null, "second email", ""));
-        rEmails.add(new Email(mailBoxOwner, null, "third email", ""));
-        rEmails.add(new Email(mailBoxOwner, null, "fourth email", ""));
+        this.rEmails = new ArrayList<>();
+        this.sEmails = new ArrayList<>();
 
-        sEmails.add(new Email(mailBoxOwner, null, "first email", ""));
-        sEmails.add(new Email(mailBoxOwner, null, "second email", ""));
-        sEmails.add(new Email(mailBoxOwner, null, "third email", ""));
-        sEmails.add(new Email(mailBoxOwner, null, "fourth email", ""));
+        ArrayList<String> emailList = new ArrayList<>();
+        emailList.add("dfd@gmail.com");
+        emailList.add("dfs@gmail.it");
+        emailList.add("dfd@gmail.com");
+
+        mailBoxOwner = "defualt@edu.unito.com";
+        rEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
+
+
+        sEmails.add(new Email(mailBoxOwner, null, "first email", "Vediamo", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, null, "second email", "Vediamo", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, null, "third email", "Vediamo", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, null, "fourth email", "Vediamo", LocalDateTime.now(), "134223"));
         
     }
     public ArrayList<Email> getrEmails() {

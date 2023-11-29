@@ -1,6 +1,5 @@
 package com.example.usergui_v1.controller;
 
-import com.example.usergui_v1.model.Email;
 import com.example.usergui_v1.model.MailBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +12,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -25,7 +22,7 @@ public class Controller_List implements Initializable {
     private ListView<String> emailRlist;
     @FXML
     private ListView<String> emailSlist;
-    private MailBox mailBox = new MailBox();
+    private final MailBox mailBox = new MailBox();
 
     @FXML
     private void WriteEmail() throws IOException {
@@ -71,14 +68,6 @@ public class Controller_List implements Initializable {
         newStage.setTitle("Reply All");
         newStage.show();
     }
-    //Email.class
-    String[] emailStrings = {"a", "b", "c", "d"};
-    String[] contentsEmail = {"casa", "macchina", "albero", "cane", "gatto", "uccello", "fiore", "mare", "montagna"};
-//    @FXML
-//    protected void onHelloButtonClick() {
-//
-//    }
-    String currentEmail;
     String currentSemail;
     String currentRemail;
   
