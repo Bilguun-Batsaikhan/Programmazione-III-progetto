@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0"
-            prefWidth="457.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.usergui_v1.controller.ControllerForward">
-    <TextField layoutX="125.0" layoutY="23.0" prefHeight="25.0" prefWidth="313.0"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="114.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerForward">
+    <TextField fx:id="Destinatario" layoutX="125.0" layoutY="23.0" prefHeight="25.0" prefWidth="313.0" />
     <Label layoutX="17.0" layoutY="26.0" prefHeight="19.0" prefWidth="105.0" text="Destinatari">
         <font>
-            <Font name="System Bold" size="12.0"/>
+            <Font name="System Bold" size="12.0" />
         </font>
     </Label>
+   <Button layoutX="181.0" layoutY="63.0" mnemonicParsing="false" onAction="#Invia" prefHeight="25.0" prefWidth="96.0" text="Invia" />
 </AnchorPane>
