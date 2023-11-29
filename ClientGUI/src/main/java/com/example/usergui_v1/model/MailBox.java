@@ -29,10 +29,10 @@ public class MailBox {
         rEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
 
 
-        sEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
         
     }
 

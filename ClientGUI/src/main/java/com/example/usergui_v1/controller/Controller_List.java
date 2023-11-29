@@ -27,13 +27,13 @@ public class Controller_List implements Initializable {
     @FXML
     private Label User;
     @FXML
-    private Label Destinatari;
+    private Label Recipients;
     @FXML
-    private Label Oggetto;
+    private Label Subject;
     @FXML
-    private Label Testo;
+    private Label Body;
     @FXML
-    private Label Mittente;
+    private Label Sender;
     @FXML
     private Label Data;
     @FXML
@@ -62,7 +62,7 @@ public class Controller_List implements Initializable {
             Scene newScene = new Scene(newSceneRoot, 450 , 500);
             Stage newStage = new Stage();
             newStage.setScene(newScene);
-            newStage.setTitle("Nuova Mail");
+            newStage.setTitle("New Mail");
             newStage.show();
 
         } catch (NullPointerException e) {
@@ -151,11 +151,11 @@ public class Controller_List implements Initializable {
         email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
             if (newEmail != null) {
                 currentEmail = newEmail;
-                Oggetto.setText(currentEmail.getSubject());
-                Mittente.setText(currentEmail.getSender());
-                Testo.setText(currentEmail.getBody());
+                Subject.setText(currentEmail.getSubject());
+                Sender.setText(currentEmail.getSender());
+                Body.setText(currentEmail.getBody());
                 Data.setText(currentEmail.getTime());
-                Destinatari.setText(currentEmail.getRecipientsString());
+                Recipients.setText(currentEmail.getRecipientsString());
             }
         });
     }

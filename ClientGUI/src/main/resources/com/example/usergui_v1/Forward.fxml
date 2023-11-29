@@ -4,9 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="114.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerForward">
-    <TextField fx:id="Destinatario" layoutX="125.0" layoutY="23.0" prefHeight="25.0" prefWidth="313.0" />
+    <TextField fx:id="Recipients" layoutX="125.0" layoutY="23.0" prefHeight="25.0" prefWidth="313.0" />
 
     <Label layoutX="17.0" layoutY="26.0" prefHeight="19.0" prefWidth="105.0" text="Recipients">
         <font>
