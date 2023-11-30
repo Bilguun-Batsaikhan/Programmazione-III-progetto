@@ -19,14 +19,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class Controller_List implements Initializable {
+public class ControllerList implements Initializable {
     @FXML
     private Label User;
     @FXML
