@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -18,7 +17,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ControllerReply {
@@ -47,7 +45,7 @@ public class ControllerReply {
     Email email;
 
     @FXML
-    private void handleClose(MouseEvent event) {
+    private void handleClose() {
         Stage stage = (Stage) loginRoot.getScene().getWindow();
         stage.close();
     }
@@ -62,7 +60,7 @@ public class ControllerReply {
 
     }
 
-    public void setRecipientstoReply() throws IOException {
+    public void setRecipientstoReply() {
         if (selectedItem != null) {
             Recipients.setText(selectedItem.getSender());
         }

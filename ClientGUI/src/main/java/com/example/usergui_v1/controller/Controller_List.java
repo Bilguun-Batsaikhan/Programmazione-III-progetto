@@ -47,7 +47,7 @@ public class Controller_List implements Initializable {
     private ClientModel model;
     private ListProperty<Email> receivedEmails = new SimpleListProperty<>();
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
-    private StringProperty emailAddress = new SimpleStringProperty();
+    private final StringProperty emailAddress = new SimpleStringProperty();
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -189,7 +189,7 @@ public class Controller_List implements Initializable {
     }
 
     public void setListView(ListView<Email> email,boolean received){
-        if(received == true) {
+        if(received) {
             email.getItems().addAll(receivedEmails.get());
         }
         else{

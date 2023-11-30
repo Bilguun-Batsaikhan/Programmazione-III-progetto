@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 public class ClientModel {
     private ListProperty<Email> rEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListProperty<Email> sEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private StringProperty mailBoxOwner = new SimpleStringProperty();
+    private final StringProperty mailBoxOwner = new SimpleStringProperty();
 
     private MailBox mailBox;
     public ClientModel() {

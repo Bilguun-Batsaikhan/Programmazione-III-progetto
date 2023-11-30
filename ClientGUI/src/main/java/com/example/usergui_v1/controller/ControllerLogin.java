@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,7 +21,7 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void exit(MouseEvent event) {
+    private void exit() {
         System.exit(0);
     }
     @FXML

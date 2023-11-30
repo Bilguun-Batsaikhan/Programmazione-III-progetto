@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -48,7 +47,7 @@ public class ControllerWriteMail {
     }
 
     @FXML
-    private void handleClose(MouseEvent event) {
+    private void handleClose() {
         Stage stage = (Stage) loginRoot.getScene().getWindow();
         stage.close();
     }
