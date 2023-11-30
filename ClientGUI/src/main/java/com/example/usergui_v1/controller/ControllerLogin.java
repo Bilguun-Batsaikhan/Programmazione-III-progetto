@@ -10,8 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+<<<<<<< HEAD
+=======
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+>>>>>>> d7432a883c451ba0ebb3dc2e0c2e38a65044dbe2
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -27,7 +30,7 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void exit(MouseEvent event) {
+    private void exit() {
         System.exit(0);
     }
     @FXML

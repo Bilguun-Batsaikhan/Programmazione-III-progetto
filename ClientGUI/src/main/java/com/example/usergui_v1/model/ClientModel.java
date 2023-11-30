@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 public class ClientModel {
     private ListProperty<Email> rEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListProperty<Email> sEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private StringProperty mailBoxOwner = new SimpleStringProperty();
+    private final StringProperty mailBoxOwner = new SimpleStringProperty();
 
     private MailBox mailBox;
     public ClientModel() {
@@ -42,13 +42,17 @@ public class ClientModel {
     public  ListProperty<Email> sEmailsProperty() {
         return sEmails;
     }
+
+    //TODO MOSTRARE QUANDO SI APRE IL CLIENT UNA LABEL GIGANTE CHE DICE SELZIONARE
+    //TODO FARE CHE QUANDO SI SELEZIONA UNA EMAIL DI UNA LIST VIEW L'ALTRA VIENE DESELEZIONATA
     //TODO GESTIRE L'ID
-    //TODO FARE CHE SI PUO'FARE REPLY E REPLY ALL SOLO ALLE MAIL RICEVUTE E CONTROLLARE L'ERRORE DI QUANDO NON SI SELEZIONA NULLA CON UN POPUP
-    //TODO GESTIONE DI CONTROLLO CORRETTEZZA MAIL E TUTTI I CAMPI ALLE MAIL
-    //TODO POPUP MAIL ERRATA LATO CLIENT, POPUP MANCATO INVIO MAIL COMUNICATO DAL SERVER, POPUP PER ELIMINA, POPUP NUOVO MESSAGGIO
+    //TODO POPUP MANCATO INVIO MAIL COMUNICATO DAL SERVER, POPUP PER ELIMINA, POPUP NUOVO MESSAGGIO
+    //TODO RIDIMENSIONE FINESTRE
+    //TODO BORDI TONDI FINESTRE
+    //TODO A CAPO AUTOMATICO NEI LABEL
 
     public boolean CorrectFormatEmail(List<String> recipients) {
-        String emailRegex = "^([0-9]|[a-z])+([0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
+        String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
         Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         boolean correct = true;
         for (int i = 0; i < recipients.size() && correct; i++) {
