@@ -6,12 +6,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerReply {
+
+    @FXML
+    AnchorPane loginRoot;
+
     @FXML
     TextField Recipients;
 
@@ -29,6 +36,13 @@ public class ControllerReply {
     String sender;
 
     ClientModel model;
+
+    @FXML
+    private void handleClose(MouseEvent event) {
+        Stage stage = (Stage) loginRoot.getScene().getWindow();
+        stage.close();
+    }
+
 
     public void initialize(Email selectedItem,String sender, ClientModel model) {
         this.selectedItem = selectedItem;

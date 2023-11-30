@@ -15,7 +15,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -46,8 +49,17 @@ public class Controller_List implements Initializable {
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
     private StringProperty emailAddress = new SimpleStringProperty();
 
-    @FXML
+    private double xOffset = 0;
+    private double yOffset = 0;
 
+
+
+    @FXML
+    private void handleClose(MouseEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
     private void Remove() throws IOException{
         model.remove(currentEmail);
     }
@@ -59,10 +71,21 @@ public class Controller_List implements Initializable {
             ControllerWriteMail controller = loader.getController();
             controller.initialize(emailAddress.get(),model);
 
-            Scene newScene = new Scene(newSceneRoot, 450 , 500);
+            Scene newScene = new Scene(newSceneRoot);
             Stage newStage = new Stage();
             newStage.setScene(newScene);
-            newStage.setTitle("New Mail");
+
+            newScene.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            newScene.setOnMouseDragged(event -> {
+                newStage.setX(event.getScreenX() - xOffset);
+                newStage.setY(event.getScreenY() - yOffset);
+            });
+
+            newStage.initStyle(StageStyle.UNDECORATED);
             newStage.show();
 
         } catch (NullPointerException e) {
@@ -71,7 +94,7 @@ public class Controller_List implements Initializable {
     }
 
     @FXML
-    private void Inoltra() throws IOException {
+    private void Forward() throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Forward.fxml")));
         Parent newSceneRoot = loader.load();
         ControllerForward controller = loader.getController();
@@ -80,7 +103,18 @@ public class Controller_List implements Initializable {
         Scene newScene = new Scene(newSceneRoot, 450 , 150);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-        newStage.setTitle("Forward");
+        newScene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        newScene.setOnMouseDragged(event -> {
+            newStage.setX(event.getScreenX() - xOffset);
+            newStage.setY(event.getScreenY() - yOffset);
+        });
+
+        newStage.initStyle(StageStyle.UNDECORATED);
+
         newStage.show();
     }
 
@@ -93,10 +127,20 @@ public class Controller_List implements Initializable {
         controller.initialize(currentEmail,emailAddress.get(),model);
         controller.setRecipientstoReply();
 
-        Scene newScene = new Scene(newSceneRoot, 450 , 500);
+        Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-        newStage.setTitle("Reply");
+        newScene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        newScene.setOnMouseDragged(event -> {
+            newStage.setX(event.getScreenX() - xOffset);
+            newStage.setY(event.getScreenY() - yOffset);
+        });
+
+        newStage.initStyle(StageStyle.UNDECORATED);
         newStage.show();
     }
 
@@ -109,10 +153,22 @@ public class Controller_List implements Initializable {
         controller.initialize(currentEmail,emailAddress.get(),model);
         controller.setRecipientstoReply();
 
-        Scene newScene = new Scene(newSceneRoot, 450, 500);
+        Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-        newStage.setTitle("Reply All");
+
+        newScene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        newScene.setOnMouseDragged(event -> {
+            newStage.setX(event.getScreenX() - xOffset);
+            newStage.setY(event.getScreenY() - yOffset);
+        });
+
+        newStage.initStyle(StageStyle.UNDECORATED);
+
         newStage.show();
     }
 

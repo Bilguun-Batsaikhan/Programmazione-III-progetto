@@ -6,11 +6,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class ControllerWriteMail {
+    @FXML
+    AnchorPane loginRoot;
 
     @FXML
     private TextField Recipient;
@@ -32,6 +37,13 @@ public class ControllerWriteMail {
         this.model = model;
 
     }
+
+    @FXML
+    private void handleClose(MouseEvent event) {
+        Stage stage = (Stage) loginRoot.getScene().getWindow();
+        stage.close();
+    }
+
     @FXML
     private void SendEmail(){
 

@@ -10,10 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ControllerLogin {
     @FXML
     private BorderPane loginRoot;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     public ControllerLogin() {}
 
@@ -31,6 +35,18 @@ public class ControllerLogin {
             // Create a new stage for the new scene
             Stage newStage = new Stage();
             newStage.setScene(newScene);
+
+            newScene.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            newScene.setOnMouseDragged(event -> {
+                newStage.setX(event.getScreenX() - xOffset);
+                newStage.setY(event.getScreenY() - yOffset);
+            });
+
+            newStage.initStyle(StageStyle.UNDECORATED);
             newStage.show();
             closeLoginWindow();
         } catch (NullPointerException e) {

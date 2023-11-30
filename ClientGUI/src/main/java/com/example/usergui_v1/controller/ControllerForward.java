@@ -4,18 +4,29 @@ import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerForward {
+    @FXML
+    AnchorPane loginRoot;
     Email selectedItem;
     String sender;
     ClientModel model;
 
     @FXML
     private TextField Recipients;
+
+    @FXML
+    private void handleClose(MouseEvent event) {
+        Stage stage = (Stage) loginRoot.getScene().getWindow();
+        stage.close();
+    }
 
     public void initialize(Email selectedItem, String sender, ClientModel model) {
         this.selectedItem = selectedItem;
