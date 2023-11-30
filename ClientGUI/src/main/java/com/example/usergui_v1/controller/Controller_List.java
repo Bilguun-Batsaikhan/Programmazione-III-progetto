@@ -125,7 +125,6 @@ public class Controller_List implements Initializable {
         Parent newSceneRoot = loader.load();
         ControllerReply controller = loader.getController();
         controller.initialize(currentEmail,emailAddress.get(),model);
-        controller.setRecipientstoReply();
 
         Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();
@@ -151,7 +150,6 @@ public class Controller_List implements Initializable {
         Parent newSceneRoot = loader.load();
         ControllerReplyAll controller = loader.getController();
         controller.initialize(currentEmail,emailAddress.get(),model);
-        controller.setRecipientstoReply();
 
         Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();

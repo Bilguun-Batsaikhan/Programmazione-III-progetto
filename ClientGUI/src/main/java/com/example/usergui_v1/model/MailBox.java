@@ -23,10 +23,10 @@ public class MailBox {
         emailList.add("dfd@gmail.com");
 
         mailBoxOwner = "defualt@edu.unito.com";
-        rEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
 
 
         sEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
