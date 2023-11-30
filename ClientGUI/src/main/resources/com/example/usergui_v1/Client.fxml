@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.Controller_List">
-   <Button layoutX="67.0" layoutY="51.0" mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" text="Write new email" />
-   <Label fx:id="User" layoutX="18.0" layoutY="21.0" text="Client 1 : nome.cognome@mail.com">
-
-      <font>
-         <Font name="System Bold" size="13.0" />
-      </font>
-   </Label>
-
-   <Label fx:id="Subject" layoutX="267.0" layoutY="13.0" prefHeight="25.0" prefWidth="440.0" text="Title">
-      <font>
-         <Font name="System Bold" size="14.0" />
-      </font>
-   </Label>
-
-   <Label layoutX="270.0" layoutY="38.0" prefHeight="17.0" prefWidth="76.0" text="Sender:" />
-   <Label fx:id="Body" layoutX="270.0" layoutY="102.0" prefHeight="263.0" prefWidth="456.0" text="Text area" />
-   <Label layoutX="270.0" layoutY="55.0" prefHeight="17.0" prefWidth="76.0" text="Recipients:" />
-   <Label layoutX="270.0" layoutY="71.0" prefHeight="17.0" prefWidth="65.0" text="Data:" />
-   <Button layoutX="275.0" layoutY="404.0" mnemonicParsing="false" onAction="#Remove" prefHeight="25.0" prefWidth="76.0" text="Delete" />
-   <Button layoutX="389.0" layoutY="404.0" mnemonicParsing="false" onAction="#Inoltra" prefHeight="25.0" prefWidth="76.0" text="Forward" />
-   <Button layoutX="513.0" layoutY="404.0" mnemonicParsing="false" onAction="#Reply" prefHeight="25.0" prefWidth="76.0" text="Reply" />
-   <Button layoutX="640.0" layoutY="404.0" mnemonicParsing="false" onAction="#ReplyAll" prefHeight="25.0" prefWidth="76.0" text="Reply all" />
-   <Label fx:id="Sender" layoutX="339.0" layoutY="37.0" prefHeight="17.0" prefWidth="347.0" />
-   <Label fx:id="Recipients" layoutX="339.0" layoutY="52.0" prefHeight="17.0" prefWidth="347.0" />
-   <Label fx:id="Data" layoutX="339.0" layoutY="69.0" prefHeight="17.0" prefWidth="347.0" />
-   <Separator layoutX="255.0" layoutY="-5.0" orientation="VERTICAL" prefHeight="101.0" prefWidth="0.0" />
-
-   <TitledPane animated="false" layoutY="94.0" prefHeight="170.0" prefWidth="258.0" text="Ricevute">
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="144.0" prefWidth="213.0">
-         <ListView fx:id="emailRlist" layoutX="-1.0" layoutY="-1.0" prefHeight="145.0" prefWidth="258.0" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="739.0" stylesheets="@listview-style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.Controller_List">
+   <children>
+      <AnchorPane layoutX="0.0" layoutY="0.0" prefWidth="260.0" style="-fx-background-color: #0598ff;">
+         <children>
+            <Label fx:id="User" layoutX="18.0" layoutY="21.0" style="-fx-text-fill: white;" text="Client : default@edu.unito.com">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Button layoutX="67.0" layoutY="51.0" mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email" />
+            <TitledPane animated="false" layoutY="94.0" prefHeight="170.0" prefWidth="258.0" style="-fx-background-color: white; -fx-text-fill: white;" text="Ricevute">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="144.0" prefWidth="213.0">
+                     <children>
+                        <ListView fx:id="emailRlist" layoutX="-1.0" layoutY="-1.0" prefHeight="145.0" prefWidth="258.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" layoutY="264.0" prefHeight="181.0" prefWidth="258.0" style="-fx-background-color: white; -fx-text-fill: white;" text="Inviate">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="emailSlist" layoutX="-1.0" prefHeight="156.0" prefWidth="258.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+         </children>
       </AnchorPane>
-   </TitledPane>
-   <TitledPane animated="false" layoutX="-1.0" layoutY="264.0" prefHeight="181.0" prefWidth="258.0" text="Inviate">
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-         <ListView fx:id="emailSlist" layoutX="-1.0" prefHeight="156.0" prefWidth="258.0" />
+
+      <Separator layoutX="258.0" orientation="VERTICAL" prefHeight="445.0" prefWidth="2.0" style="-fx-background-color: #d3d3d3;" />
+
+      <AnchorPane layoutX="260.0" layoutY="0.0" prefHeight="445.0" prefWidth="480.0" style="-fx-background-color: white;">
+         <children>
+            <Label fx:id="Subject" layoutX="12.0" layoutY="28.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0598ff;" text="Title" />
+            <Label layoutX="12.0" layoutY="56.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" text="Sender:" />
+            <Label layoutX="12.0" layoutY="73.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" text="Recipients:" />
+            <Label layoutX="12.0" layoutY="89.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" text="Data:" />
+            <Label fx:id="Sender" layoutX="82.0" layoutY="56.0" style="-fx-text-fill: #303030;" text="default@edu.unito.com" />
+            <Label fx:id="Recipients" layoutX="82.0" layoutY="73.0" text="dfd@gmail.com, dfs@gmail.it, dfd@gmail.com" />
+            <Label fx:id="Data" layoutX="82.0" layoutY="89.0" text="2023-11-30 10:26:25" />
+            <Label fx:id="Body" layoutX="12.0" layoutY="110.0" prefHeight="263.0" prefWidth="468.0" style="-fx-background-color: transparent; -fx-text-fill: #303030;" text="Vediamo4" />
+            <Button layoutX="25.0" layoutY="387.0" mnemonicParsing="false" onAction="#Remove" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Delete" />
+            <Button layoutX="134.0" layoutY="387.0" mnemonicParsing="false" onAction="#Forward" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Forward" />
+            <Button layoutX="240.0" layoutY="387.0" mnemonicParsing="false" onAction="#Reply" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply" />
+            <Button layoutX="360.0" layoutY="387.0" mnemonicParsing="false" onAction="#ReplyAll" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply all" />
+            <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" layoutX="450.0" layoutY="27.0" onMouseClicked="#handleClose" size="18" text="" />
+         </children>
       </AnchorPane>
-   </TitledPane>
+   </children>
 </AnchorPane>
