@@ -7,10 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,7 +20,7 @@ import java.util.*;
 
 public class ControllerWriteMail {
     @FXML
-    AnchorPane loginRoot;
+    private AnchorPane loginRoot;
 
     @FXML
     private TextField Recipient;
@@ -31,10 +31,6 @@ public class ControllerWriteMail {
     @FXML
     private TextArea mailBody;
 
-    @FXML
-    private Label SuccessSend;
-
-    Email email;
 
 
     String sender;
@@ -55,11 +51,10 @@ public class ControllerWriteMail {
     @FXML
     private void SendEmail() throws IOException {
 
-        email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "134223");
+        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "134223");
         errorHandling(email);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             model.send(email);
-            SuccessSend.setText("Mail sent correctly!");
 
         }
 
@@ -77,7 +72,7 @@ public class ControllerWriteMail {
     }
 
     private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUp.fxml")));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpError.fxml")));
         Parent newSceneRoot = loader.load();
         ControllerPopUp controller = loader.getController();
         controller.initialize(error);
@@ -86,7 +81,10 @@ public class ControllerWriteMail {
         Stage newStage = new Stage();
         newStage.setScene(newScene);
 
-        newStage.initStyle(StageStyle.UNDECORATED);
+
+        newScene.setFill(Color.TRANSPARENT);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: red;");
         newStage.showAndWait();
 
         if((!Objects.equals(error, "FewArguments")) && (!Objects.equals(error, "WrongFormatEmail"))) {

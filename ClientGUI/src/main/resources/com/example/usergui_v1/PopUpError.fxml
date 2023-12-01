@@ -5,7 +5,6 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="popupRoot" prefHeight="154.0" prefWidth="277.0" style="-fx-background-color: red;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerPopUp">
-   <children>
       <Label layoutX="95.0" layoutY="14.0" prefHeight="43.0" prefWidth="140.0" style="-fx-text-fill: white;" text="Error!">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -21,5 +20,4 @@
             <Font name="System Bold" size="40.0" />
          </font>
       </Label>
-   </children>
 </AnchorPane>

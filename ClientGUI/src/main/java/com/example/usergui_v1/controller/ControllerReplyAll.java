@@ -7,10 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,21 +20,17 @@ import java.util.Objects;
 
 public class ControllerReplyAll {
     @FXML
-    AnchorPane loginRoot;
+    private AnchorPane loginRoot;
     @FXML
     private TextField Recipients;
     @FXML
     private TextField Subject;
     @FXML
     private TextArea Body;
-    @FXML
-    private Label SuccessSend;
-
-    Email selectedItem;
-    String sender;
-    ClientModel model;
-
-    Email email;
+    private Email selectedItem;
+    private String sender;
+    private ClientModel model;
+    private Email email;
 
 
     @FXML
@@ -52,7 +48,7 @@ public class ControllerReplyAll {
 
     }
 
-    public void setRecipientstoReply(){
+    private void setRecipientstoReply(){
         if(selectedItem!=null) {
             selectedItem.getRecipients().remove(model.mailBoxOwnerProperty().get());
             Recipients.setText(selectedItem.getRecipientsString() + "  " + selectedItem.getSender());
@@ -61,16 +57,15 @@ public class ControllerReplyAll {
 
     @FXML
     private void Send() throws IOException {
-        Email email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
+        email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
         errorHandling(email);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             model.send(email);
-            SuccessSend.setText("Mail sent correctly!");
         }
     }
 
     private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUp.fxml")));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpError.fxml")));
         Parent newSceneRoot = loader.load();
         ControllerPopUp controller = loader.getController();
         controller.initialize(error);
@@ -79,7 +74,10 @@ public class ControllerReplyAll {
         Stage newStage = new Stage();
         newStage.setScene(newScene);
 
-        newStage.initStyle(StageStyle.UNDECORATED);
+
+        newScene.setFill(Color.TRANSPARENT);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: red;");
         newStage.showAndWait();
 
         if(!Objects.equals(error, "FewArguments")) {

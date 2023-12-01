@@ -7,10 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -22,10 +22,10 @@ import java.util.Objects;
 public class ControllerReply {
 
     @FXML
-    AnchorPane loginRoot;
+    private AnchorPane loginRoot;
 
     @FXML
-    TextField Recipients;
+    private TextField Recipients;
 
     @FXML
     private TextField Subject;
@@ -33,16 +33,13 @@ public class ControllerReply {
     @FXML
     private TextArea Body;
 
-    @FXML
-    private Label SuccessSend;
+    private Email selectedItem;
 
-    Email selectedItem;
+    private String sender;
 
-    String sender;
+    private ClientModel model;
 
-    ClientModel model;
-
-    Email email;
+    private Email email;
 
     @FXML
     private void handleClose() {
@@ -60,7 +57,7 @@ public class ControllerReply {
 
     }
 
-    public void setRecipientstoReply() {
+    private void setRecipientstoReply() {
         if (selectedItem != null) {
             Recipients.setText(selectedItem.getSender());
         }
@@ -78,7 +75,7 @@ public class ControllerReply {
         }
     }
     private void startPopUp(String error) throws IOException {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUp.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpError.fxml")));
             Parent newSceneRoot = loader.load();
             ControllerPopUp controller = loader.getController();
             controller.initialize(error);
@@ -87,7 +84,9 @@ public class ControllerReply {
             Stage newStage = new Stage();
             newStage.setScene(newScene);
 
-            newStage.initStyle(StageStyle.UNDECORATED);
+            newScene.setFill(Color.TRANSPARENT);
+            newStage.initStyle(StageStyle.TRANSPARENT);
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: red;");
             newStage.showAndWait();
 
             if(!Objects.equals(error, "FewArguments")) {
@@ -108,7 +107,6 @@ public class ControllerReply {
         errorHandling(email);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             model.send(email);
-            SuccessSend.setText("Mail sent correctly!");
         }
     }
 }

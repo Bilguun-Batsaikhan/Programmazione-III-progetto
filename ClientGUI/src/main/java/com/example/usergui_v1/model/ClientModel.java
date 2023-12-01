@@ -25,6 +25,8 @@ public class ClientModel {
         return mailBox;
     }
 
+    //L'ottenimento della casella di posta dovrebbe essere collegato a questo metodo. In questo modo la casella di posta ottenuta dal server
+    //viene passata con le properties al client
     private void syncWithMailBox() {
         mailBoxOwner.set(mailBox.getMailBoxOwner());
         rEmails.setAll(FXCollections.observableArrayList(mailBox.getrEmails()));
@@ -43,13 +45,6 @@ public class ClientModel {
         return sEmails;
     }
 
-    //TODO MOSTRARE QUANDO SI APRE IL CLIENT UNA LABEL GIGANTE CHE DICE SELZIONARE
-    //TODO FARE CHE QUANDO SI SELEZIONA UNA EMAIL DI UNA LIST VIEW L'ALTRA VIENE DESELEZIONATA
-    //TODO GESTIRE L'ID
-    //TODO POPUP MANCATO INVIO MAIL COMUNICATO DAL SERVER, POPUP PER ELIMINA, POPUP NUOVO MESSAGGIO
-    //TODO RIDIMENSIONE FINESTRE
-    //TODO BORDI TONDI FINESTRE
-    //TODO A CAPO AUTOMATICO NEI LABEL
 
     public boolean CorrectFormatEmail(List<String> recipients) {
         String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
@@ -64,9 +59,11 @@ public class ClientModel {
         return correct;
     }
 
+    //Questa è la funzione che dovrebbe occuparsi di mandare il messaggio al server
     public void send(Email email){
         System.out.println(email);
     }
+    //Questa è la funzione che dovrebbe occuparsi di chiedere al server di eliminare il messaggio
     public void remove(Email email){
         System.out.println(email);
     }

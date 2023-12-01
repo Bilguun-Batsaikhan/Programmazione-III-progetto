@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,11 +21,11 @@ import java.util.Objects;
 
 public class ControllerForward {
     @FXML
-    AnchorPane loginRoot;
-    Email selectedItem;
-    String sender;
-    ClientModel model;
-    Email email;
+    private AnchorPane loginRoot;
+    private Email selectedItem;
+    private String sender;
+    private ClientModel model;
+    private Email email;
     @FXML
     private TextField Recipients;
 
@@ -64,7 +65,7 @@ public class ControllerForward {
 
 
     private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUp.fxml")));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpError.fxml")));
         Parent newSceneRoot = loader.load();
         ControllerPopUp controller = loader.getController();
         controller.initialize(error);
@@ -73,7 +74,9 @@ public class ControllerForward {
         Stage newStage = new Stage();
         newStage.setScene(newScene);
 
-        newStage.initStyle(StageStyle.UNDECORATED);
+        newScene.setFill(Color.TRANSPARENT);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: red;");
         newStage.showAndWait();
 
         if((!Objects.equals(error, "FewArguments")) && (!Objects.equals(error, "WrongFormatEmail"))) {

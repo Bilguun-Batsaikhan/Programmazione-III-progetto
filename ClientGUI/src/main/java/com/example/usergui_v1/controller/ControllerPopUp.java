@@ -10,9 +10,9 @@ import java.util.Objects;
 public class ControllerPopUp {
 
     @FXML
-    AnchorPane popupRoot;
+    private AnchorPane popupRoot;
     @FXML
-    Label ErrorPopUp;
+    private Label ErrorPopUp;
 
     @FXML
     private void Close() {

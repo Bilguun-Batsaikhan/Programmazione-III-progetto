@@ -10,12 +10,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-<<<<<<< HEAD
-=======
+
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
->>>>>>> d7432a883c451ba0ebb3dc2e0c2e38a65044dbe2
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -36,7 +34,6 @@ public class ControllerLogin {
     @FXML
     private void login() throws IOException {
         try {
-            // Load the new scene
             Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Client.fxml")));
             Scene newScene = new Scene(newSceneRoot);
 
@@ -54,7 +51,9 @@ public class ControllerLogin {
                 newStage.setY(event.getScreenY() - yOffset);
             });
             startSocket();
-            newStage.initStyle(StageStyle.UNDECORATED);
+            newScene.setFill(Color.TRANSPARENT);
+            newStage.initStyle(StageStyle.TRANSPARENT);
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
             newStage.show();
             closeLoginWindow();
         } catch (NullPointerException e) {
