@@ -2,25 +2,20 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
-import com.example.usergui_v1.model.MailBox;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -39,37 +34,79 @@ public class ControllerList implements Initializable {
     @FXML
     private Label Data;
     @FXML
+    private Label Introduction;
+    @FXML
+    private Label SenderText;
+    @FXML
+    private Label DataText;
+    @FXML
+    private Label RecipientsText;
+    @FXML
     private ListView<Email> emailRlist;
     @FXML
     private ListView<Email> emailSlist;
-    Email currentEmail;
+    private Email currentEmail;
     private ClientModel model;
     private ListProperty<Email> receivedEmails = new SimpleListProperty<>();
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
-    private final StringProperty emailAddress = new SimpleStringProperty();
+    final StringProperty emailAddress = new SimpleStringProperty();
 
     private double xOffset = 0;
     private double yOffset = 0;
 
-
-
     @FXML
-    private void handleClose(MouseEvent event) {
+    private void handleClose() {
         System.exit(0);
     }
 
     @FXML
-    private void Remove() throws IOException{
+    private void Remove(){
         model.remove(currentEmail);
     }
     @FXML
     private void WriteEmail() throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/WriteEmail.fxml")));
-            Parent newSceneRoot = loader.load();
-            ControllerWriteMail controller = loader.getController();
-            controller.initialize(emailAddress.get(),model);
+        initializeNewScene("WriteEmail.fxml");
+    }
 
+    @FXML
+    private void Forward() throws IOException {
+        initializeNewScene("Forward.fxml");
+    }
+    @FXML
+    private void Reply() throws IOException {
+        initializeNewScene("Reply.fxml");
+    }
+    @FXML
+    private void ReplyAll() throws IOException {
+        initializeNewScene("ReplyAll.fxml");
+    }
+
+    private void initializeNewScene(String fxmlToLoad) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/" + fxmlToLoad)));
+            Parent newSceneRoot = loader.load();
+            switch (fxmlToLoad){
+                case "ReplyAll.fxml": {
+                    ControllerReplyAll controller = loader.getController();
+                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
+                }
+                case "Reply.fxml":{
+                    ControllerReply controller = loader.getController();
+                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
+                }
+                case "Forward.fxml": {
+                    ControllerForward controller = loader.getController();
+                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
+                }
+                case "WriteEmail.fxml": {
+                    ControllerWriteMail controller = loader.getController();
+                    controller.initialize(emailAddress.get(), model);
+                    break;
+                }
+            }
             Scene newScene = new Scene(newSceneRoot);
             Stage newStage = new Stage();
             newStage.setScene(newScene);
@@ -84,89 +121,14 @@ public class ControllerList implements Initializable {
                 newStage.setY(event.getScreenY() - yOffset);
             });
 
-            newStage.initStyle(StageStyle.UNDECORATED);
+            newScene.setFill(Color.TRANSPARENT);
+            newStage.initStyle(StageStyle.TRANSPARENT);
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
             newStage.show();
 
         } catch (NullPointerException e) {
             System.out.println("The file doesn't exists" + e);
         }
-    }
-
-    @FXML
-    private void Forward() throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Forward.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerForward controller = loader.getController();
-        controller.initialize(currentEmail,emailAddress.get(),model);
-
-        Scene newScene = new Scene(newSceneRoot, 450 , 150);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-        newScene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-
-        newScene.setOnMouseDragged(event -> {
-            newStage.setX(event.getScreenX() - xOffset);
-            newStage.setY(event.getScreenY() - yOffset);
-        });
-
-        newStage.initStyle(StageStyle.UNDECORATED);
-
-        newStage.show();
-    }
-
-    @FXML
-    private void Reply() throws IOException {
-        Email selectedItem = emailRlist.getSelectionModel().getSelectedItem();
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Reply.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerReply controller = loader.getController();
-        controller.initialize(currentEmail,emailAddress.get(),model);
-
-        Scene newScene = new Scene(newSceneRoot);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-        newScene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-
-        newScene.setOnMouseDragged(event -> {
-            newStage.setX(event.getScreenX() - xOffset);
-            newStage.setY(event.getScreenY() - yOffset);
-        });
-
-        newStage.initStyle(StageStyle.UNDECORATED);
-        newStage.show();
-    }
-
-    @FXML
-    private void ReplyAll() throws IOException {
-        Email selectedItem = emailRlist.getSelectionModel().getSelectedItem();
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/ReplyAll.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerReplyAll controller = loader.getController();
-        controller.initialize(currentEmail,emailAddress.get(),model);
-
-        Scene newScene = new Scene(newSceneRoot);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-
-        newScene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-
-        newScene.setOnMouseDragged(event -> {
-            newStage.setX(event.getScreenX() - xOffset);
-            newStage.setY(event.getScreenY() - yOffset);
-        });
-
-        newStage.initStyle(StageStyle.UNDECORATED);
-
-        newStage.show();
     }
 
     @Override
@@ -179,22 +141,19 @@ public class ControllerList implements Initializable {
     }
 
     private void initializeBindings() {
-        MailBox mailBox = model.getMailBox();
-
-        // Bindings unidirezionali
         receivedEmails.bind(model.rEmailsProperty());
         sentEmails.bind(model.sEmailsProperty());
         emailAddress.bind(model.mailBoxOwnerProperty());
     }
 
-    public void setListView(ListView<Email> email,boolean received){
+    private void setListView(ListView<Email> email,boolean received){
         if(received) {
             email.getItems().addAll(receivedEmails.get());
         }
         else{
             email.getItems().addAll(sentEmails.get());
         }
-        email.setCellFactory(lv -> new ListCell<Email>() {
+        email.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Email email, boolean empty) {
                 super.updateItem(email, empty);
@@ -203,6 +162,16 @@ public class ControllerList implements Initializable {
         });
         email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
             if (newEmail != null) {
+                if(received) {
+                    emailSlist.getSelectionModel().clearSelection();
+                }
+                else{
+                    emailRlist.getSelectionModel().clearSelection();
+                }
+                Introduction.setText("");
+                SenderText.setText("Sender : ");
+                DataText.setText("Data : ");
+                RecipientsText.setText("Recipients :");
                 currentEmail = newEmail;
                 Subject.setText(currentEmail.getSubject());
                 Sender.setText(currentEmail.getSender());
