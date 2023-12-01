@@ -22,9 +22,9 @@ public class ControllerReplyAll {
     @FXML
     private AnchorPane loginRoot;
     @FXML
-    private TextField Recipients;
+    private TextArea Recipients;
     @FXML
-    private TextField Subject;
+    private TextArea Subject;
     @FXML
     private TextArea Body;
     private Email selectedItem;

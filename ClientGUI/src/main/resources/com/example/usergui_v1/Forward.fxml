@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="loginRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="457.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerForward">
-    <TextField fx:id="Recipients" layoutX="125.0" layoutY="60.0" prefHeight="25.0" prefWidth="313.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+    <TextArea fx:id="Recipients" layoutX="117.0" layoutY="41.0" prefHeight="52.0" prefWidth="313.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" wrapText="true" />
 
     <Label layoutX="17.0" layoutY="63.0" prefHeight="19.0" prefWidth="105.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" text="Recipients">
         <font>

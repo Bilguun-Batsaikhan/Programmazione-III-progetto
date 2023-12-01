@@ -28,7 +28,7 @@ public class ControllerReply {
     private TextField Recipients;
 
     @FXML
-    private TextField Subject;
+    private TextArea Subject;
 
     @FXML
     private TextArea Body;

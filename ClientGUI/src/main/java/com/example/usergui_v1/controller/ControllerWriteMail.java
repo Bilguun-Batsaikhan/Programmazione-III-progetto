@@ -23,18 +23,16 @@ public class ControllerWriteMail {
     private AnchorPane loginRoot;
 
     @FXML
-    private TextField Recipient;
+    private TextArea Recipient;
 
     @FXML
-    private TextField Subject;
+    private TextArea Subject;
 
     @FXML
     private TextArea mailBody;
 
-
-
-    String sender;
-    ClientModel model;
+    private String sender;
+    private ClientModel model;
 
     public void initialize(String sender, ClientModel model) {
         this.sender = sender;
@@ -96,7 +94,7 @@ public class ControllerWriteMail {
     }
 
     private void errorHandling(Email email) throws IOException {
-        if (email!=null && getRecipients().isEmpty()){
+        if (email!=null && (getRecipients().isEmpty() ||  Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))){
             startPopUp("FewArguments");
         }
         else if(email!=null && !model.CorrectFormatEmail(getRecipients())){

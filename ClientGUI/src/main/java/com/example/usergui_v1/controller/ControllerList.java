@@ -49,7 +49,7 @@ public class ControllerList implements Initializable {
     private ClientModel model;
     private ListProperty<Email> receivedEmails = new SimpleListProperty<>();
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
-    private final StringProperty emailAddress = new SimpleStringProperty();
+    final StringProperty emailAddress = new SimpleStringProperty();
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -86,21 +86,25 @@ public class ControllerList implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/" + fxmlToLoad)));
             Parent newSceneRoot = loader.load();
             switch (fxmlToLoad){
-                case "ReplyAll": {
+                case "ReplyAll.fxml": {
                     ControllerReplyAll controller = loader.getController();
                     controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
                 }
-                case "Reply":{
+                case "Reply.fxml":{
                     ControllerReply controller = loader.getController();
                     controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
                 }
-                case "Forward": {
+                case "Forward.fxml": {
                     ControllerForward controller = loader.getController();
                     controller.initialize(currentEmail, emailAddress.get(), model);
+                    break;
                 }
-                case "WriteEmail": {
+                case "WriteEmail.fxml": {
                     ControllerWriteMail controller = loader.getController();
                     controller.initialize(emailAddress.get(), model);
+                    break;
                 }
             }
             Scene newScene = new Scene(newSceneRoot);

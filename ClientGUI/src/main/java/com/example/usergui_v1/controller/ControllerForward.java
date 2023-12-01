@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -27,7 +28,7 @@ public class ControllerForward {
     private ClientModel model;
     private Email email;
     @FXML
-    private TextField Recipients;
+    private TextArea Recipients;
 
     @FXML
     private void handleClose() {
