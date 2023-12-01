@@ -25,7 +25,7 @@ public class MailServerController implements Initializable {
         @FXML
         private TextField newUser;
         @FXML
-        private TextArea logTextArea;
+        private TextField logTextField;
         @FXML
         private Button addUserBtn;
         @FXML
