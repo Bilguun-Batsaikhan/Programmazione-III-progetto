@@ -69,6 +69,7 @@ public class MailServerController implements Initializable {
                 for(String user: users) {
                         listUsers += user + " ";
                 }
+                System.out.println(listUsers);
                 userList.setText(listUsers);
         }
         public void ArrayWord()
