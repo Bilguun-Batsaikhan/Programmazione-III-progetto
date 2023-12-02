@@ -16,11 +16,6 @@ public class MailServerApp extends Application {
 
         Scene scene = new Scene(loader.load(), 800, 450);// Ora puoi chiamare il metodo init() dopo aver caricato il controller
 
-
-        int port = 8080; // You can change this to the desired port
-        Server server = new Server(port);
-        server.start();
-
         stage.setTitle("Mail Server");
         stage.setScene(scene);
         stage.show();
