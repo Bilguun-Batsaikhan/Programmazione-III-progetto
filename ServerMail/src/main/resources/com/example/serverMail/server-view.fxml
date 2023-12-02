@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <BorderPane fx:id="RootLogFIle" prefWidth="700.0" style="-fx-border-color: white" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.serverMail.controller.MailServerController">
+
 
     <top>
         <TextField fx:id="logTextField" editable="false" prefHeight="75.0" prefWidth="512.0" style="-fx-background-color: #0598ff; -fx-text-fill: white; -fx-text-alignment: center; " text="History clients action">
@@ -19,14 +21,17 @@
     </top>
 
     <center>
+
         <ListView fx:id="eventListView" prefHeight="198.0" prefWidth="600.0" style="-fx-text-alignment: left; -fx-background-color: white; -fx-font-size: 17px;">
             <BorderPane.margin>
                 <Insets />
             </BorderPane.margin></ListView>
+
     </center>
     <bottom>
         <Button onAction="#handleAddEvent" text="Aggiugni eveneto" textAlignment="CENTER" />
     </bottom>
+
     <right>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>

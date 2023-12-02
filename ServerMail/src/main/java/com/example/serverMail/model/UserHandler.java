@@ -7,6 +7,7 @@ import java.util.List;
 public class UserHandler {
 
     String fileName = "usernames.bin";
+
     public boolean addUser(String userName) {
         try (OutputStream outputStream = new FileOutputStream(fileName, true)) {
             byte[] usernameBytes = userName.getBytes(StandardCharsets.UTF_8);
@@ -60,6 +61,7 @@ public class UserHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return usernames;
     }
 }
