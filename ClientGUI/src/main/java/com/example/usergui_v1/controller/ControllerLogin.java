@@ -50,27 +50,38 @@ public class ControllerLogin {
                 newStage.setX(event.getScreenX() - xOffset);
                 newStage.setY(event.getScreenY() - yOffset);
             });
-            startSocket();
-            newScene.setFill(Color.TRANSPARENT);
-            newStage.initStyle(StageStyle.TRANSPARENT);
-            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
-            newStage.show();
-            closeLoginWindow();
+            boolean loginAuthorized = startSocket();
+            if(loginAuthorized) {
+                closeLoginWindow();
+                newScene.setFill(Color.TRANSPARENT);
+                newStage.initStyle(StageStyle.TRANSPARENT);
+                newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
+                newStage.show();
+            }
+
         } catch (NullPointerException e) {
             System.out.println("The file doesn't exist" + e);
         }
     }
-    public void startSocket() {
+    public boolean startSocket() {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             SocketManager socketManager = new SocketManager(hostName, this.username.getText(),8080);
             socketManager.sendRequest();
-            String response = socketManager.receiveResponse();
-            System.out.println(response);
+            try {
+                String response = socketManager.receiveResponse();
+                if(response.equals("Access denied")) {
+                    System.out.println(response);
+                    return false;
+                }
+            } catch (Exception e) {
+                System.out.println(e + "ERROR!");
+            }
             socketManager.closeConnection();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+        return true;
     }
     public void closeLoginWindow() {
         Stage stage = (Stage) loginRoot.getScene().getWindow();
