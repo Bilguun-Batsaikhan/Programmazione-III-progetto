@@ -5,12 +5,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class SocketManager implements Runnable {
 
     private final Socket clientSocket;
-    private UserHandler userHandler;
+
     public SocketManager(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
@@ -22,7 +21,11 @@ public class SocketManager implements Runnable {
 
             // Step 1: Read the length of the username
             int length = 0;
-
+            /* Little note on Bitwise or Operation
+            * a     = 0000 0101
+              b     = 0000 0011
+              a | b = 0000 0111
+            */
             length |= inputStream.read() << 24;
             length |= inputStream.read() << 16;
             length |= inputStream.read() << 8;
@@ -33,7 +36,8 @@ public class SocketManager implements Runnable {
             inputStream.read(usernameBytes);
             String username = new String(usernameBytes, StandardCharsets.UTF_8);
 
-            String response = verifyUser(username) ? "Welcome " + username : "Access denied";
+            // Process the username and prepare the response (for now, just send back a simple message)
+            String response = "Hello, " + username + "!";
 
             // Send the response back to the client
             byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
@@ -57,15 +61,5 @@ public class SocketManager implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-    public boolean verifyUser(String userName) {
-        userHandler = new UserHandler();
-        List<String> users = userHandler.readUsers();
-        for(String user: users) {
-            if(user.equals(userName)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

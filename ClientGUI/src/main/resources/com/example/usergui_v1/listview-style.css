@@ -6,7 +6,6 @@
 .list-cell {
     -fx-background-color: white;
     -fx-text-fill: #0597fd;
-
 }
 
 .list-cell:filled:hover {
@@ -21,7 +20,7 @@
 }
 
 .titled-pane .content {
-    -fx-background-radius: 10px;
+    -fx-background-color: #4c97e7;
 }
 
 .titled-pane > .title > .header {
@@ -31,4 +30,3 @@
 .titled-pane > .title > .header > .text {
     -fx-border-color: transparent;
 }
-

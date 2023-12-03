@@ -11,7 +11,7 @@
 
 <BorderPane fx:id="loginRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerLogin">
    <left>
-      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff;" BorderPane.alignment="CENTER">
          <children>
             <FontAwesomeIconView fill="WHITE" glyphName="ENVELOPE" layoutX="150.0" layoutY="204.0" size="50" />
             <Text fill="WHITE" layoutX="66.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connecting Words, Crafting Worlds">

@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 public class ClientModel {
     private ListProperty<Email> rEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListProperty<Email> sEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private final StringProperty mailBoxOwner = new SimpleStringProperty();
+    private StringProperty mailBoxOwner = new SimpleStringProperty();
 
     private MailBox mailBox;
     public ClientModel() {
@@ -21,16 +21,10 @@ public class ClientModel {
         syncWithMailBox();
     }
 
-    //TODO GESTIRE L'ID CON CONTATORE ATOMICO
-//TODO DA FARE DOPO CHE I SOCKET FUNZIONANO POPUP MANCATO INVIO MAIL COMUNICATO DAL SERVER, POPUP PER ELIMINA, POPUP NUOVO MESSAGGIO, CRASH SERVER
-//TODO RIDIMENSIONE FINESTRE NON SO SE VOGLIO FARLO
-
     public MailBox getMailBox() {
         return mailBox;
     }
 
-    //L'ottenimento della casella di posta dovrebbe essere collegato a questo metodo. In questo modo la casella di posta ottenuta dal server
-    //viene passata con le properties al client
     private void syncWithMailBox() {
         mailBoxOwner.set(mailBox.getMailBoxOwner());
         rEmails.setAll(FXCollections.observableArrayList(mailBox.getrEmails()));
@@ -48,10 +42,13 @@ public class ClientModel {
     public  ListProperty<Email> sEmailsProperty() {
         return sEmails;
     }
-
+    //TODO GESTIRE L'ID
+    //TODO FARE CHE SI PUO'FARE REPLY E REPLY ALL SOLO ALLE MAIL RICEVUTE E CONTROLLARE L'ERRORE DI QUANDO NON SI SELEZIONA NULLA CON UN POPUP
+    //TODO GESTIONE DI CONTROLLO CORRETTEZZA MAIL E TUTTI I CAMPI ALLE MAIL
+    //TODO POPUP MAIL ERRATA LATO CLIENT, POPUP MANCATO INVIO MAIL COMUNICATO DAL SERVER, POPUP PER ELIMINA, POPUP NUOVO MESSAGGIO
 
     public boolean CorrectFormatEmail(List<String> recipients) {
-        String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
+        String emailRegex = "^([0-9]|[a-z])+([0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
         Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         boolean correct = true;
         for (int i = 0; i < recipients.size() && correct; i++) {
@@ -63,11 +60,9 @@ public class ClientModel {
         return correct;
     }
 
-    //Questa è la funzione che dovrebbe occuparsi di mandare il messaggio al server
     public void send(Email email){
         System.out.println(email);
     }
-    //Questa è la funzione che dovrebbe occuparsi di chiedere al server di eliminare il messaggio
     public void remove(Email email){
         System.out.println(email);
     }

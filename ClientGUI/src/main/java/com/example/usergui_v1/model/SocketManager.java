@@ -14,7 +14,7 @@ public class SocketManager {
             this.username = username;
             this.socket = new Socket(serverAddress, port);
         } catch (IOException e) {
-            System.out.println("There is a problem");
+            e.printStackTrace();
         }
     }
 
@@ -35,7 +35,7 @@ public class SocketManager {
 
             outputStream.flush();
         } catch (IOException e) {
-            System.out.println("There is a problem");
+            e.printStackTrace();
         }
     }
 
@@ -66,7 +66,7 @@ public class SocketManager {
             String receivedResponse = new String(serverResponseBytes, StandardCharsets.UTF_8);
             return receivedResponse;
         } catch (IOException e) {
-            System.out.println("There is a problem");
+            e.printStackTrace(); // Handle the exception according to your needs
         }
         return null;
     }
