@@ -36,6 +36,9 @@ public class ControllerPopUp {
         if(Objects.equals(ErrorType, "WrongFormatEmail")){
             ErrorPopUp.setText("Email format not valid.");
         }
+        if(Objects.equals(ErrorType, "Access denied")){
+            ErrorPopUp.setText("Access denied. Wrong password or email.");
+        }
 
 
     }

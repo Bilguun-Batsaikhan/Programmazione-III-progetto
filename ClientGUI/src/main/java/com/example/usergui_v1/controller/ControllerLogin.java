@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Objects;
 
 import com.example.usergui_v1.model.SocketManager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -74,7 +75,7 @@ public class ControllerLogin {
             try {
                 String response = socketManager.receiveResponse();
                 if(response.equals("Access denied")) {
-                    System.out.println(response);
+                    startPopUp(response);
                     return false;
                 }
             } catch (Exception e) {
@@ -96,5 +97,22 @@ public class ControllerLogin {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
     }
+
+    private void startPopUp(String error) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
+        Parent newSceneRoot = loader.load();
+        ControllerPopUp controller = loader.getController();
+        controller.initialize(error);
+
+        Scene newScene = new Scene(newSceneRoot);
+        Stage newStage = new Stage();
+        newStage.setScene(newScene);
+
+        newScene.setFill(Color.TRANSPARENT);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        newStage.showAndWait();
+    }
+
 
 }
