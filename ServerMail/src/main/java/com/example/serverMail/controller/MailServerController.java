@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class MailServerController implements Initializable {
+
         @FXML
         private Button userReaderBtn;
         @FXML
@@ -26,6 +27,7 @@ public class MailServerController implements Initializable {
         private TextField newUser;
         @FXML
         private TextField logTextField;
+
         @FXML
         private Button addUserBtn;
         @FXML
@@ -69,6 +71,9 @@ public class MailServerController implements Initializable {
                 for(String user: users) {
                         listUsers += user + " ";
                 }
+
+                System.out.println(listUsers);
+
                 userList.setText(listUsers);
         }
         public void ArrayWord()
