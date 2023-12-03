@@ -75,7 +75,7 @@ public class ControllerReply {
         }
     }
     private void startPopUp(String error) throws IOException {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpError.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
             Parent newSceneRoot = loader.load();
             ControllerPopUp controller = loader.getController();
             controller.initialize(error);
@@ -86,7 +86,7 @@ public class ControllerReply {
 
             newScene.setFill(Color.TRANSPARENT);
             newStage.initStyle(StageStyle.TRANSPARENT);
-            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: red;");
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
             newStage.showAndWait();
 
             if(!Objects.equals(error, "FewArguments")) {

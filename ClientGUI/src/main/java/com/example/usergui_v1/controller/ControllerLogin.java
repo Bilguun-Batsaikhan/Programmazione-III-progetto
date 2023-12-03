@@ -8,10 +8,12 @@ import java.util.Objects;
 import com.example.usergui_v1.model.SocketManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -50,6 +52,7 @@ public class ControllerLogin {
                 newStage.setX(event.getScreenX() - xOffset);
                 newStage.setY(event.getScreenY() - yOffset);
             });
+
             boolean loginAuthorized = startSocket();
             if(loginAuthorized) {
                 closeLoginWindow();
@@ -87,4 +90,11 @@ public class ControllerLogin {
         Stage stage = (Stage) loginRoot.getScene().getWindow();
         stage.close();
     }
+
+    @FXML
+    private void handleResize(MouseEvent event) {
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setMaximized(!stage.isMaximized());
+    }
+
 }

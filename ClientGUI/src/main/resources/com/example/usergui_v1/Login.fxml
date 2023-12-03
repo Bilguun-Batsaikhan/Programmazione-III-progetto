@@ -11,7 +11,7 @@
 
 <BorderPane fx:id="loginRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerLogin">
    <left>
-      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px; -fx-alignment: CENTER; -fx-spacing: 12;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
             <FontAwesomeIconView fill="WHITE" glyphName="ENVELOPE" layoutX="150.0" layoutY="204.0" size="50" />
             <Text fill="WHITE" layoutX="66.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connecting Words, Crafting Worlds">
@@ -25,20 +25,37 @@
                </font>
             </Text>
          </children>
-      </AnchorPane>
+      </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="445.0" prefWidth="739.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="445.0" prefWidth="739.0" style="-fx-spacing: 10; -fx-alignment: TOP_CENTER; -fx-padding: 10;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <TextField fx:id="username" layoutX="108.0" layoutY="191.0" promptText="User Name" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
-            <PasswordField layoutX="109.0" layoutY="241.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
-            <FontAwesomeIconView fill="#0598ff" glyphName="USER" layoutX="83.0" layoutY="214.0" selectionFill="#0598ff" size="15" />
-            <FontAwesomeIconView fill="#0598ff" glyphName="KEY" layoutX="81.0" layoutY="267.0" selectionFill="#0598ff" size="15" />
-            <Button layoutX="131.0" layoutY="310.0" mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE" />
+            <HBox prefHeight="131.0" prefWidth="350.0" style="-fx-alignment: TOP_RIGHT; -fx-padding: 10; -fx-spacing: 10;" VBox.vgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#handleResize" size="16" />
+                  <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" onMouseClicked="#exit" size="18" text="" />
+               </children>
+            </HBox>
+            <FontAwesomeIconView fill="#0598ff" glyphName="USERS" size="27" />
+            <HBox prefHeight="55.0" prefWidth="350.0" style="-fx-alignment: BOTTOM_CENTER; -fx-spacing: 10; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView fill="#0598ff" glyphName="USER" selectionFill="#0598ff" size="15" />
+                  <TextField fx:id="username" promptText="User Name" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+               </children>
+            </HBox>
+            <HBox prefHeight="63.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER; -fx-spacing: 10;" VBox.vgrow="ALWAYS">
+               <children>
+                  <FontAwesomeIconView fill="#0598ff" glyphName="KEY" selectionFill="#0598ff" size="15" />
+                  <PasswordField promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+               </children>
+            </HBox>
+            <HBox prefHeight="125.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE" />
+               </children>
+            </HBox>
             <Text fill="#0598ff" layoutX="114.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to our Email!" />
-            <FontAwesomeIconView fill="#0598ff" glyphName="USERS" layoutX="160.0" layoutY="145.0" size="27" />
-            <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" layoutX="317.0" layoutY="25.0" onMouseClicked="#exit" size="18" text="" />
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

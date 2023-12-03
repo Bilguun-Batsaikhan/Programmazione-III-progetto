@@ -5,59 +5,79 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="734.0" style="-fx-background-radius: 10px;" stylesheets="@listview-style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerList">
+<AnchorPane prefHeight="445.0" prefWidth="734.0" stylesheets="@listview-style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerList">
    <children>
-      <AnchorPane layoutX="2.0" layoutY="0.0" prefHeight="434.0" prefWidth="257.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="477.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="User" layoutX="18.0" layoutY="21.0" style="-fx-text-fill: white;" text="Client : default@edu.unito.com">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Label>
-            <Button layoutX="67.0" layoutY="51.0" mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email" />
-            <TitledPane animated="false" layoutX="-1.0" layoutY="94.0" prefHeight="170.0" prefWidth="258.0" style="-fx-background-color: white; -fx-text-fill: white;" text="Received">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="144.0" prefWidth="213.0">
-                     <children>
-                        <ListView fx:id="emailRlist" layoutX="-1.0" layoutY="-1.0" prefHeight="145.0" prefWidth="258.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-            <TitledPane animated="false" layoutY="264.0" prefHeight="170.0" prefWidth="258.0" style="-fx-background-color: white; -fx-text-fill: white; -fx-border-radius: 10px;" text="Sent">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-radius: 10px;">
-                     <children>
-                        <ListView fx:id="emailSlist" layoutX="-1.0" prefHeight="152.0" prefWidth="258.0" style="-fx-background-radius: 10px;" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-         </children>
-      </AnchorPane>
+      <!-- Sidebar -->
+      <VBox style="-fx-background-color: #0598ff; -fx-background-radius: 10px; -fx-alignment: CENTER; -fx-spacing: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+         <HBox VBox.vgrow="ALWAYS" />
+         <Label fx:id="User" style="-fx-text-fill: white;" text="Client : default@edu.unito.com">
+            <font>
+               <Font name="System Bold" size="13.0" />
+            </font>
+         </Label>
+         <Button mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email" />
 
-      <Separator layoutX="257.0" orientation="VERTICAL" prefHeight="445.0" prefWidth="4.0" />
-
-      <AnchorPane layoutX="258.0" layoutY="0.0" prefHeight="445.0" prefWidth="476.0" style="-fx-background-color: white; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="258.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="Subject" layoutX="12.0" layoutY="28.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0598ff;" wrapText="true" />
-            <Label fx:id="SenderText" layoutX="12.0" layoutY="56.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" />
-            <Label fx:id="RecipientsText" layoutX="12.0" layoutY="73.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" />
-            <Label fx:id="DataText" layoutX="12.0" layoutY="89.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" />
-            <Label fx:id="Sender" layoutX="82.0" layoutY="56.0" style="-fx-text-fill: #303030;" wrapText="true" />
-            <Label fx:id="Recipients" layoutX="82.0" layoutY="73.0" />
-            <Label fx:id="Data" layoutX="82.0" layoutY="89.0" />
-            <Label fx:id="Body" layoutX="16.0" layoutY="123.0" prefHeight="246.0" prefWidth="444.0" />
-            <Label fx:id="Introduction" layoutX="72.0" layoutY="69.0" prefHeight="263.0" prefWidth="382.0" style="-fx-background-color: transparent; -fx-text-fill: #0598ff;" text="No mail selected.                  Select one to visualize it. " wrapText="true">
-               <font>
-                  <Font name="Arial Bold" size="24.0" />
-               </font></Label>
-            <Button layoutX="25.0" layoutY="387.0" mnemonicParsing="false" onAction="#Remove" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Delete" />
-            <Button layoutX="134.0" layoutY="387.0" mnemonicParsing="false" onAction="#Forward" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Forward" />
-            <Button layoutX="240.0" layoutY="387.0" mnemonicParsing="false" onAction="#Reply" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply" />
-            <Button layoutX="360.0" layoutY="387.0" mnemonicParsing="false" onAction="#ReplyAll" prefHeight="25.0" prefWidth="76.0" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply all" />
+         <VBox VBox.vgrow="ALWAYS">
+            <TitledPane animated="false" style="-fx-background-color: white; -fx-text-fill: white;" text="Received">
+               <ListView fx:id="emailRlist" />
+            </TitledPane>
+            <TitledPane animated="false" style="-fx-background-color: white; -fx-text-fill: white; -fx-border-radius: 10px;" text="Sent">
+               <ListView fx:id="emailSlist" style="-fx-background-radius: 10px;" />
+            </TitledPane>
+         </VBox>
+      </VBox>
+      <!-- Main Content -->
+      <VBox fillWidth="true" style="-fx-background-color: white; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+         <HBox style="-fx-alignment: CENTER_RIGHT; -fx-spacing: 5; -fx-padding: 10;">
+            <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" layoutX="420.0" layoutY="27.0" onMouseClicked="#handleResize" size="16" />
             <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" layoutX="450.0" layoutY="27.0" onMouseClicked="#handleClose" size="18" text="" />
-         </children>
-      </AnchorPane>
+         </HBox>
+         <HBox VBox.vgrow="ALWAYS">
+            <children>
+               <Label fx:id="Subject" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0598ff;" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="SenderText" prefHeight="17.0" prefWidth="70.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" />
+               <Label fx:id="Sender" style="-fx-text-fill: #303030;" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="RecipientsText" prefHeight="17.0" prefWidth="70.0" style=" -fx-text-fill: #0598ff;-fx-font-weight: bold;" />
+               <Label fx:id="Recipients" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="DataText" prefHeight="17.0" prefWidth="70.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold;" />
+               <Label fx:id="Data" />
+
+            </children>
+         </HBox>
+         <Pane fx:id="contentPane" VBox.vgrow="ALWAYS">
+            <children>
+               <Label fx:id="Body" alignment="TOP_LEFT" prefHeight="${contentPane.height}" prefWidth="${contentPane.width}" style="-fx-padding: 10;" wrapText="true" />
+               <Label fx:id="Introduction" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="65.0" prefHeight="111.0" prefWidth="466.0" style="-fx-padding: 10; -fx-background-color: transparent; -fx-text-fill: #0598ff; -fx-alignment: CENTER;" text="No mail selected. Select one to view it. " textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+                  <font>
+                     <Font name="Arial Bold" size="24.0" />
+                  </font></Label>
+
+
+            </children>
+         </Pane>
+         <HBox alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="475.0" style="-fx-alignment: CENTER; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#Remove" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Delete" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#Forward" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Forward" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#Reply" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#ReplyAll" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply all" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+      </VBox>
    </children>
 </AnchorPane>

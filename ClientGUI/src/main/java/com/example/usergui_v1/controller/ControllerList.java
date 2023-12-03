@@ -9,9 +9,11 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -123,7 +125,7 @@ public class ControllerList implements Initializable {
 
             newScene.setFill(Color.TRANSPARENT);
             newStage.initStyle(StageStyle.TRANSPARENT);
-            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd; -fx-border-radius: 10px");
             newStage.show();
 
         } catch (NullPointerException e) {
@@ -180,5 +182,11 @@ public class ControllerList implements Initializable {
                 Recipients.setText(currentEmail.getRecipientsString());
             }
         });
+    }
+
+    @FXML
+    private void handleResize(MouseEvent event) {
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setMaximized(!stage.isMaximized());
     }
 }
