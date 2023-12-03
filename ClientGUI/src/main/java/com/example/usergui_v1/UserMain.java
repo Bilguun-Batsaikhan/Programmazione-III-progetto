@@ -2,7 +2,9 @@ package com.example.usergui_v1;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -15,8 +17,9 @@ public class UserMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(UserMain.class.getResource("Login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent newSceneRoot = fxmlLoader.load();
+        Scene scene = new Scene(newSceneRoot);
 
         // Add event handlers for window dragging
         scene.setOnMousePressed(event -> {
@@ -29,7 +32,10 @@ public class UserMain extends Application {
             stage.setY(event.getScreenY() - yOffset);
         });
 
-        stage.initStyle(StageStyle.UNDECORATED);
+        scene.setFill(Color.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
+
         stage.setScene(scene);
         stage.show();
     }
