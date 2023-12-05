@@ -15,6 +15,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 public class ControllerReplyAll {
@@ -56,7 +57,7 @@ public class ControllerReplyAll {
 
     @FXML
     private void Send() throws IOException {
-        email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
+        email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), new Date(), "134223");
         errorHandling(email);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             model.send(email);

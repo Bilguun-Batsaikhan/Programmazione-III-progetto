@@ -1,6 +1,8 @@
 package com.example.serverMail.model;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -23,9 +25,13 @@ public class Server {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket.getInetAddress());
+                ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 
+                // Server initiates communication
+                out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
-                executorService.submit(new SocketManager(clientSocket));
+                executorService.submit(new SocketManager(clientSocket, in, out));
             }
         } catch (IOException e) {
             e.printStackTrace();

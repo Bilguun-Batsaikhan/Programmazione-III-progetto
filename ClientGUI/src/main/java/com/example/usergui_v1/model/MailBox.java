@@ -2,6 +2,7 @@ package com.example.usergui_v1.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MailBox {
     private final String mailBoxOwner;
@@ -23,16 +24,16 @@ public class MailBox {
         emailList.add("dfd@gmail.com");
 
         mailBoxOwner = "defualt@edu.unito.com";
-        rEmails.add(new Email("dfd@gmail.com", emailList, "first email", "Vediamohhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh jwkerhkwjehrkjwehrkjwehrkjwehrjkwehrkjhewjkrhwejkrhewkjrhwejkhrjwkehrwjkehrwjkehrkjwehrjkwehrkjhwerkjhwejkrhwekjrhwkejjh jehrjkwehrkjwehrjkweh werkhwejkrhwekjh werjhwejkrh ewjr hwejrhwekjrhwekj hjkwehr jkwehrkjwehrkjwehrjkweh kjw jkewhrjkwehrjkw1", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email("dfd@gmail.com", emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email("dfd@gmail.com", emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
-        rEmails.add(new Email("dfd@gmail.com", emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "first email", "Vediamohhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh jwkerhkwjehrkjwehrkjwehrkjwehrjkwehrkjhewjkrhwejkrhewkjrhwejkhrjwkehrwjkehrwjkehrkjwehrjkwehrkjhwerkjhwejkrhwekjrhwkejjh jehrjkwehrkjwehrjkweh werkhwejkrhwekjh werjhwejkrh ewjr hwejrhwekjrhwekj hjkwehr jkwehrkjwehrkjwehrjkweh kjw jkewhrjkwehrjkw1", new Date(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "second email", "Vediamo2", new Date(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "third email", "Vediamo3", new Date(), "134223"));
+        rEmails.add(new Email("dfd@gmail.com", emailList, "fourth email", "Vediamo4", new Date(), "134223"));
 
 
-        sEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo2", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo3", LocalDateTime.now(), "134223"));
-        sEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", LocalDateTime.now(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "first email", "Vediamo1", new Date(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "second email", "Vediamo2", new Date(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "third email", "Vediamo3", new Date(), "134223"));
+        sEmails.add(new Email(mailBoxOwner, emailList, "fourth email", "Vediamo4", new Date(), "134223"));
         
     }
 
