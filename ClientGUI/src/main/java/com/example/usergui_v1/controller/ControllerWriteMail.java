@@ -48,11 +48,10 @@ public class ControllerWriteMail {
     @FXML
     private void SendEmail() throws IOException {
 
-        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), LocalDateTime.now(), "134223");
+        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), "134223");
         errorHandling(email);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             model.send(email);
-
         }
 
     }

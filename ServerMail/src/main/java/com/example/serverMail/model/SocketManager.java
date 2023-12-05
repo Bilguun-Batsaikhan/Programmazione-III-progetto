@@ -1,68 +1,62 @@
 package com.example.serverMail.model;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class SocketManager implements Runnable {
 
     private final Socket clientSocket;
     private UserHandler userHandler;
-    public SocketManager(Socket clientSocket) {
+    private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
+
+    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out) {
         this.clientSocket = clientSocket;
+        objectInputStream = in;
+        objectOutputStream = out;
     }
 
     @Override
     public void run() {
-        try (InputStream inputStream = clientSocket.getInputStream();
-             OutputStream outputStream = clientSocket.getOutputStream()) {
+        try {
+            Gson x = new Gson();
+            String res = (String) objectInputStream.readObject();
+            System.out.println(res);
 
-            // Step 1: Read the length of the username
-            int length = 0;
+            // Deserialize JSON string to Email object
+            UserOperations o = x.fromJson(res, UserOperations.class);
+            System.out.println(o.getUsername());
 
-            length |= inputStream.read() << 24;
-            length |= inputStream.read() << 16;
-            length |= inputStream.read() << 8;
-            length |= inputStream.read();
-
-            // Step 2: Read the username
-            byte[] usernameBytes = new byte[length];
-            inputStream.read(usernameBytes);
-            String username = new String(usernameBytes, StandardCharsets.UTF_8);
-
-            String response = verifyUser(username) ? "Welcome " + username : "Access denied";
-
-            // Send the response back to the client
-            byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
-
-            outputStream.write(responseBytes.length >> 24);
-            outputStream.write(responseBytes.length >> 16);
-            outputStream.write(responseBytes.length >> 8);
-            outputStream.write(responseBytes.length);
-
-            outputStream.write(responseBytes);
-
-            // Flush the output stream to ensure all data is sent
-            outputStream.flush();
-
+            ServerResponse response = new ServerResponse(doOperation(o));
+            objectOutputStream.writeObject(new Gson().toJson(response));
+            // objectOutputStream.writeObject(new Gson().toJson(answer));
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println("IOException " + e);
+        } catch (ClassNotFoundException e) {
+            System.out.println("ClassNotFound " + e);
         }
     }
+
+    public String doOperation(UserOperations userOperations) {
+        switch (userOperations.getNumOperation()) {
+            case 1:
+                boolean result = verifyUser(userOperations.getUsername());
+                System.out.println(userOperations.getUsername());
+                return result ? "welcome " + userOperations.getUsername() : "Access denied";
+        }
+        return "There is no such operation";
+    }
+
     public boolean verifyUser(String userName) {
         userHandler = new UserHandler();
         List<String> users = userHandler.readUsers();
-        for(String user: users) {
-            if(user.equals(userName)) {
+        for (String user : users) {
+            if (user.equals(userName)) {
                 return true;
             }
         }

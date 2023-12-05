@@ -16,6 +16,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class ControllerForward {
 
     @FXML
     private void Send() throws IOException {
-        email = new Email(sender,getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), LocalDateTime.now(), "134223");
+        email = new Email(sender,getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), "134223");
         errorHandling(email);
         if(!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             model.send(email);

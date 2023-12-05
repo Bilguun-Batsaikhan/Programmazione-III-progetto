@@ -1,91 +1,80 @@
 package com.example.usergui_v1.model;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class SocketManager {
+    private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
     private Socket socket;
-    private String username;
-    public SocketManager(String serverAddress, String username, int port) {
+
+    public SocketManager(String serverAddress, int port) {
         try {
-            this.username = username;
             this.socket = new Socket(serverAddress, port);
-        } catch (IOException e) {
-            System.out.println("There is a problem");
-        }
-    }
+            System.out.println("User socket initialized");
 
-    public void sendRequest() {
-        try {
-            OutputStream outputStream = socket.getOutputStream();
+            // Create ObjectInputStream first
+            this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+            System.out.println("ObjectInputStream created");
 
-            // Convert the username String to bytes
-            byte[] usernameBytes = username.getBytes("UTF-8");
+            // Then create ObjectOutputStream
+            this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("ObjectOutputStream created");
 
-            // Send the length of the username as a 4-byte integer
-            outputStream.write(usernameBytes.length >> 24);
-            outputStream.write(usernameBytes.length >> 16);
-            outputStream.write(usernameBytes.length >> 8);
-            outputStream.write(usernameBytes.length);
+            System.out.println("reached here");
 
-            outputStream.write(usernameBytes);
-
-            outputStream.flush();
-        } catch (IOException e) {
-            System.out.println("There is a problem");
-        }
-    }
-
-    public String receiveResponse() {
-        try {
-            InputStream inputStream = socket.getInputStream();
-
-            int length = 0;
-
-            // Read the length
-            length |= readNextByte(inputStream) << 24;
-            length |= readNextByte(inputStream) << 16;
-            length |= readNextByte(inputStream) << 8;
-            length |= readNextByte(inputStream);
-
-            // Read the response data
-            byte[] serverResponseBytes = new byte[length];
-            int bytesRead = 0;
-            while (bytesRead < length) {
-                int result = inputStream.read(serverResponseBytes, bytesRead, length - bytesRead);
-                if (result == -1) {
-                    // Handle end of stream or other errors
-                    throw new IOException("Unexpected end of stream or other error");
-                }
-                bytesRead += result;
+            String signal = null;
+            try {
+                signal = (String) objectInputStream.readObject();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
-
-            String receivedResponse = new String(serverResponseBytes, StandardCharsets.UTF_8);
-            return receivedResponse;
+            System.out.println("Received signal from server: " + signal);
         } catch (IOException e) {
-            System.out.println("There is a problem");
+            e.printStackTrace();
+            System.out.println("IO exception: " + e.getMessage());
         }
-        return null;
-    }
-
-    private int readNextByte(InputStream inputStream) throws IOException {
-        int result = inputStream.read();
-        if (result == -1) {
-            throw new IOException("Unexpected end of stream or other error");
-        }
-        return result;
     }
 
     public void closeConnection() {
         try {
+            if (objectInputStream != null) {
+                objectInputStream.close();
+            }
+            if (objectOutputStream != null) {
+                objectOutputStream.close();
+            }
             if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
+            System.out.println("Connection closed successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error closing connection: " + e.getMessage());
         }
+    }
+
+
+//    public void closeConnection() {
+//        try {
+//            if (socket != null && !socket.isClosed()) {
+//                socket.close();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public ObjectInputStream getObjectInputStream() {
+        return objectInputStream;
+    }
+
+    public ObjectOutputStream getObjectOutputStream() {
+        return objectOutputStream;
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

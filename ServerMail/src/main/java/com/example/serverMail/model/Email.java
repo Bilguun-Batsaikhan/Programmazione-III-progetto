@@ -1,4 +1,5 @@
-package com.example.usergui_v1.model;
+package com.example.serverMail.model;
+
 import java.util.List;
 import java.util.Date;
 

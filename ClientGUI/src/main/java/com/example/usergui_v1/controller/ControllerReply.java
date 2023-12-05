@@ -17,6 +17,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class ControllerReply {
@@ -103,7 +104,7 @@ public class ControllerReply {
         ArrayList<String> recipient = new ArrayList<>();
         recipient.add(selectedItem.getSender());
 
-        email = new Email(sender,recipient, Subject.getText(), Body.getText(), LocalDateTime.now(), "134223");
+        email = new Email(sender,recipient, Subject.getText(), Body.getText(), new Date(), "134223");
         errorHandling(email);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             model.send(email);
