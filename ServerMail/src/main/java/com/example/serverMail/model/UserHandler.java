@@ -3,12 +3,18 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 public class UserHandler {
 
     String fileName = "usernames.bin";
+    private final String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
+    private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
 
-    public boolean addUser(String userName) {
+    public boolean addUser(String userName) throws IOException{
+        if (!isEmailValid(userName)) {
+            return false;
+        }
         try (OutputStream outputStream = new FileOutputStream(fileName, true)) {
             byte[] usernameBytes = userName.getBytes(StandardCharsets.UTF_8);
 
@@ -22,10 +28,12 @@ public class UserHandler {
             outputStream.write(usernameBytes);
 
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         }
+    }
+
+    private boolean isEmailValid(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
     }
 
     public List<String> readUsers() {
