@@ -29,11 +29,20 @@ public class ControllerLogin {
     private BorderPane loginRoot;
     @FXML
     private TextField username;
+    @FXML
+    private Text register;
     private double xOffset = 0;
     private double yOffset = 0;
 
     public ControllerLogin() {}
 
+    @FXML
+    private void register() {
+        boolean result = startSocket(2);
+        if(result) {
+            register.setText("Now you can login!");
+        }
+    }
     @FXML
     private void exit() {
         System.exit(0);
@@ -58,7 +67,7 @@ public class ControllerLogin {
                 newStage.setY(event.getScreenY() - yOffset);
             });
 
-            boolean loginAuthorized = startSocket();
+            boolean loginAuthorized = startSocket(1);
             if(loginAuthorized) {
                 closeLoginWindow();
                 newScene.setFill(Color.TRANSPARENT);
@@ -73,23 +82,39 @@ public class ControllerLogin {
             System.out.println("The file doesn't exist" + e);
         }
     }
-        public boolean startSocket() {
-            try {
-                String hostName = InetAddress.getLocalHost().getHostName();
-                SocketManager socketManager = new SocketManager(hostName,8080);
-                UserOperations askAuthentication = new UserOperations(1, username.getText());
-                askAuthentication.sendLoginRequest(socketManager.getObjectOutputStream());
-                ServerResponse result = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
-                if(result.getMessage().equals("Access denied")) {
-                    System.out.println(result.getMessage());
-                    return false;
+        public boolean startSocket(int LogReg) {
+        switch (LogReg) {
+            case 1:
+                try {
+                    String hostName = InetAddress.getLocalHost().getHostName();
+                    SocketManager socketManager = new SocketManager(hostName,8080);
+                    UserOperations askAuthentication = new UserOperations(1, username.getText());
+                    askAuthentication.sendLoginRequest(socketManager.getObjectOutputStream());
+                    ServerResponse result = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    if(result.getMessage().equals("Access denied")) {
+                        System.out.println(result.getMessage());
+                        return false;
+                    }
+                    socketManager.closeConnection();
+                } catch (UnknownHostException e) {
+                    System.out.println("Login failed " + e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                socketManager.closeConnection();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            break;
+            case 2:
+                try {
+                    String hostName = InetAddress.getLocalHost().getHostName();
+                    SocketManager socketManager = new SocketManager(hostName,8080);
+                    UserOperations register = new UserOperations(2, username.getText());
+                    register.sendLoginRequest(socketManager.getObjectOutputStream());
+                } catch (UnknownHostException e) {
+                    System.out.println("Registration failed " + e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            break;
+        }
             return true;
         }
     public void closeLoginWindow() {

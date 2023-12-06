@@ -3,12 +3,15 @@ package com.example.serverMail.model;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MailServer {
     private SimpleListProperty<String> listOfAction;
+    private ObservableList<String> data;
 
     public MailServer() {
-        ObservableList<String> data = FXCollections.observableArrayList();
+        data = FXCollections.observableArrayList();
         listOfAction = new SimpleListProperty<>(data);
     }
 
@@ -17,7 +20,26 @@ public class MailServer {
     }
 
     public void addMessage(String action) {
-        listOfAction.add(action);
+        data.add(action);
+    }
+
+    public void resetList()
+    {
+        data.clear();
+    }
+    public void orderListAscending() {
+        data.sort(String::compareToIgnoreCase);
+    }
+
+    public void orderListDescending() {
+        data.sort((s1, s2) -> s2.compareToIgnoreCase(s1));
+    }
+    public void searchInList(String found)
+    {
+        ObservableList<String> filteredList = data.filtered(item -> item.toLowerCase().contains(found));
+
+        // Aggiorna la ListView con la lista filtrata
+        listOfAction.set(filteredList);
     }
 }
 

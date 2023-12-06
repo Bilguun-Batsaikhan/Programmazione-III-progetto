@@ -21,16 +21,29 @@
 
     <center>
 
-        <ListView fx:id="eventListView" prefHeight="198.0" prefWidth="600.0" style="-fx-text-alignment: left; -fx-background-color: white; -fx-font-size: 17px;">
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin></ListView>
+        <VBox alignment="CENTER">
+            <TextField fx:id="searchTextField" promptText="Search..." onKeyReleased="#handleEventSearch"/>
+            <ListView fx:id="eventListView" VBox.vgrow="ALWAYS" style="-fx-text-alignment: left; -fx-background-color: white; -fx-font-size: 17px;">
+                <BorderPane.margin>
+                    <Insets />
+                </BorderPane.margin>
+            </ListView>
+        </VBox>
+
 
     </center>
-    <bottom>
-        <Button onAction="#handleAddEvent" text="Aggiugni eveneto" textAlignment="CENTER" />
-    </bottom>
 
+
+    <bottom>
+        <ToolBar>
+            <items>
+                <Button text="Add event" onAction="#handleAddEvent"/>
+                <Button text="Order ascending" onAction="#handleEventOrderAscending"/>
+                <Button text="Order descending" onAction="#handleEventOrderDescending"/>
+                <Button text="Reset log" onAction="#handleEventReset"/>
+            </items>
+        </ToolBar>
+    </bottom>
     <right>
         <AnchorPane  prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
