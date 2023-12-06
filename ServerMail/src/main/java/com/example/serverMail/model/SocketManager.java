@@ -19,6 +19,7 @@ public class SocketManager implements Runnable {
         this.clientSocket = clientSocket;
         objectInputStream = in;
         objectOutputStream = out;
+        userHandler = new UserHandler();
     }
 
     @Override
@@ -45,13 +46,18 @@ public class SocketManager implements Runnable {
             case 1:
                 boolean result = verifyUser(userOperations.getUsername());
                 System.out.println(userOperations.getUsername());
-                return result ? "welcome " + userOperations.getUsername() : "Access denied";
+                return result ? "Welcome " + userOperations.getUsername() : "Access denied";
+            case 2:
+                userHandler.addUser(userOperations.getUsername());
+                System.out.println(verifyUser(userOperations.getUsername()));
+
+                return "Welcome " + userOperations.getUsername();
         }
         return "There is no such operation";
     }
 
     public boolean verifyUser(String userName) {
-        userHandler = new UserHandler();
+//        userHandler = new UserHandler();
         List<String> users = userHandler.readUsers();
         for (String user : users) {
             if (user.equals(userName)) {

@@ -12,8 +12,7 @@ public class MailServerApp extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("server-view.fxml"));
 
-        Scene scene = new Scene(loader.load(), 1000, 700);// Ora puoi chiamare il metodo init() dopo aver caricato il controller
-
+        Scene scene = new Scene(loader.load(), 1000, 700);
 
         stage.setTitle("Mail Server");
         stage.setScene(scene);
