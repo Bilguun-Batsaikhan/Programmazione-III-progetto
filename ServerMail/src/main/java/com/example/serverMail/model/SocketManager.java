@@ -1,5 +1,8 @@
 package com.example.serverMail.model;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import com.example.serverMail.controller.MailServerController;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -14,11 +17,15 @@ public class SocketManager implements Runnable {
     private UserHandler userHandler;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
+    private MailServerController controllerView;
 
-    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out) {
+
+    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out, MailServerController  controller) {
         this.clientSocket = clientSocket;
         objectInputStream = in;
         objectOutputStream = out;
+        controllerView = controller;
+        userHandler = controllerView.getUserHandler();
     }
 
     @Override
@@ -32,7 +39,7 @@ public class SocketManager implements Runnable {
             UserOperations o = x.fromJson(res, UserOperations.class);
             System.out.println(o.getUsername());
 
-            ServerResponse response = new ServerResponse(doOperation(o));
+            ServerResponse response = new ServerResponse(doOperation(o, controllerView));
             objectOutputStream.writeObject(new Gson().toJson(response));
             // objectOutputStream.writeObject(new Gson().toJson(answer));
         } catch (IOException e) {
@@ -42,12 +49,22 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public String doOperation(UserOperations userOperations) {
-        switch (userOperations.getNumOperation()) {
+    public String doOperation(UserOperations userOperations, MailServerController controllerView) {
+        switch (userOperations.getNumOperation())
+        {
             case 1:
-                boolean result = verifyUser(userOperations.getUsername());
-                System.out.println(userOperations.getUsername());
-                return result ? "welcome " + userOperations.getUsername() : "Access denied";
+            {
+                String username = userOperations.getUsername();
+                //take date
+                Date dataCorrente = new Date();
+                SimpleDateFormat formatoOrario = new SimpleDateFormat("HH:mm:ss");
+                String orarioCorrente = formatoOrario.format(dataCorrente);
+                //add a listView
+                controllerView.addLogMessageLogin(username + " si è connesso alle " + orarioCorrente);
+                boolean result = verifyUser(username);
+                String test = result ? "welcome " + username : "Access denied";
+                return "welcome " + username;
+            }
         }
         return "There is no such operation";
     }

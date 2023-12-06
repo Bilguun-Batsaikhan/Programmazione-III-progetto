@@ -1,5 +1,8 @@
 package com.example.serverMail.model;
 
+import com.example.serverMail.MailServerApp;
+import com.example.serverMail.controller.MailServerController;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,10 +15,13 @@ public class Server {
 
     private final int port;
     private final ExecutorService executorService;
+    private MailServerController controllerView;
 
-    public Server(int port) {
+    public Server(int port, MailServerController controller) {
         this.port = port;
         this.executorService = Executors.newCachedThreadPool();
+        controllerView = controller;
+
     }
 
     public void start() {
@@ -31,7 +37,7 @@ public class Server {
                 // Server initiates communication
                 out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
-                executorService.submit(new SocketManager(clientSocket, in, out));
+                executorService.submit(new SocketManager(clientSocket, in, out, controllerView));
             }
         } catch (IOException e) {
             e.printStackTrace();
