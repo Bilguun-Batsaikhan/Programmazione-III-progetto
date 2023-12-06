@@ -25,7 +25,6 @@ public class SocketManager implements Runnable {
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
-        userHandler = controllerView.getUserHandler();
     }
 
     @Override
@@ -46,37 +45,41 @@ public class SocketManager implements Runnable {
             System.out.println("IOException " + e);
         } catch (ClassNotFoundException e) {
             System.out.println("ClassNotFound " + e);
+        }catch (InterruptedException e)
+        {
+            System.out.println("Interrupted exception " +e);
         }
     }
 
-    public String doOperation(UserOperations userOperations, MailServerController controllerView) {
-        switch (userOperations.getNumOperation())
-        {
-            case 1:
-            {
+    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException{
+        switch (userOperations.getNumOperation()) {
+            case 1: {
                 String username = userOperations.getUsername();
+                boolean result = verifyUser(userOperations.getUsername());
                 //take date
                 Date dataCorrente = new Date();
                 SimpleDateFormat formatoOrario = new SimpleDateFormat("HH:mm:ss");
                 String orarioCorrente = formatoOrario.format(dataCorrente);
                 //add a listView
-                controllerView.addLogMessageLogin(username + " si è connesso alle " + orarioCorrente);
-                boolean result = verifyUser(username);
-                String test = result ? "welcome " + username : "Access denied";
-                return "welcome " + username;
+                Thread t1 = new Thread(new ThreadGui(controllerView, username));
+                t1.start();
+                t1.join();
+
+                return result ? "welcome " + userOperations.getUsername() : "Access denied";
             }
         }
         return "There is no such operation";
     }
 
-    public boolean verifyUser(String userName) {
-        userHandler = new UserHandler();
-        List<String> users = userHandler.readUsers();
-        for (String user : users) {
-            if (user.equals(userName)) {
-                return true;
+
+        public boolean verifyUser(String userName) {
+            userHandler = new UserHandler();
+            List<String> users = userHandler.readUsers();
+            for (String user : users) {
+                if (user.equals(userName)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
-    }
 }
