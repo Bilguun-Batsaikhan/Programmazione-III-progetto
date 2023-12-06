@@ -11,7 +11,7 @@ public class UserHandler {
     private final String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
 
-    public boolean addUser(String userName) throws IOException{
+    public boolean addUser(String userName) throws IOException {
         if (!isEmailValid(userName)) {
             return false;
         }

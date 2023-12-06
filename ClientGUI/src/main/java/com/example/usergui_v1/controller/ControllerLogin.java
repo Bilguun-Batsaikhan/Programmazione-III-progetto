@@ -41,6 +41,8 @@ public class ControllerLogin {
         boolean result = startSocket(2);
         if(result) {
             register.setText("Now you can login!");
+        } else {
+            register.setText("Please write in form of username@example.com");
         }
     }
     @FXML
@@ -90,9 +92,9 @@ public class ControllerLogin {
                     SocketManager socketManager = new SocketManager(hostName,8080);
                     UserOperations askAuthentication = new UserOperations(1, username.getText());
                     askAuthentication.sendLoginRequest(socketManager.getObjectOutputStream());
-                    ServerResponse result = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
-                    if(result.getMessage().equals("Access denied")) {
-                        System.out.println(result.getMessage());
+                    ServerResponse response = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    if(response.getMessage().equals("Access denied")) {
+                        System.out.println(response.getMessage());
                         return false;
                     }
                     socketManager.closeConnection();
@@ -108,6 +110,13 @@ public class ControllerLogin {
                     SocketManager socketManager = new SocketManager(hostName,8080);
                     UserOperations register = new UserOperations(2, username.getText());
                     register.sendLoginRequest(socketManager.getObjectOutputStream());
+                    ServerResponse response = register.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    if(response.getMessage().equals("Access denied")) {
+                        System.out.println(response.getMessage());
+                        return false;
+                    } else {
+                        return true;
+                    }
                 } catch (UnknownHostException e) {
                     System.out.println("Registration failed " + e);
                 } catch (IOException e) {
