@@ -50,7 +50,7 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException, IOException {
+    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException{
         switch (userOperations.getNumOperation()) {
             case 1: {
                 String username = userOperations.getUsername();
