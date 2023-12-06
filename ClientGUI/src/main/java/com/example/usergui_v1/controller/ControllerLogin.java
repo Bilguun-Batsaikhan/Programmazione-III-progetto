@@ -3,8 +3,11 @@ package com.example.usergui_v1.controller;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.ServerResponse;
 import com.example.usergui_v1.model.UserOperations;
 import com.example.usergui_v1.model.SocketManager;
@@ -50,8 +53,11 @@ public class ControllerLogin {
     @FXML
     private void login() throws IOException {
         try {
-            Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Client.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Client.fxml")));
+            Parent newSceneRoot = loader.load();
             Scene newScene = new Scene(newSceneRoot);
+            ControllerList controller = loader.getController();
+            controller.initialize(username.getText());
 
             // Create a new stage for the new scene
             Stage newStage = new Stage();
@@ -106,8 +112,17 @@ public class ControllerLogin {
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(2, username.getText());
-                    register.sendLoginRequest(socketManager.getObjectOutputStream());
+                    ClientModel model = new ClientModel();
+                    List<String> usernameList = new ArrayList<>();
+                    usernameList.add(username.getText());
+                    if(model.CorrectFormatEmail(usernameList)){
+                        UserOperations register = new UserOperations(2, username.getText());
+                        register.sendLoginRequest(socketManager.getObjectOutputStream());
+                    }
+                    else{
+                        startPopUp("WrongFormatEmail");
+                        return false;
+                    }
                 } catch (UnknownHostException e) {
                     System.out.println("Registration failed " + e);
                 } catch (IOException e) {

@@ -133,11 +133,10 @@ public class ControllerList implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(String username) {
         this.model = new ClientModel();
         initializeBindings();
-        User.setText("Client :  " + emailAddress.get());
+        User.setText("Client :  " + username);
         setListView(emailRlist,true);
         setListView(emailSlist,false);
     }
@@ -145,7 +144,6 @@ public class ControllerList implements Initializable {
     private void initializeBindings() {
         receivedEmails.bind(model.rEmailsProperty());
         sentEmails.bind(model.sEmailsProperty());
-        emailAddress.bind(model.mailBoxOwnerProperty());
     }
 
     private void setListView(ListView<Email> email,boolean received){
@@ -188,5 +186,9 @@ public class ControllerList implements Initializable {
     private void handleResize(MouseEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
     }
 }
