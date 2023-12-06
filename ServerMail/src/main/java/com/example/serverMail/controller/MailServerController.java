@@ -1,5 +1,6 @@
 package com.example.serverMail.controller;
 
+import com.example.serverMail.model.MailBox;
 import com.example.serverMail.model.MailServer;
 import com.example.serverMail.model.UserHandler;
 import javafx.event.ActionEvent;
@@ -78,31 +79,31 @@ public class MailServerController implements Initializable {
         {
                 model.orderListDescending();
         }
-        @FXML
-        public void addUser(ActionEvent event) {
-                try {
-                        String userToAdd = newUser.getText();
-                        if (userToAdd != null) {
-                                boolean result = userHandler.addUser(userToAdd);
-                                if (result) {
-                                        addUserResult.setText(userToAdd + " successfully added");
-                                        addUserResult.setTextFill(Color.GREEN);
-                                } else {
-                                        addUserResult.setText("Email format not valid");
-                                        addUserResult.setTextFill(Color.RED);
-                                }
-                        }
-                }
-                catch (IOException e) {
-                        e.printStackTrace();
-                }
-        }
+//        @FXML
+//        public void addUser(ActionEvent event) {
+//                try {
+//                        String userToAdd = newUser.getText();
+//                        if (userToAdd != null) {
+//                                boolean result = userHandler.addUser(userToAdd);
+//                                if (result) {
+//                                        addUserResult.setText(userToAdd + " successfully added");
+//                                        addUserResult.setTextFill(Color.GREEN);
+//                                } else {
+//                                        addUserResult.setText("Email format not valid");
+//                                        addUserResult.setTextFill(Color.RED);
+//                                }
+//                        }
+//                }
+//                catch (IOException e) {
+//                        e.printStackTrace();
+//                }
+//        }
         @FXML
         public void readUsers(ActionEvent event) {
-                List<String> users = userHandler.readUsers();
+                List<MailBox> mailBoxes = userHandler.readAllMailBoxes();
                 String listUsers = "";
-                for(String user: users) {
-                        listUsers += user + "\n";
+                for(MailBox mailBox: mailBoxes) {
+                        listUsers += mailBox.getMailBoxOwner() + "\n";
                 }
 
                 System.out.println(listUsers);

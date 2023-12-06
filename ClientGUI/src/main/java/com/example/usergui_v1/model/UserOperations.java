@@ -22,28 +22,50 @@ public class UserOperations {
     @SerializedName("disconnect")
     private boolean disconnect;
 
+    @SerializedName("mailbox")
+    private MailBox mailBox;
+
     // constructor for all fields
-    public UserOperations(int numOperation, String username, Email toSend, Email reply, Email toForward, boolean disconnect) {
+    public UserOperations(int numOperation, String username, Email toSend, Email reply, Email toForward, boolean disconnect, MailBox mailBox) {
         this.numOperation = numOperation;
         this.username = username;
         this.toSend = toSend;
         this.reply = reply;
         this.toForward = toForward;
         this.disconnect = disconnect;
+        this.mailBox = mailBox;
     }
 
-    // constructor for only two fields
+    // constructor for login
     public UserOperations(int numOperation, String username) {
-        this(numOperation, username, null, null, null, false); // call the other constructor with default values for the other fields
+        this(numOperation, username, null, null, null, false, null); // call the other constructor with default values for the other fields
     }
 
-    public void sendLoginRequest(ObjectOutputStream out) throws IOException {
-        // Create Email object
-        //Email e = new Email("Bilguun", null, "test", "one two three", new Date(), "1");
-        Gson gson = new Gson();
+    // constructor for registration
+    public UserOperations(int numOperation, MailBox mailBox) {
+        this(numOperation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
+    }
 
-        out.writeObject(gson.toJson(this));
-        out.flush();
+    public void sendLoginRequest(ObjectOutputStream out) {
+        assert this.numOperation == 1 && this.username != null : "Username cannot be NULL";
+        try {
+            Gson gson = new Gson();
+            out.writeObject(gson.toJson(this));
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("There is a problem while sending username " + e);
+        }
+    }
+
+    public void sendRegistrationRequest(ObjectOutputStream out) {
+        assert this.mailBox != null : "Mailbox cannot be NULL";
+        try {
+            Gson gson = new Gson();
+            out.writeObject(gson.toJson(this));
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("There is problem while sending mailbox " + e);
+        }
     }
 
     public ServerResponse receiveLoginAuthentication(ObjectInputStream in) throws IOException {

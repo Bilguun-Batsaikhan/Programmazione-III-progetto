@@ -54,7 +54,7 @@ public class SocketManager implements Runnable {
         switch (userOperations.getNumOperation()) {
             case 1: {
                 String username = userOperations.getUsername();
-                boolean result = verifyUser(userOperations.getUsername());
+                boolean result = userHandler.verifyUser(userOperations.getUsername());
                 //take date
                 Date currentData = new Date();
                 SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
@@ -65,10 +65,9 @@ public class SocketManager implements Runnable {
                 t1.join();
                 return result ? "welcome " + userOperations.getUsername() : "Access denied";
             }
-
             case 2:
                 try {
-                    boolean result = userHandler.addUser(userOperations.getUsername());
+                    boolean result = userHandler.addUser(userOperations.getMailBox());
                     return result ? "welcome " + userOperations.getUsername() : "Access denied";
                 } catch (IOException e) {
                     System.out.println("Failed to add user " + e);
@@ -76,16 +75,5 @@ public class SocketManager implements Runnable {
             break;
         }
         return "There is no such operation";
-    }
-
-
-    public boolean verifyUser(String userName) {
-        List<String> users = userHandler.readUsers();
-        for (String user : users) {
-            if (user.equals(userName)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

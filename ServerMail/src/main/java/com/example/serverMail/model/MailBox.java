@@ -1,9 +1,7 @@
-package com.example.usergui_v1.model;
+package com.example.serverMail.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MailBox implements Serializable {
     private final String mailBoxOwner;
