@@ -30,11 +30,9 @@ public class SocketManager implements Runnable {
 
             // Deserialize JSON string to Email object
             UserOperations o = x.fromJson(res, UserOperations.class);
-            System.out.println(o.getUsername());
 
             ServerResponse response = new ServerResponse(doOperation(o));
             objectOutputStream.writeObject(new Gson().toJson(response));
-            // objectOutputStream.writeObject(new Gson().toJson(answer));
         } catch (IOException e) {
             System.out.println("IOException " + e);
         } catch (ClassNotFoundException e) {
