@@ -5,14 +5,12 @@ import com.example.serverMail.model.UserHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-
-import javafx.scene.control.ListView;
-
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.scene.input.KeyEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,8 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class MailServerController implements Initializable {
-
+        @FXML
+        public Label addUserResult;
         @FXML
         private ListView<String> eventListView;
         @FXML
@@ -81,22 +80,29 @@ public class MailServerController implements Initializable {
         }
         @FXML
         public void addUser(ActionEvent event) {
-                String userToAdd = newUser.getText();
-                if(!userToAdd.equals(null)) {
-                        Boolean result = userHandler.addUser(userToAdd);
-                        if(result) {
-                                System.out.println("new user " + userToAdd + " successfully added");
-                        } else {
-                                System.out.println("There is a problem...");
+                try {
+                        String userToAdd = newUser.getText();
+                        if (userToAdd != null) {
+                                boolean result = userHandler.addUser(userToAdd);
+                                if (result) {
+                                        addUserResult.setText(userToAdd + " successfully added");
+                                        addUserResult.setTextFill(Color.GREEN);
+                                } else {
+                                        addUserResult.setText("Email format not valid");
+                                        addUserResult.setTextFill(Color.RED);
+                                }
                         }
+                }
+                catch (IOException e) {
+                        e.printStackTrace();
                 }
         }
         @FXML
         public void readUsers(ActionEvent event) {
                 List<String> users = userHandler.readUsers();
-                String listUsers = " ";
+                String listUsers = "";
                 for(String user: users) {
-                        listUsers += user + " ";
+                        listUsers += user + "\n";
                 }
 
                 System.out.println(listUsers);
