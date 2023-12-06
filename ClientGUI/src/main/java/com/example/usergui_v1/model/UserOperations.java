@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-
 public class UserOperations {
-    private static final long serialVersionUID = 1L;
 
     @SerializedName("numOperation")
     private int numOperation;
@@ -63,52 +61,5 @@ public class UserOperations {
         return this.username;
     }
 
-    public int getNumOperation() {
-        return numOperation;
-    }
-
-    public void setNumOperation(int numOperation) {
-        this.numOperation = numOperation;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Email getToSend() {
-        return toSend;
-    }
-
-    public void setToSend(Email toSend) {
-        this.toSend = toSend;
-    }
-
-    public Email getReply() {
-        return reply;
-    }
-
-    public void setReply(Email reply) {
-        this.reply = reply;
-    }
-
-    public Email getToForward() {
-        return toForward;
-    }
-
-    public void setToForward(Email toForward) {
-        this.toForward = toForward;
-    }
-
-    public boolean isDisconnect() {
-        return disconnect;
-    }
-
-    public void setDisconnect(boolean disconnect) {
-        this.disconnect = disconnect;
-    }
 
 }

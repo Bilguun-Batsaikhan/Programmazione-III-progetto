@@ -25,6 +25,7 @@ public class SocketManager implements Runnable {
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
+        userHandler = new UserHandler();
     }
 
     @Override
@@ -36,11 +37,9 @@ public class SocketManager implements Runnable {
 
             // Deserialize JSON string to Email object
             UserOperations o = x.fromJson(res, UserOperations.class);
-            System.out.println(o.getUsername());
 
             ServerResponse response = new ServerResponse(doOperation(o, controllerView));
             objectOutputStream.writeObject(new Gson().toJson(response));
-            // objectOutputStream.writeObject(new Gson().toJson(answer));
         } catch (IOException e) {
             System.out.println("IOException " + e);
         } catch (ClassNotFoundException e) {
@@ -67,19 +66,25 @@ public class SocketManager implements Runnable {
 
                 return result ? "welcome " + userOperations.getUsername() : "Access denied";
             }
+
+            case 2:
+                userHandler.addUser(userOperations.getUsername());
+                System.out.println(verifyUser(userOperations.getUsername()));
+
+                return "Welcome " + userOperations.getUsername();
+
         }
         return "There is no such operation";
     }
 
 
-        public boolean verifyUser(String userName) {
-            userHandler = new UserHandler();
-            List<String> users = userHandler.readUsers();
-            for (String user : users) {
-                if (user.equals(userName)) {
-                    return true;
-                }
+    public boolean verifyUser(String userName) {
+        List<String> users = userHandler.readUsers();
+        for (String user : users) {
+            if (user.equals(userName)) {
+                return true;
             }
             return false;
         }
+    }
 }
