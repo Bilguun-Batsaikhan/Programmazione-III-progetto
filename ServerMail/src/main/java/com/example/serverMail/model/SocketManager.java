@@ -84,7 +84,7 @@ public class SocketManager implements Runnable {
             if (user.equals(userName)) {
                 return true;
             }
-            return false;
         }
+        return false;
     }
 }
