@@ -20,6 +20,7 @@ public class MailServerApp extends Application {
 
         stage.setTitle("Mail Server");
         stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
 
         // Start the server in a separate thread

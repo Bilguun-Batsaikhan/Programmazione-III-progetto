@@ -20,7 +20,7 @@ public class Server {
     public Server(int port, MailServerController controller) {
         this.port = port;
         this.executorService = Executors.newCachedThreadPool();
-        controllerView = controller;
+        this.controllerView = controller;
 
     }
 

@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
 public class ControllerLogin {
     @FXML
     private Text errorMessage;
@@ -51,9 +52,10 @@ public class ControllerLogin {
     @FXML
     private void login() throws IOException {
         try {
-            Parent newSceneRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/Client.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/Client.fxml"));
+            Parent newSceneRoot = loader.load();
             Scene newScene = new Scene(newSceneRoot);
-
+            ControllerList temp = loader.getController();
             // Create a new stage for the new scene
             Stage newStage = new Stage();
             newStage.setScene(newScene);
@@ -68,13 +70,15 @@ public class ControllerLogin {
                 newStage.setY(event.getScreenY() - yOffset);
             });
 
-            boolean loginAuthorized = startSocket(1);
+        boolean loginAuthorized = startSocket(1);
             if(loginAuthorized) {
                 closeLoginWindow();
+                temp.setUsers(username.getText());
                 newScene.setFill(Color.TRANSPARENT);
                 newStage.initStyle(StageStyle.TRANSPARENT);
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
                 newStage.show();
+
             } else {
                 errorMessage.setText("Access denied!!!");
             }
@@ -122,6 +126,7 @@ public class ControllerLogin {
                     throw new RuntimeException(e);
                 }
             break;
+
         }
             return true;
         }

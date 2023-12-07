@@ -51,28 +51,43 @@ public class SocketManager implements Runnable {
     }
 
     public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException{
+        String username;
+        boolean result;
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         switch (userOperations.getNumOperation()) {
             case 1: {
-                String username = userOperations.getUsername();
-                boolean result = userHandler.verifyUser(userOperations.getUsername());
+                username = userOperations.getUsername();
+                result = userHandler.verifyUser(userOperations.getUsername());
                 //take date
-                Date currentData = new Date();
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-                String currentTime = timeFormat.format(currentData);
-                //add a listView
-                Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime));
-                t1.start();
-                t1.join();
-                return result ? "welcome " + userOperations.getUsername() : "Access denied";
+                if(result){
+                    Date currentData = new Date();
+                    String currentTime = timeFormat.format(currentData);
+                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime,0));
+                    t1.start();
+                    t1.join();
+                }
+                return result ? "welcome " + username : "Access denied";
             }
             case 2:
                 try {
-                    boolean result = userHandler.addUser(userOperations.getMailBox());
+                    result = userHandler.addUser(userOperations.getMailBox());
                     return result ? "welcome " + userOperations.getUsername() : "Access denied";
                 } catch (IOException e) {
                     System.out.println("Failed to add user " + e);
                 }
             break;
+            case 3:
+                username = userOperations.getUsername();
+                result = userHandler.verifyUser(userOperations.getUsername());
+                if(result)
+                {
+                    Date currentData = new Date();
+                    String currentTime = timeFormat.format(currentData);
+                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime,1));
+                    t1.start();
+                    t1.join();
+                }
+                return result ? "Bye " + username : "Error, user not joined";
         }
         return "There is no such operation";
     }
