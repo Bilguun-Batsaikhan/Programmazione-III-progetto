@@ -20,7 +20,9 @@ public class Email {
         this.time = time;
         this.ID = id;
     }
-
+    public String getSubject() {
+        return subject;
+    }
     @Override
     public String toString() {
         return "Email{" +

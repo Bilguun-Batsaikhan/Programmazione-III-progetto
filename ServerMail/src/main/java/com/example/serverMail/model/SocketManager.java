@@ -54,37 +54,26 @@ public class SocketManager implements Runnable {
         switch (userOperations.getNumOperation()) {
             case 1: {
                 String username = userOperations.getUsername();
-                boolean result = verifyUser(userOperations.getUsername());
+                boolean result = userHandler.verifyUser(userOperations.getUsername());
                 //take date
-                Date dataCorrente = new Date();
-                SimpleDateFormat formatoOrario = new SimpleDateFormat("HH:mm:ss");
-                String orarioCorrente = formatoOrario.format(dataCorrente);
+                Date currentData = new Date();
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+                String currentTime = timeFormat.format(currentData);
                 //add a listView
-                Thread t1 = new Thread(new ThreadGui(controllerView, username));
+                Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime));
                 t1.start();
                 t1.join();
-
                 return result ? "welcome " + userOperations.getUsername() : "Access denied";
             }
-
             case 2:
-                userHandler.addUser(userOperations.getUsername());
-                System.out.println(verifyUser(userOperations.getUsername()));
-
-                return "Welcome " + userOperations.getUsername();
-
+                try {
+                    boolean result = userHandler.addUser(userOperations.getMailBox());
+                    return result ? "welcome " + userOperations.getUsername() : "Access denied";
+                } catch (IOException e) {
+                    System.out.println("Failed to add user " + e);
+                }
+            break;
         }
         return "There is no such operation";
-    }
-
-
-    public boolean verifyUser(String userName) {
-        List<String> users = userHandler.readUsers();
-        for (String user : users) {
-            if (user.equals(userName)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

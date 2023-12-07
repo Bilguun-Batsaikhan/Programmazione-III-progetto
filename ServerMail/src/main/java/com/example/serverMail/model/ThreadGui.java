@@ -6,8 +6,9 @@ import javafx.application.Platform;
 public class ThreadGui implements Runnable{
     private MailServerController controller;
     private String username;
-    public  ThreadGui(MailServerController controller, String username)
-    {
+    String currentTime;
+    public  ThreadGui(MailServerController controller, String username, String currentTime) {
+        this.currentTime = currentTime;
         this.controller = controller;
         this.username = username;
     }
@@ -15,7 +16,7 @@ public class ThreadGui implements Runnable{
     public void run()
     {
         Platform.runLater(() -> {
-            controller.addLogMessageLogin(username + " ha appena fatto l'accesso ");
+            controller.addLogMessageLogin(username + " has joined " + currentTime);
         });
 
         //controller.addLogMessageLogin(username + " ha appena fatto l'accesso ");

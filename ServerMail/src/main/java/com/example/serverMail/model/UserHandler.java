@@ -1,34 +1,53 @@
 package com.example.serverMail.model;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 public class UserHandler {
-
-    String fileName = "usernames.bin";
+    JsonArray mailboxes;
+    String fileName = "mailboxes.json";
     private final String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-
-    public boolean addUser(String userName) throws IOException{
-        if (!isEmailValid(userName)) {
+    public UserHandler() {
+        mailboxes = new JsonArray();
+    }
+    public boolean addUser(MailBox mailBox) throws IOException {
+        if (!isEmailValid(mailBox.getMailBoxOwner())) {
             return false;
         }
-        try (OutputStream outputStream = new FileOutputStream(fileName, true)) {
-            byte[] usernameBytes = userName.getBytes(StandardCharsets.UTF_8);
-
-            // Write the length of the username as a 4-byte integer
-            outputStream.write((usernameBytes.length >> 24) & 0xFF);
-            outputStream.write((usernameBytes.length >> 16) & 0xFF);
-            outputStream.write((usernameBytes.length >> 8) & 0xFF);
-            outputStream.write((usernameBytes.length) & 0xFF);
-
-            // Write the actual username bytes
-            outputStream.write(usernameBytes);
-
-            return true;
+        try (FileReader fileReader = new FileReader(fileName)) { // read the existing file
+            // parse the existing JSON data into a JsonArray
+            JsonParser parser = new JsonParser();
+            mailboxes = parser.parse(fileReader).getAsJsonArray();
+        } catch (FileNotFoundException e) {
+            // if the file does not exist, create a new empty array
+            mailboxes = new JsonArray();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        try (FileWriter fileWriter = new FileWriter(fileName)) { // overwrite the file with the updated data
+            // create a JsonObject for each mailbox
+            JsonObject mailbox1 = new JsonObject();
+            mailbox1.add("mailBoxOwner", new JsonPrimitive(mailBox.getMailBoxOwner()));
+            mailbox1.add("rEmails", new JsonArray());
+            mailbox1.add("sEmails", new JsonArray());
+            // add the mailbox to the array
+            mailboxes.add(mailbox1);
+            Gson gson = new GsonBuilder().create();
+            // write the array to the file
+            String json = gson.toJson(mailboxes); // use the mailboxes array instead of the mailBox parameter
+            fileWriter.write(json + System.lineSeparator());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private boolean isEmailValid(String email) {
@@ -36,40 +55,42 @@ public class UserHandler {
         return matcher.find();
     }
 
-    public List<String> readUsers() {
-        List<String> usernames = new ArrayList<>();
+    public List<MailBox> readAllMailBoxes() {
+        List<MailBox> mailBoxes = new ArrayList<>();
 
-        try (InputStream inputStream = new FileInputStream(fileName)) {
-            while (true) {
-                int length = 0;
+        try {
+            File file = new File(fileName);
 
-                // Read the length of the username as a 4-byte integer
-                int byte1 = inputStream.read();
-                int byte2 = inputStream.read();
-                int byte3 = inputStream.read();
-                int byte4 = inputStream.read();
+            if (!file.exists()) {
+                // Create the file if it doesn't exist
+                file.createNewFile();
+            }
 
-                if (byte1 == -1 || byte2 == -1 || byte3 == -1 || byte4 == -1) {
-                    break;
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+                String line;
+                Gson gson = new GsonBuilder().create();
+                while ((line = bufferedReader.readLine()) != null) {
+                    // parse the line into a list of mailboxes
+                    Type listType = new TypeToken<List<MailBox>>() {}.getType();
+                    mailBoxes = gson.fromJson(line, listType);
                 }
-
-                length |= (byte1 << 24) & 0xFF000000;
-                length |= (byte2 << 16) & 0x00FF0000;
-                length |= (byte3 << 8) & 0x0000FF00;
-                length |= (byte4) & 0x000000FF;
-
-                byte[] usernameBytes = new byte[length];
-                inputStream.read(usernameBytes);
-
-                // Convert the bytes to a String using UTF-8 encoding
-                String username = new String(usernameBytes, StandardCharsets.UTF_8);
-
-                usernames.add(username);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Exception in UserHandler reading mailboxes " + e);
         }
 
-        return usernames;
+        return mailBoxes;
+    }
+
+
+    public boolean verifyUser(String userName) {
+        List<MailBox> mailBoxes = readAllMailBoxes();
+        for (MailBox mailBox : mailBoxes) {
+            System.out.println("Checking " + userName + " current mailBoxOwner " + mailBox.getMailBoxOwner());
+            if (mailBox.getMailBoxOwner().equals(userName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

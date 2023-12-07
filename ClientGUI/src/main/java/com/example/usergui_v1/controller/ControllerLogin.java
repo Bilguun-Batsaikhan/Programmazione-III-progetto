@@ -3,11 +3,10 @@ package com.example.usergui_v1.controller;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Objects;
 
-import com.example.usergui_v1.model.ServerResponse;
-import com.example.usergui_v1.model.UserOperations;
-import com.example.usergui_v1.model.SocketManager;
+import com.example.usergui_v1.model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -41,6 +40,8 @@ public class ControllerLogin {
         boolean result = startSocket(2);
         if(result) {
             register.setText("Now you can login!");
+        } else {
+            register.setText("Please write in form of username@example.com");
         }
     }
     @FXML
@@ -90,9 +91,9 @@ public class ControllerLogin {
                     SocketManager socketManager = new SocketManager(hostName,8080);
                     UserOperations askAuthentication = new UserOperations(1, username.getText());
                     askAuthentication.sendLoginRequest(socketManager.getObjectOutputStream());
-                    ServerResponse result = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
-                    if(result.getMessage().equals("Access denied")) {
-                        System.out.println(result.getMessage());
+                    ServerResponse response = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    if(response.getMessage().equals("Access denied")) {
+                        System.out.println(response.getMessage());
                         return false;
                     }
                     socketManager.closeConnection();
@@ -106,8 +107,15 @@ public class ControllerLogin {
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(2, username.getText());
-                    register.sendLoginRequest(socketManager.getObjectOutputStream());
+                    UserOperations register = new UserOperations(2, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username.getText()));
+                    register.sendRegistrationRequest(socketManager.getObjectOutputStream());
+                    ServerResponse response = register.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    if(response.getMessage().equals("Access denied")) {
+                        System.out.println(response.getMessage());
+                        return false;
+                    } else {
+                        return true;
+                    }
                 } catch (UnknownHostException e) {
                     System.out.println("Registration failed " + e);
                 } catch (IOException e) {
