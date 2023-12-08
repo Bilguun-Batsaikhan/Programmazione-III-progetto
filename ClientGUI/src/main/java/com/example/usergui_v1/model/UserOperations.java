@@ -67,6 +67,16 @@ public class UserOperations {
             System.out.println("There is problem while sending mailbox " + e);
         }
     }
+    public void sendLeftRequest(ObjectOutputStream out) {
+        assert this.numOperation == 3 && this.username != null : "Username cannot be NULL";
+        try {
+            Gson gson = new Gson();
+            out.writeObject(gson.toJson(this));
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("There is a problem while sending username " + e);
+        }
+    }
 
     public ServerResponse receiveLoginAuthentication(ObjectInputStream in) throws IOException {
         try {

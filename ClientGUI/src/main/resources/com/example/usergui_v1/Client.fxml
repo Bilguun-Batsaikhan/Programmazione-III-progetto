@@ -10,7 +10,7 @@
       <!-- Sidebar -->
       <VBox style="-fx-background-color: #0598ff; -fx-background-radius: 10px; -fx-alignment: CENTER; -fx-spacing: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
          <HBox VBox.vgrow="ALWAYS" />
-         <Label fx:id="User" style="-fx-text-fill: white;" text="Client : default@edu.unito.com">
+         <Label fx:id="User" style="-fx-text-fill: white;" text="">
             <font>
                <Font name="System Bold" size="13.0" />
             </font>
