@@ -20,8 +20,8 @@ public class UserOperations {
     private Email toSend;
     @SerializedName("reply")
     private Email reply;
-    @SerializedName("toForward")
-    private Email toForward;
+    @SerializedName("toDelete")
+    private Email toDelete;
     @SerializedName("disconnect")
     private boolean disconnect;
 
@@ -29,12 +29,12 @@ public class UserOperations {
     private MailBox mailBox;
 
     // constructor for all fields
-    public UserOperations(Operation operation, String username, Email toSend, Email reply, Email toForward, boolean disconnect, MailBox mailBox) {
+    public UserOperations(Operation operation, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox) {
         this.operation = operation;
         this.username = username;
         this.toSend = toSend;
         this.reply = reply;
-        this.toForward = toForward;
+        this.toDelete = toDelete;
         this.disconnect = disconnect;
         this.mailBox = mailBox;
     }

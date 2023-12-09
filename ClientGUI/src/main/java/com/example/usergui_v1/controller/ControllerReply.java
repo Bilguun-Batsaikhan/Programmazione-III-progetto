@@ -2,6 +2,7 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
+import com.example.usergui_v1.model.SocketManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,6 +42,9 @@ public class ControllerReply {
     private ClientModel model;
 
     private Email email;
+
+    private SocketManager socket = new SocketManager();
+
 
     @FXML
     private void handleClose() {
@@ -107,7 +111,7 @@ public class ControllerReply {
         email = new Email(sender,recipient, Subject.getText(), Body.getText(), new Date(), "134223");
         errorHandling(email);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
-            model.send(email);
+            socket.setEmailToSend(email);
         }
     }
 }

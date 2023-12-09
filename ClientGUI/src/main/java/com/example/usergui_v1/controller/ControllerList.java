@@ -50,9 +50,11 @@ public class ControllerList implements Initializable {
     private ListView<Email> emailSlist;
     private Email currentEmail;
     private ClientModel model;
+
+    private SocketManager socket = new SocketManager();
+
     private ListProperty<Email> receivedEmails = new SimpleListProperty<>();
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
-    final StringProperty emailAddress = new SimpleStringProperty();
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -60,39 +62,16 @@ public class ControllerList implements Initializable {
     @FXML
     private void handleClose() {
         boolean close;
-        try {
-            close = startSocket();
-         if (close)
-         System.exit(0);
-         else
-             System.out.println("Errore");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        close = socket.startSocket(Operation.EXIT);
+        if (close)
+            System.exit(0);
+        else
+            System.out.println("Errore");
     }
-    private boolean startSocket() throws IOException {
-        Objects.requireNonNull(Operation.EXIT);
-        try {
-            String hostName = InetAddress.getLocalHost().getHostName();
-            SocketManager socketManager = new SocketManager(hostName, 8080);
-            UserOperations left = new UserOperations(Operation.EXIT, User.getText());
-            left.sendRequest(socketManager.getObjectOutputStream()); //request log out
-            ServerResponse response = left.receiveServerResponse(socketManager.getObjectInputStream());
-            if (response.getMessage().equals("Error, user not joined")) {
-                System.out.println(response.getMessage());
-                return false;
-            }
-            socketManager.closeConnection();
-        } catch (UnknownHostException e) {
-            System.out.println("Log out failed " + e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return true;
-    }
+
     @FXML
     private void Remove(){
-        model.remove(currentEmail);
+        socket.setEmailToDelete(currentEmail);
     }
     @FXML
     private void WriteEmail() throws IOException {
@@ -119,22 +98,22 @@ public class ControllerList implements Initializable {
             switch (fxmlToLoad){
                 case "ReplyAll.fxml": {
                     ControllerReplyAll controller = loader.getController();
-                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    controller.initialize(currentEmail, User.getText(), model);
                     break;
                 }
                 case "Reply.fxml":{
                     ControllerReply controller = loader.getController();
-                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    controller.initialize(currentEmail, User.getText(), model);
                     break;
                 }
                 case "Forward.fxml": {
                     ControllerForward controller = loader.getController();
-                    controller.initialize(currentEmail, emailAddress.get(), model);
+                    controller.initialize(currentEmail, User.getText(), model);
                     break;
                 }
                 case "WriteEmail.fxml": {
                     ControllerWriteMail controller = loader.getController();
-                    controller.initialize(emailAddress.get(), model);
+                    controller.initialize(User.getText(), model);
                     break;
                 }
             }
@@ -166,7 +145,6 @@ public class ControllerList implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.model = new ClientModel();
         initializeBindings();
-        User.setText("Client :  " + emailAddress.get());
         setListView(emailRlist,true);
         setListView(emailSlist,false);
     }
@@ -174,7 +152,6 @@ public class ControllerList implements Initializable {
     private void initializeBindings() {
         receivedEmails.bind(model.rEmailsProperty());
         sentEmails.bind(model.sEmailsProperty());
-        emailAddress.bind(model.mailBoxOwnerProperty());
     }
 
     private void setListView(ListView<Email> email,boolean received){
