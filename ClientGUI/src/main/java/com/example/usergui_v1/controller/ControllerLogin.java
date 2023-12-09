@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import com.example.usergui_v1.model.*;
@@ -38,7 +40,7 @@ public class ControllerLogin {
 
     @FXML
     private void register() {
-        boolean result = startSocket(2);
+        boolean result = startSocket(Operation.REGISTER);
         if(result) {
             register.setText("Now you can login!");
         } else {
@@ -70,7 +72,7 @@ public class ControllerLogin {
                 newStage.setY(event.getScreenY() - yOffset);
             });
 
-        boolean loginAuthorized = startSocket(1);
+        boolean loginAuthorized = startSocket(Operation.LOGIN);
             if(loginAuthorized) {
                 closeLoginWindow();
                 temp.setUsers(username.getText());
@@ -87,15 +89,15 @@ public class ControllerLogin {
             System.out.println("The file doesn't exist" + e);
         }
     }
-        public boolean startSocket(int LogReg) {
+        public boolean startSocket(Operation LogReg) {
         switch (LogReg) {
-            case 1:
+            case LOGIN:
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations askAuthentication = new UserOperations(1, username.getText());
-                    askAuthentication.sendLoginRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = askAuthentication.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    UserOperations askAuthentication = new UserOperations(Operation.LOGIN, username.getText());
+                    askAuthentication.sendRequest(socketManager.getObjectOutputStream());
+                    ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
                     if(response.getMessage().equals("Access denied")) {
                         System.out.println(response.getMessage());
                         return false;
@@ -107,13 +109,13 @@ public class ControllerLogin {
                     throw new RuntimeException(e);
                 }
             break;
-            case 2:
+            case REGISTER:
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(2, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username.getText()));
-                    register.sendRegistrationRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = register.receiveLoginAuthentication(socketManager.getObjectInputStream());
+                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username.getText()));
+                    register.sendRequest(socketManager.getObjectOutputStream());
+                    ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
                     if(response.getMessage().equals("Access denied")) {
                         System.out.println(response.getMessage());
                         return false;
@@ -126,7 +128,16 @@ public class ControllerLogin {
                     throw new RuntimeException(e);
                 }
             break;
-
+//            case SEND:
+//                //////////////////
+//                List<String> recipients = new ArrayList<>();
+//                recipients.add(username.getText());
+//                Email email = new Email("Bilguun@gmail.com",recipients, "test", "test123123", new Date(), "134223");
+//                UserOperations userOperations = new UserOperations(Operation.SEND, username.getText(), email, null, null, false, null);
+//                SocketManager socketManager = new SocketManager()
+//                userOperations.sendRequest();
+//                //////////////////
+//            break;
         }
             return true;
         }
@@ -156,6 +167,4 @@ public class ControllerLogin {
         newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
         newStage.showAndWait();
     }
-
-
 }

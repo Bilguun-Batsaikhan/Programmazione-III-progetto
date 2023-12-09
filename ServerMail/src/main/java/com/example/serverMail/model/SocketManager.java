@@ -14,10 +14,10 @@ import java.util.List;
 public class SocketManager implements Runnable {
 
     private final Socket clientSocket;
-    private UserHandler userHandler;
-    private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
-    private MailServerController controllerView;
+    private final UserHandler userHandler;
+    private final ObjectInputStream objectInputStream;
+    private final ObjectOutputStream objectOutputStream;
+    private final MailServerController controllerView;
 
 
     public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out, MailServerController  controller) {
@@ -50,12 +50,12 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException{
+    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException, IOException {
         String username;
         boolean result;
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        switch (userOperations.getNumOperation()) {
-            case 1: {
+        switch (userOperations.getOperation()) {
+            case LOGIN: {
                 username = userOperations.getUsername();
                 result = userHandler.verifyUser(userOperations.getUsername());
                 //take date
@@ -68,7 +68,7 @@ public class SocketManager implements Runnable {
                 }
                 return result ? "welcome " + username : "Access denied";
             }
-            case 2:
+            case REGISTER:
                 try {
                     result = userHandler.addUser(userOperations.getMailBox());
                     return result ? "welcome " + userOperations.getUsername() : "Access denied";
@@ -76,7 +76,7 @@ public class SocketManager implements Runnable {
                     System.out.println("Failed to add user " + e);
                 }
             break;
-            case 3:
+            case EXIT:
                 username = userOperations.getUsername();
                 result = userHandler.verifyUser(userOperations.getUsername());
                 if(result)
@@ -88,6 +88,10 @@ public class SocketManager implements Runnable {
                     t1.join();
                 }
                 return result ? "Bye " + username : "Error, user not joined";
+            case SEND:
+                username = userOperations.getUsername();
+                result = userHandler.addEmailToMailBox(username, userOperations.getToSend());
+                return result ? "Email added to " + username + "'s mailbox" : "Couldn't add the email";
         }
         return "There is no such operation";
     }

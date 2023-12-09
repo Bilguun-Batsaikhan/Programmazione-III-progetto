@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import static com.example.usergui_v1.model.Operation.EXIT;
+import static com.example.usergui_v1.model.Operation.LOGIN;
+
 public class UserOperations {
 
-    @SerializedName("numOperation")
-    private int numOperation;
+    @SerializedName("operation")
+    private Operation operation;
     @SerializedName("username")
     private String username;
     @SerializedName("toSend")
@@ -26,8 +29,8 @@ public class UserOperations {
     private MailBox mailBox;
 
     // constructor for all fields
-    public UserOperations(int numOperation, String username, Email toSend, Email reply, Email toForward, boolean disconnect, MailBox mailBox) {
-        this.numOperation = numOperation;
+    public UserOperations(Operation operation, String username, Email toSend, Email reply, Email toForward, boolean disconnect, MailBox mailBox) {
+        this.operation = operation;
         this.username = username;
         this.toSend = toSend;
         this.reply = reply;
@@ -37,17 +40,17 @@ public class UserOperations {
     }
 
     // constructor for login
-    public UserOperations(int numOperation, String username) {
-        this(numOperation, username, null, null, null, false, null); // call the other constructor with default values for the other fields
+    public UserOperations(Operation operation, String username) {
+        this(operation, username, null, null, null, false, null); // call the other constructor with default values for the other fields
     }
 
     // constructor for registration
-    public UserOperations(int numOperation, MailBox mailBox) {
-        this(numOperation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
+    public UserOperations(Operation operation, MailBox mailBox) {
+        this(operation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
     }
 
-    public void sendLoginRequest(ObjectOutputStream out) {
-        assert this.numOperation == 1 && this.username != null : "Username cannot be NULL";
+    public void sendRequest(ObjectOutputStream out) {
+        assert this.operation != null : "Operation cannot be NULL";
         try {
             Gson gson = new Gson();
             out.writeObject(gson.toJson(this));
@@ -57,28 +60,8 @@ public class UserOperations {
         }
     }
 
-    public void sendRegistrationRequest(ObjectOutputStream out) {
-        assert this.mailBox != null : "Mailbox cannot be NULL";
-        try {
-            Gson gson = new Gson();
-            out.writeObject(gson.toJson(this));
-            out.flush();
-        } catch (IOException e) {
-            System.out.println("There is problem while sending mailbox " + e);
-        }
-    }
-    public void sendLeftRequest(ObjectOutputStream out) {
-        assert this.numOperation == 3 && this.username != null : "Username cannot be NULL";
-        try {
-            Gson gson = new Gson();
-            out.writeObject(gson.toJson(this));
-            out.flush();
-        } catch (IOException e) {
-            System.out.println("There is a problem while sending username " + e);
-        }
-    }
 
-    public ServerResponse receiveLoginAuthentication(ObjectInputStream in) throws IOException {
+    public ServerResponse receiveServerResponse(ObjectInputStream in) throws IOException {
         try {
             Gson x = new Gson();
             String result = (String) in.readObject();
