@@ -92,6 +92,7 @@ public class SocketManager {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
                     UserOperations askAuthentication = new UserOperations(Operation.LOGIN, username);
+                    System.out.println(username);
                     askAuthentication.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
                     if(response.getMessage().equals("Access denied")) {
@@ -99,6 +100,7 @@ public class SocketManager {
                         return false;
                     }
                     socketManager.closeConnection();
+
                 } catch (UnknownHostException e) {
                     System.out.println("Login failed " + e);
                 } catch (IOException e) {

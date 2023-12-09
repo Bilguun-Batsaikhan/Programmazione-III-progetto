@@ -62,6 +62,7 @@ public class ControllerList implements Initializable {
     @FXML
     private void handleClose() {
         boolean close;
+        socket.setUsername(User.getText());
         close = socket.startSocket(Operation.EXIT);
         if (close)
             System.exit(0);

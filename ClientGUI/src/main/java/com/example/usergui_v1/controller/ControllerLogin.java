@@ -75,7 +75,7 @@ public class ControllerLogin {
                 newStage.setX(event.getScreenX() - xOffset);
                 newStage.setY(event.getScreenY() - yOffset);
             });
-
+            socket.setUsername(username.getText());
         boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
             if(loginAuthorized) {
                 closeLoginWindow();
