@@ -27,16 +27,10 @@ public class MailServerController implements Initializable {
         @FXML
         private TextField searchTextField;
         @FXML
-        private Button userReaderBtn;
-        @FXML
         private TextArea userList;
-        @FXML
-        private TextField newUser;
         @FXML
         private TextField logTextField;
 
-        @FXML
-        private Button addUserBtn;
 
         private ArrayList<String> word = new ArrayList<>();
         Random r = new Random();
@@ -79,25 +73,7 @@ public class MailServerController implements Initializable {
         {
                 model.orderListDescending();
         }
-//        @FXML
-//        public void addUser(ActionEvent event) {
-//                try {
-//                        String userToAdd = newUser.getText();
-//                        if (userToAdd != null) {
-//                                boolean result = userHandler.addUser(userToAdd);
-//                                if (result) {
-//                                        addUserResult.setText(userToAdd + " successfully added");
-//                                        addUserResult.setTextFill(Color.GREEN);
-//                                } else {
-//                                        addUserResult.setText("Email format not valid");
-//                                        addUserResult.setTextFill(Color.RED);
-//                                }
-//                        }
-//                }
-//                catch (IOException e) {
-//                        e.printStackTrace();
-//                }
-//        }
+
         @FXML
         public void readUsers(ActionEvent event) {
                 List<MailBox> mailBoxes = userHandler.readAllMailBoxes();

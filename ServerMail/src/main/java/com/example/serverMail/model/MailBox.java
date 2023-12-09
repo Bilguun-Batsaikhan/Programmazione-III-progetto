@@ -40,6 +40,13 @@ public class MailBox implements Serializable {
         this.sEmails = sEmails;
     }
 
+    public void addReceivedEmail(Email email) {
+        rEmails.add(email);
+    }
+
+    public void addSentEmail(Email email) {
+        sEmails.add(email);
+    }
     public ArrayList<String> getrSubjectsEmail() {
         ArrayList<String> emailSubjects = new ArrayList<>();
         for(Email e: rEmails) {

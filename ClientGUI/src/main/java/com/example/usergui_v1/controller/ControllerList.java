@@ -59,9 +59,9 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void handleClose() {
-        boolean close = false;
+        boolean close;
         try {
-            close = startSocket(3);
+            close = startSocket();
          if (close)
          System.exit(0);
          else
@@ -70,26 +70,23 @@ public class ControllerList implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private boolean startSocket(int op) throws IOException {
-        switch (op) {
-            case 3:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName, 8080);
-                    UserOperations left = new UserOperations(3, User.getText());
-                    left.sendLeftRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = left.receiveLoginAuthentication(socketManager.getObjectInputStream());
-                    if (response.getMessage().equals("Error, user not joined")) {
-                        System.out.println(response.getMessage());
-                        return false;
-                    }
-                    socketManager.closeConnection();
-                } catch (UnknownHostException e) {
-                    System.out.println("Login failed " + e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
+    private boolean startSocket() throws IOException {
+        Objects.requireNonNull(Operation.EXIT);
+        try {
+            String hostName = InetAddress.getLocalHost().getHostName();
+            SocketManager socketManager = new SocketManager(hostName, 8080);
+            UserOperations left = new UserOperations(Operation.EXIT, User.getText());
+            left.sendRequest(socketManager.getObjectOutputStream()); //request log out
+            ServerResponse response = left.receiveServerResponse(socketManager.getObjectInputStream());
+            if (response.getMessage().equals("Error, user not joined")) {
+                System.out.println(response.getMessage());
+                return false;
+            }
+            socketManager.closeConnection();
+        } catch (UnknownHostException e) {
+            System.out.println("Log out failed " + e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return true;
     }

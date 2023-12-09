@@ -7,6 +7,7 @@ module com.example.demo {
     opens com.example.serverMail to javafx.fxml;
     exports com.example.serverMail;
     exports com.example.serverMail.controller;
+    exports com.example.serverMail.model;
     opens com.example.serverMail.controller to javafx.fxml;
     opens com.example.serverMail.model to com.google.gson;
 }
