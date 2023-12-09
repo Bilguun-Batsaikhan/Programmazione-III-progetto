@@ -2,6 +2,7 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
+import com.example.usergui_v1.model.SocketManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +30,7 @@ public class ControllerForward {
     private Email email;
     @FXML
     private TextArea Recipients;
+    private SocketManager socket = new SocketManager();
 
     @FXML
     private void handleClose() {
@@ -48,7 +50,7 @@ public class ControllerForward {
         email = new Email(sender,getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), "134223");
         errorHandling(email);
         if(!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
-            model.send(email);
+            socket.setEmailToSend(email);
         }
 
     }

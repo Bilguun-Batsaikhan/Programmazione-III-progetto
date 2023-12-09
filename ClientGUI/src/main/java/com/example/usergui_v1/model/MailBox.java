@@ -15,13 +15,6 @@ public class MailBox implements Serializable {
         this.sEmails = sEmails;
         this.mailBoxOwner = me;
     }
-    public MailBox() {
-        this.rEmails = new ArrayList<>();
-        this.sEmails = new ArrayList<>();
-
-        mailBoxOwner = "defualt@edu.unito.com";
-    }
-
     public String getMailBoxOwner() {
         return mailBoxOwner;
     }

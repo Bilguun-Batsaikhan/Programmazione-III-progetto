@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.example.usergui_v1.model.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,12 +37,14 @@ public class ControllerLogin {
     private Text register;
     private double xOffset = 0;
     private double yOffset = 0;
+    private SocketManager socket = new SocketManager();
 
     public ControllerLogin() {}
 
     @FXML
     private void register() {
-        boolean result = startSocket(Operation.REGISTER);
+        socket.setUsername(username.getText());
+        boolean result = socket.startSocket(Operation.REGISTER);
         if(result) {
             register.setText("Now you can login!");
         } else {
@@ -72,7 +76,7 @@ public class ControllerLogin {
                 newStage.setY(event.getScreenY() - yOffset);
             });
 
-        boolean loginAuthorized = startSocket(Operation.LOGIN);
+        boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
             if(loginAuthorized) {
                 closeLoginWindow();
                 temp.setUsers(username.getText());
@@ -89,58 +93,7 @@ public class ControllerLogin {
             System.out.println("The file doesn't exist" + e);
         }
     }
-        public boolean startSocket(Operation LogReg) {
-        switch (LogReg) {
-            case LOGIN:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations askAuthentication = new UserOperations(Operation.LOGIN, username.getText());
-                    askAuthentication.sendRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(response.getMessage().equals("Access denied")) {
-                        System.out.println(response.getMessage());
-                        return false;
-                    }
-                    socketManager.closeConnection();
-                } catch (UnknownHostException e) {
-                    System.out.println("Login failed " + e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            break;
-            case REGISTER:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username.getText()));
-                    register.sendRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(response.getMessage().equals("Access denied")) {
-                        System.out.println(response.getMessage());
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } catch (UnknownHostException e) {
-                    System.out.println("Registration failed " + e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            break;
-//            case SEND:
-//                //////////////////
-//                List<String> recipients = new ArrayList<>();
-//                recipients.add(username.getText());
-//                Email email = new Email("Bilguun@gmail.com",recipients, "test", "test123123", new Date(), "134223");
-//                UserOperations userOperations = new UserOperations(Operation.SEND, username.getText(), email, null, null, false, null);
-//                SocketManager socketManager = new SocketManager()
-//                userOperations.sendRequest();
-//                //////////////////
-//            break;
-        }
-            return true;
-        }
+
     public void closeLoginWindow() {
         Stage stage = (Stage) loginRoot.getScene().getWindow();
         stage.close();
@@ -152,19 +105,4 @@ public class ControllerLogin {
         stage.setMaximized(!stage.isMaximized());
     }
 
-    private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerPopUp controller = loader.getController();
-        controller.initialize(error);
-
-        Scene newScene = new Scene(newSceneRoot);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-
-        newScene.setFill(Color.TRANSPARENT);
-        newStage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
-        newStage.showAndWait();
-    }
 }

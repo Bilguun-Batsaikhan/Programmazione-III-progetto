@@ -17,20 +17,6 @@ public class ClientModel {
 
     private MailBox mailBox;
     public ClientModel() {
-        this.mailBox = new MailBox();
-        syncWithMailBox();
-    }
-
-    public MailBox getMailBox() {
-        return mailBox;
-    }
-
-    //L'ottenimento della casella di posta dovrebbe essere collegato a questo metodo. In questo modo la casella di posta ottenuta dal server
-    //viene passata con le properties al client
-    private void syncWithMailBox() {
-        mailBoxOwner.set(mailBox.getMailBoxOwner());
-        rEmails.setAll(FXCollections.observableArrayList(mailBox.getrEmails()));
-        sEmails.setAll(FXCollections.observableArrayList(mailBox.getsEmails()));
     }
 
     public StringProperty mailBoxOwnerProperty() {
@@ -58,15 +44,5 @@ public class ClientModel {
         }
         return correct;
     }
-
-    //Questa è la funzione che dovrebbe occuparsi di mandare il messaggio al server
-    public void send(Email email){
-        System.out.println(email);
-    }
-    //Questa è la funzione che dovrebbe occuparsi di chiedere al server di eliminare il messaggio
-    public void remove(Email email){
-        System.out.println(email);
-    }
-
 
 }

@@ -5,7 +5,7 @@ public enum Operation {
     EXIT(3),
     SEND(4),
     RECEIVE(5),
-    FORWARD(6),
+    DELETE(6),
     VERIFY(7);
 
     private final int id;
