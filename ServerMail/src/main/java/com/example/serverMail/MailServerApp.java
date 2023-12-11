@@ -17,7 +17,6 @@ public class MailServerApp extends Application {
         Scene scene = new Scene(loader.load(), 1000, 700);// Ora puoi chiamare il metodo init() dopo aver caricato il controller
         MailServerController controller = loader.getController();
 
-
         stage.setTitle("Mail Server");
         stage.setScene(scene);
         stage.setOnCloseRequest(windowEvent -> System.exit(0));

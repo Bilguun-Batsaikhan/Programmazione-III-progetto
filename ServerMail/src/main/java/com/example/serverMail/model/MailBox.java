@@ -54,4 +54,13 @@ public class MailBox implements Serializable {
         }
         return emailSubjects;
     }
+
+    @Override
+    public String toString() {
+        return "MailBox{" +
+                "mailBoxOwner='" + mailBoxOwner + '\'' +
+                ", rEmails=" + rEmails +
+                ", sEmails=" + sEmails +
+                '}';
+    }
 }
