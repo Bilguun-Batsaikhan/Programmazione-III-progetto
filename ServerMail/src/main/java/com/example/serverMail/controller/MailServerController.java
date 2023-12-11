@@ -28,9 +28,6 @@ public class MailServerController implements Initializable {
         private TextField searchTextField;
         @FXML
         private TextArea userList;
-        @FXML
-        private TextField logTextField;
-
 
         private ArrayList<String> word = new ArrayList<>();
         Random r = new Random();
@@ -76,10 +73,10 @@ public class MailServerController implements Initializable {
 
         @FXML
         public void readUsers(ActionEvent event) {
-                List<MailBox> mailBoxes = userHandler.readAllMailBoxes();
+                List<String> usernames = userHandler.readUsers();
                 String listUsers = "";
-                for(MailBox mailBox: mailBoxes) {
-                        listUsers += mailBox.getMailBoxOwner() + "\n";
+                for(String user: usernames) {
+                        listUsers += user + "\n";
                 }
 
                 System.out.println(listUsers);

@@ -88,10 +88,10 @@ public class SocketManager implements Runnable {
                     t1.join();
                 }
                 return result ? "Bye " + username : "Error, user not joined";
-            case SEND:
-                username = userOperations.getUsername();
-                result = userHandler.addEmailToMailBox(username, userOperations.getToSend());
-                return result ? "Email added to " + username + "'s mailbox" : "Couldn't add the email";
+//            case SEND:
+//                username = userOperations.getUsername();
+//                result = userHandler.addEmailToMailBox(username, userOperations.getToSend());
+//                return result ? "Email added to " + username + "'s mailbox" : "Couldn't add the email";
         }
         return "There is no such operation";
     }
