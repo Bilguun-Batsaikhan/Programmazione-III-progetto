@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -34,7 +35,7 @@ public class ControllerLogin {
     @FXML
     private TextField username;
     @FXML
-    private Text register;
+    private Text feedback;
     private double xOffset = 0;
     private double yOffset = 0;
     private SocketManager socket = new SocketManager();
@@ -46,9 +47,9 @@ public class ControllerLogin {
         socket.setUsername(username.getText());
         boolean result = socket.startSocket(Operation.REGISTER);
         if(result) {
-            register.setText("Now you can login!");
+            showSuccessPopup();
         } else {
-            register.setText("Please write in form of username@example.com");
+            feedback.setText("Please write in form of username@example.com");
         }
     }
     @FXML
@@ -105,4 +106,23 @@ public class ControllerLogin {
         stage.setMaximized(!stage.isMaximized());
     }
 
+    private void showSuccessPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml"));
+            Parent root = loader.load();
+
+            ControllerPopUp controller = loader.getController();
+            controller.initialize("Registration Successful! Now you can log in.");
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Success");
+            stage.setScene(new Scene(root));
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
