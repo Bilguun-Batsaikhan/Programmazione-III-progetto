@@ -43,14 +43,20 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void register() {
-        socket.setUsername(username.getText());
-        boolean result = socket.startSocket(Operation.REGISTER);
-        if(result) {
-            showSuccessPopup();
-        } else {
-            feedback.setText("Please write in form of username@example.com");
-        }
+    private void register() throws IOException {
+       try {
+           ControllerPopUp popUp = new ControllerPopUp();
+           socket.setUsername(username.getText());
+           boolean result = socket.startSocket(Operation.REGISTER);
+           if (result) {
+               popUp.startPopUp("SignUp", true);
+           } else {
+               feedback.setText("Please write in form of username@example.com");
+           }
+       }
+       catch (NullPointerException e){
+           System.out.println("Registration Failed");
+       }
     }
     @FXML
     private void exit() {
@@ -106,23 +112,4 @@ public class ControllerLogin {
         stage.setMaximized(!stage.isMaximized());
     }
 
-    private void showSuccessPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml"));
-            Parent root = loader.load();
-
-            ControllerPopUp controller = loader.getController();
-            controller.initialize("Registration Successful! Now you can log in.");
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Success");
-            stage.setScene(new Scene(root));
-
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
