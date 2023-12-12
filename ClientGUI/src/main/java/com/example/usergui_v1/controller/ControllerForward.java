@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -40,16 +41,16 @@ public class ControllerForward {
 
     public void initialize(Email selectedItem, String sender, ClientModel model) throws IOException {
         this.selectedItem = selectedItem;
-        this.sender=sender;
+        this.sender = sender;
         this.model = model;
         errorHandling(email);
     }
 
     @FXML
     private void Send() throws IOException {
-        email = new Email(sender,getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), "134223");
+        email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), "134223");
         errorHandling(email);
-        if(!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
+        if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             socket.setEmailToSend(email);
         }
 
@@ -67,39 +68,19 @@ public class ControllerForward {
     }
 
 
-    private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerPopUp controller = loader.getController();
-        controller.initialize(error);
-
-        Scene newScene = new Scene(newSceneRoot);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-
-        newScene.setFill(Color.TRANSPARENT);
-        newStage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
-        newStage.showAndWait();
-
-        if((!Objects.equals(error, "FewArguments")) && (!Objects.equals(error, "WrongFormatEmail"))) {
+    private void errorHandling(Email email) throws IOException {
+        ControllerPopUp popUp = new ControllerPopUp();
+        if (selectedItem == null) {
+            popUp.startPopUp("NullEmail",false);
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();
             });
+        } else if (email != null && getRecipients().isEmpty()) {
+            popUp.startPopUp("FewArguments",false);
+
+        } else if (email != null && !model.CorrectFormatEmail(getRecipients())) {
+            popUp.startPopUp("WrongFormatEmail",false);
         }
     }
-
-    private void errorHandling(Email email) throws IOException {
-        if(selectedItem == null){
-            startPopUp("NullEmail");
-        }
-        else if (email!=null && getRecipients().isEmpty()){
-            startPopUp("FewArguments");
-        }
-        else if(email!=null && !model.CorrectFormatEmail(getRecipients())){
-            startPopUp("WrongFormatEmail");
-        }
-    }
-
 }

@@ -55,7 +55,7 @@ public class UserOperations {
             Gson gson = new Gson();
             out.writeObject(gson.toJson(this));
             out.flush();
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             System.out.println("There is a problem while sending username " + e);
         }
     }

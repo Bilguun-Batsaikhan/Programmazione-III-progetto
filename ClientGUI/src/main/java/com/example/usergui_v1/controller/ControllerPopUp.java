@@ -1,10 +1,20 @@
 package com.example.usergui_v1.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.util.Objects;
 
 
 public class ControllerPopUp {
@@ -20,7 +30,7 @@ public class ControllerPopUp {
         stage.close();
     }
 
-    public void initialize(String errorType) {
+    public void initialize(String errorType) throws IOException {
         makeSceneDraggable();
         switch (errorType) {
             case "ReplySent":
@@ -41,8 +51,8 @@ public class ControllerPopUp {
             case "AccessDenied":
                 errorPopUp.setText("Access denied. Wrong password or email.");
                 break;
-            case "Registration Successful! Now you can log in.":
-                errorPopUp.setText(errorType);
+            case "SignUp":
+                errorPopUp.setText("Registration Successful! Now you can log in.");
                 break;
             default:
                 // Handle unexpected errorType
@@ -62,4 +72,28 @@ public class ControllerPopUp {
             stage.setY(event.getScreenY() - yOffset);
         });
     }
+    public void startPopUp(String error, boolean success) throws IOException {
+        FXMLLoader loader;
+        if(success){
+            loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml")));
+
+        }
+        else {
+            loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
+        }
+        Parent newSceneRoot = loader.load();
+        ControllerPopUp controller = loader.getController();
+        controller.initialize(error);
+
+        Scene newScene = new Scene(newSceneRoot);
+        Stage newStage = new Stage();
+        newStage.setScene(newScene);
+
+
+        newScene.setFill(Color.TRANSPARENT);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        newStage.showAndWait();
+    }
+
 }
