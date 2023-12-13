@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -34,7 +35,7 @@ public class ControllerLogin {
     @FXML
     private TextField username;
     @FXML
-    private Text register;
+    private Text feedback;
     private double xOffset = 0;
     private double yOffset = 0;
     private SocketManager socket = new SocketManager();
@@ -42,14 +43,20 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void register() {
-        socket.setUsername(username.getText());
-        boolean result = socket.startSocket(Operation.REGISTER);
-        if(result) {
-            register.setText("Now you can login!");
-        } else {
-            register.setText("Please write in form of username@example.com");
-        }
+    private void register() throws IOException {
+       try {
+           ControllerPopUp popUp = new ControllerPopUp();
+           socket.setUsername(username.getText());
+           boolean result = socket.startSocket(Operation.REGISTER);
+           if (result) {
+               popUp.startPopUp("SignUp", true);
+           } else {
+               feedback.setText("Please write in form of username@example.com");
+           }
+       }
+       catch (NullPointerException e){
+           System.out.println("Registration Failed");
+       }
     }
     @FXML
     private void exit() {

@@ -1,6 +1,11 @@
 package com.example.usergui_v1.model;
 
 
+import com.example.usergui_v1.controller.ControllerLogin;
+import com.example.usergui_v1.controller.ControllerPopUp;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,6 +26,8 @@ public class SocketManager {
 
     private Email toDelete;
 
+    private ControllerPopUp popUp = new ControllerPopUp();
+
     public SocketManager() {
     }
 
@@ -39,7 +46,7 @@ public class SocketManager {
     }
 
 
-    public SocketManager(String serverAddress, int port) {
+    public SocketManager(String serverAddress, int port) throws IOException {
         try {
             this.socket = new Socket(serverAddress, port);
             System.out.println("User socket initialized");
@@ -62,8 +69,8 @@ public class SocketManager {
             }
             System.out.println("Received signal from server: " + signal);
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("IO exception: " + e.getMessage());
+            popUp.startPopUp("ServerConnection", false);
         }
     }
 
@@ -117,11 +124,11 @@ public class SocketManager {
                         return false;
                     } else
                         return true;
-
+                    }
                 } catch (UnknownHostException e) {
                     System.out.println("Registration failed " + e);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("Registration failed " + e);
                 }
                 break;
             case EXIT:

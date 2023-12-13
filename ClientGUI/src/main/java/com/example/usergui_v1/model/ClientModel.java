@@ -37,6 +37,9 @@ public class ClientModel {
 
 
     public boolean CorrectFormatEmail(List<String> recipients) {
+        if(recipients == null){
+            return false;
+        }
         String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
         Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         boolean correct = true;

@@ -4,14 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="popupRoot" prefHeight="154.0" prefWidth="277.0" style="-fx-background-color: #ffc400;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerPopUp">
+<AnchorPane fx:id="popupRoot" prefHeight="163.0" prefWidth="277.0" style="-fx-background-color: #ffc400;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerPopUp">
       <Label layoutX="95.0" layoutY="14.0" prefHeight="43.0" prefWidth="140.0" style="-fx-text-fill: black;" text="Warning!">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="ErrorPopUp" layoutX="91.0" layoutY="48.0" prefHeight="57.0" prefWidth="169.0" style="-fx-text-fill: black;" text="Label" wrapText="true" />
-      <Button layoutX="93.0" layoutY="98.0" mnemonicParsing="false" onAction="#Close" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #e3dddd; -fx-border-color: black;" text="Ok">
+      <Label fx:id="errorPopUp" layoutX="91.0" layoutY="48.0" prefHeight="57.0" prefWidth="169.0" style="-fx-text-fill: black;" text="Label" wrapText="true" />
+      <Button layoutX="93.0" layoutY="111.0" mnemonicParsing="false" onAction="#Close" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #e3dddd; -fx-border-color: black;" text="Ok">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Button>
