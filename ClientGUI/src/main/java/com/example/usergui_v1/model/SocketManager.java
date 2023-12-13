@@ -124,7 +124,7 @@ public class SocketManager {
                         return false;
                     } else
                         return true;
-                    }
+
                 } catch (UnknownHostException e) {
                     System.out.println("Registration failed " + e);
                 } catch (IOException e) {
