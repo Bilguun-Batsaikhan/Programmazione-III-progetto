@@ -42,7 +42,9 @@ public class UserOperations {
     }
     public UserOperations(Operation operation, String username, Email emailToSend)
     {
-        this(operation,username,emailToSend, null, null, false, null);
+        this.operation = operation;
+        this.username = username;
+        this.toSend = emailToSend;
     }
 
     @Override
