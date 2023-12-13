@@ -40,6 +40,10 @@ public class UserOperations {
     public UserOperations(Operation operation, MailBox mailBox) {
         this(operation, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
     }
+    public UserOperations(Operation operation, String username, Email emailToSend)
+    {
+        this(operation,username,emailToSend, null, null, false, null);
+    }
 
     @Override
     public String toString() {

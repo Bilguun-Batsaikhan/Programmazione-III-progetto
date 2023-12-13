@@ -48,6 +48,11 @@ public class UserOperations {
     public UserOperations(Operation operation, MailBox mailBox) {
         this(operation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
     }
+    //costructor for send email
+    public UserOperations(Operation operation, String username, Email emailToSend)
+    {
+        this(operation,username,emailToSend, null, null, false, null);
+    }
 
     public void sendRequest(ObjectOutputStream out) {
         assert this.operation != null : "Operation cannot be NULL";

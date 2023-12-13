@@ -3,8 +3,6 @@ package com.example.usergui_v1.controller;
 import com.example.usergui_v1.model.*;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,9 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -55,19 +51,17 @@ public class ControllerList implements Initializable {
 
     private ListProperty<Email> receivedEmails = new SimpleListProperty<>();
     private ListProperty<Email> sentEmails = new SimpleListProperty<>();
-
     private double xOffset = 0;
     private double yOffset = 0;
 
     @FXML
     private void handleClose() {
+        System.out.println("Close start");
         boolean close;
         socket.setUsername(User.getText());
         close = socket.startSocket(Operation.EXIT);
-        if (close)
-            System.exit(0);
-        else
-            System.out.println("Errore");
+        System.out.println("Close request");
+        System.exit(0);
     }
 
     @FXML
@@ -155,7 +149,7 @@ public class ControllerList implements Initializable {
         sentEmails.bind(model.sEmailsProperty());
     }
 
-    private void setListView(ListView<Email> email,boolean received){
+    protected void setListView(ListView<Email> email,boolean received){
         if(received) {
             email.getItems().addAll(receivedEmails.get());
         }
@@ -201,4 +195,5 @@ public class ControllerList implements Initializable {
     {
         User.setText(username);
     }
+
 }

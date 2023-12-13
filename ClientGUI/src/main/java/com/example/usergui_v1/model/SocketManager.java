@@ -1,9 +1,11 @@
 package com.example.usergui_v1.model;
 
+
 import com.example.usergui_v1.controller.ControllerLogin;
 import com.example.usergui_v1.controller.ControllerPopUp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,7 +14,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Objects;
+
 
 public class SocketManager {
     private ObjectInputStream objectInputStream;
@@ -98,7 +100,7 @@ public class SocketManager {
                     System.out.println(username);
                     askAuthentication.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(response.getMessage().equals("Access denied")) {
+                    if(!response.isSuccess()){
                         System.out.println(response.getMessage());
                         return false;
                     }
@@ -117,12 +119,14 @@ public class SocketManager {
                     UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username));
                     register.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(response.getMessage().equals("Access denied")) {
+                    if(!response.isSuccess()) {
                         System.out.println(response.getMessage());
                         return false;
-                    } else {
+                    } else
                         return true;
                     }
+                } catch (UnknownHostException e) {
+                    System.out.println("Registration failed " + e);
                 } catch (IOException e) {
                     System.out.println("Registration failed " + e);
                 }
@@ -134,28 +138,34 @@ public class SocketManager {
                     UserOperations left = new UserOperations(Operation.EXIT, username);
                     left.sendRequest(socketManager.getObjectOutputStream()); //request log out
                     ServerResponse response = left.receiveServerResponse(socketManager.getObjectInputStream());
-                    if (response.getMessage().equals("Error, user not joined")) {
-                        System.out.println(response.getMessage());
-                        return false;
-                    }
                     socketManager.closeConnection();
                 } catch (UnknownHostException e) {
                     System.out.println("Log out failed " + e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-//            case SEND:
-//                //////////////////
-//                UserOperations userOperations = new UserOperations(Operation.SEND, username.getText(), toSend, null, null, false, null);
-//                SocketManager socketManager = new SocketManager()
-//                userOperations.sendRequest();
-//                //////////////////
-//            case DELETE:
-
-//            break;
+                break;
+             case SEND: {
+                 try {
+                     String hostName = InetAddress.getLocalHost().getHostName();
+                     SocketManager socketManager = new SocketManager(hostName, 8080);
+                     UserOperations sendEmail = new UserOperations(Operation.SEND, username, this.toSend);
+                     sendEmail.sendRequest(socketManager.getObjectOutputStream());
+                     ServerResponse response = sendEmail.receiveServerResponse(socketManager.objectInputStream);
+                     if (!response.isSuccess()) {
+                         System.out.println(response.getMessage());
+                         return false;
+                     }
+                     socketManager.closeConnection();
+                 } catch (IOException e) {
+                     throw new RuntimeException(e);
+                 }
+             }
+             break;
         }
         return true;
     }
+
 //    public void closeConnection() {
 //        try {
 //            if (socket != null && !socket.isClosed()) {

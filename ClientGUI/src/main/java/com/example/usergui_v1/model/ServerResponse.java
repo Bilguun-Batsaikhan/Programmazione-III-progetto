@@ -23,13 +23,6 @@ public class ServerResponse implements Serializable {
         this.message = message;
     }
 
-    // constructor for failure response
-    public ServerResponse(String message) {
-        this(false, message);
-    }
-
-    // other methods, getters, setters as needed
-
     public void sendResponse(ObjectOutputStream out) throws IOException {
         Gson gson = new Gson();
         out.writeObject(gson.toJson(this));

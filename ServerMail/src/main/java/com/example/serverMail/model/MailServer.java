@@ -37,8 +37,6 @@ public class MailServer {
     public void searchInList(String found)
     {
         ObservableList<String> filteredList = data.filtered(item -> item.toLowerCase().contains(found));
-
-        // Aggiorna la ListView con la lista filtrata
         listOfAction.set(filteredList);
     }
 }

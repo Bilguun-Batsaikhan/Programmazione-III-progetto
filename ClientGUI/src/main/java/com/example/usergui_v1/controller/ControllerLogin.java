@@ -65,26 +65,26 @@ public class ControllerLogin {
     @FXML
     private void login() throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/Client.fxml"));
-            Parent newSceneRoot = loader.load();
-            Scene newScene = new Scene(newSceneRoot);
-            ControllerList temp = loader.getController();
-            // Create a new stage for the new scene
-            Stage newStage = new Stage();
-            newStage.setScene(newScene);
-
-            newScene.setOnMousePressed(event -> {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            });
-
-            newScene.setOnMouseDragged(event -> {
-                newStage.setX(event.getScreenX() - xOffset);
-                newStage.setY(event.getScreenY() - yOffset);
-            });
             socket.setUsername(username.getText());
-        boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
+            boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
             if(loginAuthorized) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/Client.fxml"));
+                Parent newSceneRoot = loader.load();
+                Scene newScene = new Scene(newSceneRoot);
+                ControllerList temp = loader.getController();
+                // Create a new stage for the new scene
+                Stage newStage = new Stage();
+                newStage.setScene(newScene);
+
+                newScene.setOnMousePressed(event -> {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                });
+
+                newScene.setOnMouseDragged(event -> {
+                    newStage.setX(event.getScreenX() - xOffset);
+                    newStage.setY(event.getScreenY() - yOffset);
+                });
                 closeLoginWindow();
                 temp.setUsers(username.getText());
                 newScene.setFill(Color.TRANSPARENT);
