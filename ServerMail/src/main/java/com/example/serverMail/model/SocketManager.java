@@ -1,5 +1,6 @@
 package com.example.serverMail.model;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import com.example.serverMail.controller.MailServerController;
@@ -37,8 +38,8 @@ public class SocketManager implements Runnable {
 
             // Deserialize JSON string to Email object
             UserOperations o = x.fromJson(res, UserOperations.class);
-
-            ServerResponse response = new ServerResponse(doOperation(o, controllerView));
+            ServerResponse response = new ServerResponse(true,null);
+            doOperation(o, controllerView, response);
             objectOutputStream.writeObject(new Gson().toJson(response));
         } catch (IOException e) {
             System.out.println("IOException " + e);
@@ -50,49 +51,87 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public String doOperation(UserOperations userOperations, MailServerController controllerView) throws InterruptedException, IOException {
+    public void doOperation(UserOperations userOperations, MailServerController controllerView, ServerResponse response) throws InterruptedException, IOException {
         String username;
         boolean result;
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        Date currentData = new Date();
+        String currentTime = timeFormat.format(currentData);
         switch (userOperations.getOperation()) {
             case LOGIN: {
                 username = userOperations.getUsername();
                 result = userHandler.verifyUser(userOperations.getUsername());
                 //take date
-                if(result){
-                    Date currentData = new Date();
-                    String currentTime = timeFormat.format(currentData);
-                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime,0));
+                if (result) {
+                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.LOGIN));
                     t1.start();
                     t1.join();
+                    response.setMessage("Login corretto");
                 }
-                return result ? "welcome " + username : "Access denied";
+                else
+                    response.setMessage("User not exist");
+                response.setSuccess(result);
+                break;
             }
             case REGISTER:
                 try {
                     result = userHandler.addUser(userOperations.getMailBox());
-                    return result ? "welcome " + userOperations.getUsername() : "Access denied";
+                    if(result)
+                        response.setMessage("welcome " + userOperations.getUsername() );
+                    else
+                        response.setMessage("Access denied");
+                    response.setSuccess(result);
+
                 } catch (IOException e) {
                     System.out.println("Failed to add user " + e);
                 }
-            break;
-            case EXIT:
+                break;
+            case EXIT: {
                 username = userOperations.getUsername();
-                result = userHandler.verifyUser(userOperations.getUsername());
-                if(result)
-                {
-                    Date currentData = new Date();
-                    String currentTime = timeFormat.format(currentData);
-                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime,1));
+                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
                     t1.start();
                     t1.join();
+                    response.setSuccess(true);
+                    response.setMessage("Bye");
+                    break;
+            }
+            case SEND: {
+                username = userOperations.getUsername();
+                Email temp = userOperations.getToSend();
+                List<String> userTotest = temp.getRecipients();
+                boolean control = true;
+                for (String user : userTotest) {
+                    control = userHandler.verifyUser(user);
+                    if (!control) {
+                        response.setSuccess(false);
+                        response.setMessage("Wrong User");
+                    }
                 }
-                return result ? "Bye " + username : "Error, user not joined";
-//            case SEND:
-//                username = userOperations.getUsername();
-//                result = userHandler.addEmailToMailBox(username, userOperations.getToSend());
-//                return result ? "Email added to " + username + "'s mailbox" : "Couldn't add the email";
+                if (control) {
+                    for (String s : userTotest) {
+                        System.out.println(s);
+                        MailBox prov = userHandler.readUserMailbox(s);
+                        System.out.println("Aggiungo email a " + prov.getMailBoxOwner());
+                        prov.addReceivedEmail(temp);
+                        userHandler.writeMailbox(prov);
+                        System.out.println("Aggiunta");
+                    }
+                    MailBox sender = userHandler.readUserMailbox(userOperations.getUsername());
+                    System.out.println(sender.getMailBoxOwner());
+                    sender.addSentEmail(temp);
+                    userHandler.writeMailbox(sender);
+                    currentData = new Date();
+                    currentTime = timeFormat.format(currentData);
+                    Thread send = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.SEND, temp.getRecipients()));
+                    send.start();
+                    send.join();
+
+                    response.setSuccess(true);
+                    response.setMessage("Correct send email");
+                }
+                break;
+
+            }
         }
-        return "There is no such operation";
     }
 }
