@@ -43,16 +43,6 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-//<<<<<<< HEAD
-//    private void register() {
-//        socket.setUsername(username.getText());
-//        boolean result = socket.startSocket(Operation.REGISTER);
-//        if(result) {
-//            showSuccessPopup();
-//        } else {
-//            feedback.setText("Please write in form of username@example.com");
-//        }
-//=======
     private void register() throws IOException {
        try {
            ControllerPopUp popUp = new ControllerPopUp();

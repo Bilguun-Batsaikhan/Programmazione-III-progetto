@@ -74,18 +74,6 @@ public class SocketManager implements Runnable {
                 break;
             }
             case REGISTER:
-//<<<<<<< HEAD
-//                    result = userHandler.writeMailbox(userOperations.getMailBox());
-//                    return result ? "welcome " + userOperations.getUsername() : "Access denied";
-//            case EXIT:
-//                username = userOperations.getUsername();
-//                result = userHandler.checkUserExists(userOperations.getUsername());
-//                if(result)
-//                {
-//                    Date currentData = new Date();
-//                    String currentTime = timeFormat.format(currentData);
-//                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime,1));
-//=======
                     result = userHandler.writeMailbox(userOperations.getMailBox());
                     if(result)
                         response.setMessage("welcome " + userOperations.getUsername() );
@@ -96,7 +84,6 @@ public class SocketManager implements Runnable {
             case EXIT: {
                 username = userOperations.getUsername();
                     Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
-//>>>>>>> origin/main
                     t1.start();
                     t1.join();
                     response.setSuccess(true);

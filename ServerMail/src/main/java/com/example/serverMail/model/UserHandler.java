@@ -14,6 +14,9 @@ public class UserHandler {
 
     //Given a mailbox it writes it to username@email.com.json, so it can be used for updating existing mailbox
     public boolean writeMailbox(MailBox mailBox) {
+        if (!isEmailValid(mailBox.getMailBoxOwner())) {
+            return false;
+        }
         //If it's a new user then add it to the user list
         if(!checkUserExists(mailBox.getMailBoxOwner())) {
             try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
@@ -21,9 +24,6 @@ public class UserHandler {
             } catch (IOException e) {
                 System.out.println("There is a problem while writing to usernames.txt " + e);
             }
-        }
-        if (!isEmailValid(mailBox.getMailBoxOwner())) {
-            return false;
         }
         String folderPath = "user_files";
         String userFileName = folderPath + File.separator + mailBox.getMailBoxOwner() + ".json";
