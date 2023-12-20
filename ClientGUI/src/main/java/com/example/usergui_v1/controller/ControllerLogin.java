@@ -91,7 +91,6 @@ public class ControllerLogin {
                 newStage.initStyle(StageStyle.TRANSPARENT);
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
                 newStage.show();
-
             } else {
                 errorMessage.setText("Access denied!!!");
             }

@@ -6,7 +6,7 @@ public enum Operation {
     SEND(4),
     RECEIVE(5),
     DELETE(6),
-    VERIFY(7);
+    UPDATE(7);
 
     private final int id;
 

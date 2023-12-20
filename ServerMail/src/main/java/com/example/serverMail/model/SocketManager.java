@@ -125,8 +125,13 @@ public class SocketManager implements Runnable {
                     response.setMessage("Correct send email");
                 }
                 break;
-
             }
+            //Create a Thread at Client side which sends userOperation Update every 5 seconds which updates the current Client list. The following will return current Client's mailbox.
+            case UPDATE: {
+                MailBox mailBox = userHandler.readUserMailbox(userOperations.getUsername());
+                objectOutputStream.writeObject(new Gson().toJson(mailBox));
+            }
+            break;
         }
     }
 }
