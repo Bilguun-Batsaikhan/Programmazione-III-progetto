@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.List;
 
 public class SocketManager implements Runnable {
 
@@ -57,7 +56,7 @@ public class SocketManager implements Runnable {
         switch (userOperations.getOperation()) {
             case LOGIN: {
                 username = userOperations.getUsername();
-                result = userHandler.verifyUser(userOperations.getUsername());
+                result = userHandler.checkUserExists(userOperations.getUsername());
                 //take date
                 if(result){
                     Date currentData = new Date();
@@ -69,16 +68,11 @@ public class SocketManager implements Runnable {
                 return result ? "welcome " + username : "Access denied";
             }
             case REGISTER:
-                try {
-                    result = userHandler.addUser(userOperations.getMailBox());
+                    result = userHandler.writeMailbox(userOperations.getMailBox());
                     return result ? "welcome " + userOperations.getUsername() : "Access denied";
-                } catch (IOException e) {
-                    System.out.println("Failed to add user " + e);
-                }
-            break;
             case EXIT:
                 username = userOperations.getUsername();
-                result = userHandler.verifyUser(userOperations.getUsername());
+                result = userHandler.checkUserExists(userOperations.getUsername());
                 if(result)
                 {
                     Date currentData = new Date();

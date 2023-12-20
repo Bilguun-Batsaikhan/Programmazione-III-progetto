@@ -12,54 +12,36 @@ public class UserHandler {
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
     public UserHandler() {}
 
-    public void writeMailbox(MailBox mailBox) {
+    //Given a mailbox it writes it to username@email.com.json, so it can be used for updating existing mailbox
+    public boolean writeMailbox(MailBox mailBox) {
+        //If it's a new user then add it to the user list
+        if(!checkUserExists(mailBox.getMailBoxOwner())) {
+            try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
+                usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
+            } catch (IOException e) {
+                System.out.println("There is a problem while writing to usernames.txt " + e);
+            }
+        }
+        if (!isEmailValid(mailBox.getMailBoxOwner())) {
+            return false;
+        }
         String folderPath = "user_files";
         String userFileName = folderPath + File.separator + mailBox.getMailBoxOwner() + ".json";
         try (FileWriter fileWriter = new FileWriter(userFileName)) {
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(mailBox);
             fileWriter.write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean addUser(MailBox mailBox) throws IOException {
-        if (!isEmailValid(mailBox.getMailBoxOwner())) {
-            return false;
-        }
-
-        String folderPath = "user_files";
-        String userFileName = folderPath + File.separator + mailBox.getMailBoxOwner() + ".json";
-
-        // Create the folder if it doesn't exist
-        File folder = new File(folderPath);
-        folder.mkdirs();
-
-        try (FileWriter fileWriter = new FileWriter(userFileName)) {
-            // Create a JsonObject for the mailbox
-            JsonObject mailbox = new JsonObject();
-            mailbox.add("mailBoxOwner", new JsonPrimitive(mailBox.getMailBoxOwner()));
-            mailbox.add("rEmails", new JsonArray());
-            mailbox.add("sEmails", new JsonArray());
-
-            Gson gson = new GsonBuilder().create();
-            // Write the mailbox to the file
-            String json = gson.toJson(mailbox);
-            fileWriter.write(json);
-
-            try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
-                usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
-            }
             return true;
         } catch (IOException e) {
-            System.out.println("There is a problem with writing the mailbox: " + e);
+            System.out.println("There is a problem while writing a mailbox " + e);
         }
         return false;
     }
-    public MailBox readUserMailbox(String userFile) {
+
+
+    public MailBox readUserMailbox(String username) {
         String folderPath = "user_files";
-        String userFileName = folderPath + File.separator + userFile + ".json";
+        String userFileName = folderPath + File.separator + username + ".json";
         try(FileReader fileReader = new FileReader(userFileName)) {
             return new Gson().fromJson(fileReader, MailBox.class);
         } catch (FileNotFoundException e) {
@@ -71,6 +53,21 @@ public class UserHandler {
         return null;
     }
 
+    public boolean deleteEmailFromMailbox(String username, Email emailToDel, Boolean inbox) {
+        String id = emailToDel.getID();
+        MailBox mailBox = readUserMailbox(username);
+        ArrayList<Email> emails = inbox ? mailBox.getrEmails() : mailBox.getsEmails();
+        for(Email e : emails) {
+            if(e.getID().equals(id)) {
+                emails.remove(e);
+                writeMailbox(mailBox);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //reads user list from usernames.txt then returns List of users
     public List<String> readUsers() {
         List<String> usernames = new ArrayList<>();
         try {
@@ -93,8 +90,9 @@ public class UserHandler {
         Matcher matcher = pattern.matcher(email);
         return matcher.find();
     }
-    public boolean verifyUser(String userName) {
+    public boolean checkUserExists(String userName) {
         List<String> usernames = readUsers();
+        System.out.println(usernames);
         for (String user : usernames) {
             if (user.equals(userName)) {
                 return true;

@@ -2,3 +2,4 @@
 test@gmail.com
 Client@gmail.com
 lll@gmail.com
+newUser@yahoo.com
