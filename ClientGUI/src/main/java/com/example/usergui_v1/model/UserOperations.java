@@ -48,6 +48,11 @@ public class UserOperations {
     public UserOperations(Operation operation, MailBox mailBox) {
         this(operation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
     }
+    //costructor for send email
+    public UserOperations(Operation operation, String username, Email emailToSend)
+    {
+        this(operation,username,emailToSend, null, null, false, null);
+    }
 
     public void sendRequest(ObjectOutputStream out) {
         assert this.operation != null : "Operation cannot be NULL";
@@ -55,7 +60,7 @@ public class UserOperations {
             Gson gson = new Gson();
             out.writeObject(gson.toJson(this));
             out.flush();
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             System.out.println("There is a problem while sending username " + e);
         }
     }

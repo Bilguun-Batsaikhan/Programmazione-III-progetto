@@ -67,39 +67,23 @@ public class ControllerReplyAll {
         }
     }
 
-    private void startPopUp(String error) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
-        Parent newSceneRoot = loader.load();
-        ControllerPopUp controller = loader.getController();
-        controller.initialize(error);
 
-        Scene newScene = new Scene(newSceneRoot);
-        Stage newStage = new Stage();
-        newStage.setScene(newScene);
-
-
-        newScene.setFill(Color.TRANSPARENT);
-        newStage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
-        newStage.showAndWait();
-
-        if(!Objects.equals(error, "FewArguments")) {
+    private void errorHandling(Email email) throws IOException {
+        ControllerPopUp popUp = new ControllerPopUp();
+        if (email!=null && Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), "")){
+            popUp.startPopUp("FewArguments",false);
+        }
+        else {
+            if (selectedItem == null) {
+                popUp.startPopUp("NullEmail",false);
+            } else if (Objects.equals(selectedItem.getSender(), model.mailBoxOwnerProperty().get())) {
+                popUp.startPopUp("ReplySent",false);
+            }
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();
             });
-        }
-    }
 
-    private void errorHandling(Email email) throws IOException {
-        if(selectedItem == null){
-            startPopUp("NullEmail");
-        }
-        else if (Objects.equals(selectedItem.getSender(), model.mailBoxOwnerProperty().get())) {
-            startPopUp("ReplySent");
-        }
-        else if (email!=null && Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), "")){
-            startPopUp("FewArguments");
         }
     }
 

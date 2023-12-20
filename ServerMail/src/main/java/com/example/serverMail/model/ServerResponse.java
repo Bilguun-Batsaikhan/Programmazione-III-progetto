@@ -21,12 +21,6 @@ public class ServerResponse implements Serializable {
         this.success = success;
         this.message = message;
     }
-
-    // constructor for failure response
-    public ServerResponse(String message) {
-        this(false, message);
-    }
-
     // other methods, getters, setters as needed
 
     public void sendResponse(ObjectOutputStream out) throws IOException {

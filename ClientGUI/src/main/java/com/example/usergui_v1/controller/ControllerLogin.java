@@ -43,14 +43,30 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void register() {
-        socket.setUsername(username.getText());
-        boolean result = socket.startSocket(Operation.REGISTER);
-        if(result) {
-            showSuccessPopup();
-        } else {
-            feedback.setText("Please write in form of username@example.com");
-        }
+//<<<<<<< HEAD
+//    private void register() {
+//        socket.setUsername(username.getText());
+//        boolean result = socket.startSocket(Operation.REGISTER);
+//        if(result) {
+//            showSuccessPopup();
+//        } else {
+//            feedback.setText("Please write in form of username@example.com");
+//        }
+//=======
+    private void register() throws IOException {
+       try {
+           ControllerPopUp popUp = new ControllerPopUp();
+           socket.setUsername(username.getText());
+           boolean result = socket.startSocket(Operation.REGISTER);
+           if (result) {
+               popUp.startPopUp("SignUp", true);
+           } else {
+               feedback.setText("Please write in form of username@example.com");
+           }
+       }
+       catch (NullPointerException e){
+           System.out.println("Registration Failed");
+       }
     }
     @FXML
     private void exit() {
@@ -59,26 +75,26 @@ public class ControllerLogin {
     @FXML
     private void login() throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/Client.fxml"));
-            Parent newSceneRoot = loader.load();
-            Scene newScene = new Scene(newSceneRoot);
-            ControllerList temp = loader.getController();
-            // Create a new stage for the new scene
-            Stage newStage = new Stage();
-            newStage.setScene(newScene);
-
-            newScene.setOnMousePressed(event -> {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            });
-
-            newScene.setOnMouseDragged(event -> {
-                newStage.setX(event.getScreenX() - xOffset);
-                newStage.setY(event.getScreenY() - yOffset);
-            });
             socket.setUsername(username.getText());
-        boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
+            boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
             if(loginAuthorized) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/Client.fxml"));
+                Parent newSceneRoot = loader.load();
+                Scene newScene = new Scene(newSceneRoot);
+                ControllerList temp = loader.getController();
+                // Create a new stage for the new scene
+                Stage newStage = new Stage();
+                newStage.setScene(newScene);
+
+                newScene.setOnMousePressed(event -> {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                });
+
+                newScene.setOnMouseDragged(event -> {
+                    newStage.setX(event.getScreenX() - xOffset);
+                    newStage.setY(event.getScreenY() - yOffset);
+                });
                 closeLoginWindow();
                 temp.setUsers(username.getText());
                 newScene.setFill(Color.TRANSPARENT);
