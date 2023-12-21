@@ -34,7 +34,7 @@ public class UserMain extends Application {
 
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
+        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white;-fx-border-color: #e3dddd;");
 
         stage.setScene(scene);
         stage.show();

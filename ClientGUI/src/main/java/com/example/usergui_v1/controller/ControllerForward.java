@@ -5,22 +5,13 @@ import com.example.usergui_v1.model.Email;
 import com.example.usergui_v1.model.SocketManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class ControllerForward {
     @FXML
@@ -31,7 +22,7 @@ public class ControllerForward {
     private Email email;
     @FXML
     private TextArea Recipients;
-    private SocketManager socket = new SocketManager();
+    private final SocketManager socket = new SocketManager();
 
     @FXML
     private void handleClose() {
@@ -43,17 +34,18 @@ public class ControllerForward {
         this.selectedItem = selectedItem;
         this.sender = sender;
         this.model = model;
-        errorHandling(email);
+        errorHandling(email,false,false);
     }
 
     @FXML
     private void Send() throws IOException {
-        email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), "134223");
-        errorHandling(email);
+        email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), -1);
+        errorHandling(email,false,false);
         if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
-            socket.setEmailToSend(email);
+            socket.setUsername(sender);
+            errorHandling(email,true, socket.setEmailToSend(email));
         }
-
+        handleClose();
     }
 
     private List<String> getRecipients() {
@@ -68,7 +60,7 @@ public class ControllerForward {
     }
 
 
-    private void errorHandling(Email email) throws IOException {
+    private void errorHandling(Email email, boolean send,boolean success) throws IOException {
         ControllerPopUp popUp = new ControllerPopUp();
         if (selectedItem == null) {
             popUp.startPopUp("NullEmail",false);
@@ -81,6 +73,13 @@ public class ControllerForward {
 
         } else if (email != null && !model.CorrectFormatEmail(getRecipients())) {
             popUp.startPopUp("WrongFormatEmail",false);
+        }
+        if(send) {
+            if (success) {
+                popUp.startPopUp("MailSent",true);
+            } else {
+                popUp.startPopUp("EmailNotExist", false);
+            }
         }
     }
 }

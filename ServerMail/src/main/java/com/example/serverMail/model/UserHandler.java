@@ -90,6 +90,9 @@ public class UserHandler {
         return usernames;
     }
     private boolean isEmailValid(String email) {
+        if(email == null || email.isEmpty()){
+            return false;
+        }
         Matcher matcher = pattern.matcher(email);
         return matcher.find();
     }

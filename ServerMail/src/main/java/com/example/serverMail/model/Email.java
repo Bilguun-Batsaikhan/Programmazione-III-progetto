@@ -9,10 +9,10 @@ public class Email {
     private final String subject;
     private final String body;
     private final Date time;
-    private final String ID;
+    private int ID;
 
     // Constructor
-    public Email(String sender, List<String> recipients, String subject, String body, Date time, String id) {
+    public Email(String sender, List<String> recipients, String subject, String body, Date time, int id) {
         this.sender = sender;
         this.recipients = recipients;
         this.subject = subject;
@@ -41,9 +41,10 @@ public class Email {
         return time;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
+    public void setID(int ID){this.ID = ID;}
 
     @Override
     public String toString() {

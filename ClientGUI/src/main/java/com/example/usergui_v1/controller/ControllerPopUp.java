@@ -1,6 +1,5 @@
 package com.example.usergui_v1.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,11 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -30,7 +27,7 @@ public class ControllerPopUp {
         stage.close();
     }
 
-    public void initialize(String errorType) throws IOException {
+    public void initialize(String errorType){
         makeSceneDraggable();
         switch (errorType) {
             case "ReplySent":
@@ -54,7 +51,17 @@ public class ControllerPopUp {
             case "SignUp":
                 errorPopUp.setText("Registration Successful! Now you can log in.");
                 break;
+            case "MailSent":
+                errorPopUp.setText("Mail sent successfully!");
+                break;
+            case "EmailNotExist":
+                errorPopUp.setText("Impossible to send! Email does not exist.");
+                break;
+            case "NewMailArrived":
+                errorPopUp.setText("New emails has arrived!");
+                break;
             default:
+                errorPopUp.setText("Unexpected Error");
                 // Handle unexpected errorType
                 System.err.println("Unexpected ErrorType: " + errorType);
                 break;
@@ -92,7 +99,12 @@ public class ControllerPopUp {
 
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        if(success) {
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #3dda30;");
+        }
+        else{
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        }
         newStage.showAndWait();
     }
 
