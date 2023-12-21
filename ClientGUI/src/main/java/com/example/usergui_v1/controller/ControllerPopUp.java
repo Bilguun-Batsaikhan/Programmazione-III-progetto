@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -30,9 +29,6 @@ public class ControllerPopUp {
         stage.close();
     }
 
-//<<<<<<< HEAD
-//    public void initialize(String errorType) {
-//=======
     public void initialize(String errorType) throws IOException {
         makeSceneDraggable();
         switch (errorType) {
@@ -54,31 +50,26 @@ public class ControllerPopUp {
             case "AccessDenied":
                 errorPopUp.setText("Access denied. Wrong password or email.");
                 break;
-//<<<<<<< HEAD
-//            case "Registration Successful! Now you can log in.":
-//                errorPopUp.setText(errorType);
-//=======
             case "SignUp":
                 errorPopUp.setText("Registration Successful! Now you can log in.");
                 break;
+            case "MailSent":
+                errorPopUp.setText("Mail sent successfully!");
+                break;
+            case "EmailNotExist":
+                errorPopUp.setText("Impossible to send! Email does not exist.");
+                break;
+            case "NewMailArrived":
+                errorPopUp.setText("New emails has arrived!");
+                break;
             default:
+                errorPopUp.setText("Unexpected Error");
                 // Handle unexpected errorType
                 System.err.println("Unexpected ErrorType: " + errorType);
                 break;
         }
     }
-//    private void makeSceneDraggable() {
-//        popupRoot.setOnMousePressed((MouseEvent event) -> {
-//            xOffset = event.getSceneX();
-//            yOffset = event.getSceneY();
-//        });
-//
-//        popupRoot.setOnMouseDragged((MouseEvent event) -> {
-//            Stage stage = (Stage) popupRoot.getScene().getWindow();
-//            stage.setX(event.getScreenX() - xOffset);
-//            stage.setY(event.getScreenY() - yOffset);
-//        });
-//    }
+
     private void makeSceneDraggable() {
         popupRoot.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();
@@ -111,7 +102,12 @@ public class ControllerPopUp {
 
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);
-        newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        if(success) {
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #3dda30;");
+        }
+        else{
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
+        }
         newStage.showAndWait();
     }
 

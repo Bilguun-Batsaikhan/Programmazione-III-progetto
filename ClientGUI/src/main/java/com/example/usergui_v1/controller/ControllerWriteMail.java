@@ -2,21 +2,12 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
-import com.example.usergui_v1.model.Operation;
 import com.example.usergui_v1.model.SocketManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ControllerWriteMail {
@@ -35,7 +26,7 @@ public class ControllerWriteMail {
     private String sender;
     private ClientModel model;
 
-    private SocketManager socket = new SocketManager();
+    private final SocketManager socket = new SocketManager();
 
 
 
@@ -53,26 +44,14 @@ public class ControllerWriteMail {
     @FXML
     private void SendEmail() throws IOException {
 
-        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), "134223");
-        errorHandling(email);
+        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), -1);
+        errorHandling(email,false,false);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             socket.setUsername(sender);
-            socket.setEmailToSend(email);
-            boolean send = socket.startSocket(Operation.SEND);
-            if(send) {
-                Platform.runLater(() -> {
-                    model.addSentEmail(email);
-                    this.handleClose();
-                    List<Email> pritnSend = model.getSendEmail();
-                    System.out.println(pritnSend.toString());
-                });
+            errorHandling(email,true, socket.setEmailToSend(email));
 
-            }
-            else {
-                System.out.println("Utenti errati");
-                handleClose();
-            }
         }
+        handleClose();
     }
 
     private List<String> getRecipients() {
@@ -86,7 +65,7 @@ public class ControllerWriteMail {
         return recipients;
     }
 
-    private void errorHandling(Email email) throws IOException {
+    private void errorHandling(Email email,boolean send,boolean success) throws IOException {
         ControllerPopUp popUp = new ControllerPopUp();
         if (email!=null && (getRecipients().isEmpty() ||  Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))){
             popUp.startPopUp("FewArguments",false);
@@ -94,7 +73,13 @@ public class ControllerWriteMail {
         else if(email!=null && !model.CorrectFormatEmail(getRecipients())){
             popUp.startPopUp("WrongFormatEmail",false);
         }
-
+        if(send) {
+            if (success) {
+                popUp.startPopUp("MailSent",true);
+            } else {
+                popUp.startPopUp("EmailNotExist", false);
+            }
+        }
     }
 
 }

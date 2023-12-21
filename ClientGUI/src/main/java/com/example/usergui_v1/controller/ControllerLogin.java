@@ -1,28 +1,17 @@
 package com.example.usergui_v1.controller;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 import com.example.usergui_v1.model.*;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -38,7 +27,7 @@ public class ControllerLogin {
     private Text feedback;
     private double xOffset = 0;
     private double yOffset = 0;
-    private SocketManager socket = new SocketManager();
+    private final SocketManager socket = new SocketManager();
 
     public ControllerLogin() {}
 
@@ -73,6 +62,7 @@ public class ControllerLogin {
                 Scene newScene = new Scene(newSceneRoot);
                 ControllerList temp = loader.getController();
                 // Create a new stage for the new scene
+                temp.setMailBox(socket.getMailbox());
                 Stage newStage = new Stage();
                 newStage.setScene(newScene);
 
@@ -89,7 +79,7 @@ public class ControllerLogin {
                 temp.setUsers(username.getText());
                 newScene.setFill(Color.TRANSPARENT);
                 newStage.initStyle(StageStyle.TRANSPARENT);
-                newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: white;");
+                newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd;");
                 newStage.show();
             } else {
                 errorMessage.setText("Access denied!!!");

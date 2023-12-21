@@ -1,6 +1,7 @@
 package com.example.usergui_v1.model;
 import java.util.List;
 import java.util.Date;
+import java.util.Objects;
 
 public class Email {
     private final String sender;
@@ -8,10 +9,10 @@ public class Email {
     private final String subject;
     private final String body;
     private final Date time;
-    private final String ID;
+    private final int ID;
 
     // Constructor
-    public Email(String sender, List<String> recipients, String subject, String body, Date time, String id) {
+    public Email(String sender, List<String> recipients, String subject, String body, Date time, int id) {
         this.sender = sender;
         this.recipients = recipients;
         this.subject = subject;
@@ -49,19 +50,6 @@ public class Email {
         return time.toString();
     }
 
-    public String getID() {
-        return ID;
-    }
-
-    // Additional methods if needed
-    public void addRecipient(String recipient) {
-        recipients.add(recipient);
-    }
-
-    public void removeRecipient(String recipient) {
-        recipients.remove(recipient);
-    }
-
     @Override
     public String toString() {
         return "Email{" +
@@ -72,5 +60,22 @@ public class Email {
                 ", time=" + time +
                 ", ID='" + ID + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Email email)) return false;
+        return Objects.equals(sender, email.sender) &&
+                Objects.equals(recipients, email.recipients) &&
+                Objects.equals(subject, email.subject) &&
+                Objects.equals(body, email.body) &&
+                Objects.equals(time, email.time) &&
+                Objects.equals(ID, email.ID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sender, recipients, subject, body, time, ID);
     }
 }

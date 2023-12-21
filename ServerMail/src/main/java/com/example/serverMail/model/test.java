@@ -11,7 +11,7 @@ public class test {
         MailBox mailBox = userHandler.readUserMailbox(testFile);
         System.out.println(mailBox);
 
-        Email newEmail = new Email("test@gmail.com", List.of("Client@gmail.com"), "Subject", "Body", new Date(), "123");
+        Email newEmail = new Email("sender@gmail.com", List.of("recipient1@gmail.com"), "Subject", "Body", new Date(), 123);
 
 //        mailBox.getsEmails().add(newEmail);
 //        userHandler.writeMailbox(mailBox);

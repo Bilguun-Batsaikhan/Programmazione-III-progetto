@@ -3,12 +3,10 @@ package com.example.usergui_v1.model;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class ServerResponse implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @SerializedName("success")
@@ -54,4 +52,7 @@ public class ServerResponse implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+
+
+
 }

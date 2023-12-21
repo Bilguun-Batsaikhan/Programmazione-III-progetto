@@ -72,7 +72,7 @@ public class UserOperations {
             String result = (String) in.readObject();
             return x.fromJson(result, ServerResponse.class);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
     }
 
@@ -81,5 +81,18 @@ public class UserOperations {
         return this.username;
     }
 
+
+    public MailBox receiveMailbox(ObjectInputStream in) throws IOException {
+        try {
+            Gson gson = new Gson();
+            String mailboxJson = (String) in.readObject();
+            return gson.fromJson(mailboxJson, MailBox.class);
+        } catch (ClassNotFoundException e ) {
+            throw new IOException("Class not found while deserializing the mailbox", e);
+        }
+        catch (NullPointerException e){
+            throw new IOException("Null Pointer Exception error", e);
+        }
+    }
 
 }
