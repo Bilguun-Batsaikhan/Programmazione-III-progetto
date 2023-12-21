@@ -48,10 +48,12 @@ public class ControllerWriteMail {
         errorHandling(email,false,false);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             socket.setUsername(sender);
-            errorHandling(email,true, socket.setEmailToSend(email));
-
+            boolean sent = socket.setEmailToSend(email);
+            errorHandling(email,true, sent);
+            if(sent) {
+                handleClose();
+            }
         }
-        handleClose();
     }
 
     private List<String> getRecipients() {
