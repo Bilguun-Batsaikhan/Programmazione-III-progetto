@@ -1,12 +1,5 @@
 package com.example.usergui_v1.model;
-
-
-import com.example.usergui_v1.controller.ControllerLogin;
 import com.example.usergui_v1.controller.ControllerPopUp;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,8 +19,6 @@ public class SocketManager {
 
     private Email toDelete;
 
-    private ControllerPopUp popUp = new ControllerPopUp();
-
     public SocketManager() {
     }
 
@@ -35,9 +26,10 @@ public class SocketManager {
         this.username=username;
     }
 
-    public void setEmailToSend(Email toSend){
+    public boolean setEmailToSend(Email toSend){
         this.toSend=toSend;
-        System.out.println(toSend);
+        return startSocket(Operation.SEND);
+
     }
 
     public  void setEmailToDelete(Email toDelete){
@@ -61,7 +53,7 @@ public class SocketManager {
 
             System.out.println("reached here");
 
-            String signal = null;
+            String signal;
             try {
                 signal = (String) objectInputStream.readObject();
             } catch (ClassNotFoundException e) {
@@ -70,6 +62,7 @@ public class SocketManager {
             System.out.println("Received signal from server: " + signal);
         } catch (IOException e) {
             System.out.println("IO exception: " + e.getMessage());
+            ControllerPopUp popUp = new ControllerPopUp();
             popUp.startPopUp("ServerConnection", false);
         }
     }
@@ -116,7 +109,7 @@ public class SocketManager {
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<Email>(), new ArrayList<Email>(), username));
+                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<>(), new ArrayList<>(), username));
                     register.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
                     if(!response.isSuccess()) {
@@ -125,8 +118,6 @@ public class SocketManager {
                     } else
                         return true;
 
-                } catch (UnknownHostException e) {
-                    System.out.println("Registration failed " + e);
                 } catch (IOException e) {
                     System.out.println("Registration failed " + e);
                 }
@@ -187,4 +178,26 @@ public class SocketManager {
     public Socket getSocket() {
         return socket;
     }
+
+    public MailBox getMailbox() {
+        try {
+            String hostName = InetAddress.getLocalHost().getHostName();
+            SocketManager socketManager = new SocketManager(hostName, 8080);
+            UserOperations mailboxRequest = new UserOperations(Operation.RECEIVE, this.username);
+            mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
+            MailBox mailbox = mailboxRequest.receiveMailbox(socketManager.getObjectInputStream());
+            socketManager.closeConnection();
+            return mailbox;
+        } catch (IOException e) {
+            System.out.println("Error in getting mailbox: " + e.getMessage());
+        }
+        return null;
+    }
+    // TODO GESTIONE CRASH DEL SERVER : manca da togliere quegli errori rossi
+    // TODO DA MIGLIORARE IL LOG DELLE AZIONI
+    // TODO MODIFICA DEL REFRESH PER FARE IN MODO CHE IL SERVER MANDI SOLO LE MAIL NON ANCORA VISUALIZZATE
+    // TODO GESTIONE RICHIESTA OGNI TOT TEMPO CON TIMER PER AGGIORNARE LE COSE
+    // TODO DELETE
+    // TODO THREAD POOL
+
 }

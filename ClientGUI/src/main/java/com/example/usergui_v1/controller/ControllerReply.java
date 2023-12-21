@@ -5,18 +5,11 @@ import com.example.usergui_v1.model.Email;
 import com.example.usergui_v1.model.SocketManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -43,7 +36,7 @@ public class ControllerReply {
 
     private Email email;
 
-    private SocketManager socket = new SocketManager();
+    private final SocketManager socket = new SocketManager();
 
 
     @FXML
@@ -57,32 +50,42 @@ public class ControllerReply {
         this.selectedItem = selectedItem;
         this.sender = sender;
         this.model = model;
-        errorHandling(email);
-        setRecipientstoReply();
+        errorHandling(email,false,false);
+        setRecipientsToReply();
 
     }
 
-    private void setRecipientstoReply() {
+    private void setRecipientsToReply() {
         if (selectedItem != null) {
             Recipients.setText(selectedItem.getSender());
         }
     }
 
-    private void errorHandling(Email email) throws IOException {
+    private void errorHandling(Email email,boolean send,boolean success) throws IOException {
         ControllerPopUp popUp = new ControllerPopUp();
         if (email!=null && Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), "")){
             popUp.startPopUp("FewArguments",false);
         }
-        else {
-            if (selectedItem == null) {
-                popUp.startPopUp("NullEmail",false);
-            } else if (Objects.equals(selectedItem.getSender(), model.mailBoxOwnerProperty().get())) {
-                popUp.startPopUp("ReplySent",false);
-            }
+        if (selectedItem == null) {
+            popUp.startPopUp("NullEmail",false);
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();
             });
+
+        } else if (Objects.equals(selectedItem.getSender(), model.mailBoxOwnerProperty().get())) {
+            popUp.startPopUp("ReplySent",false);
+            Platform.runLater(() -> {
+                Stage stage = (Stage) loginRoot.getScene().getWindow();
+                stage.close();
+            });
+            }
+        if(send) {
+            if (success) {
+                popUp.startPopUp("MailSent",true);
+            } else {
+                popUp.startPopUp("EmailNotExist", false);
+            }
         }
     }
 
@@ -91,10 +94,12 @@ public class ControllerReply {
         ArrayList<String> recipient = new ArrayList<>();
         recipient.add(selectedItem.getSender());
 
-        email = new Email(sender,recipient, Subject.getText(), Body.getText(), new Date(), "134223");
-        errorHandling(email);
+        email = new Email(sender,recipient, Subject.getText(), Body.getText(), new Date(), -1);
+        errorHandling(email,false,false);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
-            socket.setEmailToSend(email);
+            socket.setUsername(sender);
+            errorHandling(email,true, socket.setEmailToSend(email));
         }
+        handleClose();
     }
 }

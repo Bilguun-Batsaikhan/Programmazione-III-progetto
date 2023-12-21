@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocketManager implements Runnable {
 
@@ -112,6 +113,8 @@ public class SocketManager implements Runnable {
                         System.out.println(s);
                         MailBox prov = userHandler.readUserMailbox(s);
                         System.out.println("Aggiungo email a " + prov.getMailBoxOwner());
+                        PersistentCounter ID = new PersistentCounter();
+                        temp.setID(ID.increment());
                         prov.addReceivedEmail(temp);
                         userHandler.writeMailbox(prov);
                         System.out.println("Aggiunta");
@@ -132,6 +135,19 @@ public class SocketManager implements Runnable {
                 break;
 
             }
+            case RECEIVE: {
+                username = userOperations.getUsername();
+                MailBox mailbox = userHandler.readUserMailbox(username);
+                if (mailbox != null) {
+                    response.sendMailbox(mailbox, objectOutputStream);
+                    response.setSuccess(true);
+                } else {
+                    response.setMessage("Mailbox not found");
+                    response.setSuccess(false);
+                }
+                break;
+            }
+
         }
     }
 }

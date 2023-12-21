@@ -1,38 +1,19 @@
 package com.example.usergui_v1.model;
 
-import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ClientModel {
-    private ListProperty<Email> rEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private ListProperty<Email> sEmails = new SimpleListProperty<>(FXCollections.observableArrayList());
     private final StringProperty mailBoxOwner = new SimpleStringProperty();
-
-    private MailBox mailBox;
 
     public ClientModel() {
     }
 
     public StringProperty mailBoxOwnerProperty() {
         return mailBoxOwner;
-    }
-
-    public ListProperty<Email> rEmailsProperty() {
-        return rEmails;
-    }
-
-    public ListProperty<Email> sEmailsProperty() {
-        return sEmails;
     }
 
 
@@ -50,13 +31,5 @@ public class ClientModel {
 
         }
         return correct;
-    }
-
-    public void addSentEmail(Email email) {
-        sEmails.add(email);
-    }
-
-    public List<Email> getSendEmail() {
-        return sEmails;
     }
 }

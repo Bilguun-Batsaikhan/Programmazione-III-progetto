@@ -39,6 +39,13 @@ public class ServerResponse implements Serializable {
         }
     }
 
+    public void sendMailbox(MailBox mailbox, ObjectOutputStream out) throws IOException {
+        Gson gson = new Gson();
+        String mailboxJson = gson.toJson(mailbox);
+        out.writeObject(mailboxJson);
+        out.flush();
+    }
+
     public boolean isSuccess() {
         return success;
     }

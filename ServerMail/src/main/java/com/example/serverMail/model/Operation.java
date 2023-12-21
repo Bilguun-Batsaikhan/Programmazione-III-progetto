@@ -8,7 +8,6 @@ public enum Operation {
     RECEIVE(5),
     DELETE(6),
     VERIFY(7);
-
     private final int id;
 
     Operation(int id) {

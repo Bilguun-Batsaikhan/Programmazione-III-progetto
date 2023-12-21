@@ -41,11 +41,11 @@ public class MailBox implements Serializable {
     }
 
     public void addReceivedEmail(Email email) {
-        rEmails.add(email);
+        rEmails.add(0,email);
     }
 
     public void addSentEmail(Email email) {
-        sEmails.add(email);
+        sEmails.add(0,email);
     }
     public ArrayList<String> getrSubjectsEmail() {
         ArrayList<String> emailSubjects = new ArrayList<>();
@@ -57,10 +57,14 @@ public class MailBox implements Serializable {
 
     @Override
     public String toString() {
-        return "MailBox{" +
-                "mailBoxOwner='" + mailBoxOwner + '\'' +
-                ", rEmails=" + rEmails +
-                ", sEmails=" + sEmails +
-                '}';
+        String mailbox = "MailBox{ \n" + "mailBoxOwner='" + mailBoxOwner + '\n' + "Received Emails: \n";
+        for (Email email : rEmails) {
+            mailbox = mailbox + email + "\n";
+        }
+        mailbox = mailbox + "Sent Emails: \n";
+        for (Email email : sEmails) {
+            mailbox = mailbox + email + "\n";
+        }
+        return mailbox;
     }
 }

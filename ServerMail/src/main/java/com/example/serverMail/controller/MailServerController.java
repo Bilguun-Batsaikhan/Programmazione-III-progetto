@@ -1,21 +1,15 @@
 package com.example.serverMail.controller;
 
-import com.example.serverMail.model.MailBox;
 import com.example.serverMail.model.MailServer;
 import com.example.serverMail.model.UserHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.scene.input.KeyEvent;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Random;
 import java.util.ResourceBundle;
 
