@@ -9,9 +9,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
+
 
 
 public class ControllerPopUp {
@@ -27,7 +29,7 @@ public class ControllerPopUp {
         stage.close();
     }
 
-    public void initialize(String errorType){
+    public void initialize(String errorType) throws IOException {
         makeSceneDraggable();
         switch (errorType) {
             case "ReplySent":
@@ -67,6 +69,7 @@ public class ControllerPopUp {
                 break;
         }
     }
+
     private void makeSceneDraggable() {
         popupRoot.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();

@@ -61,7 +61,7 @@ public class SocketManager implements Runnable {
         switch (userOperations.getOperation()) {
             case LOGIN: {
                 username = userOperations.getUsername();
-                result = userHandler.verifyUser(userOperations.getUsername());
+                result = userHandler.checkUserExists(userOperations.getUsername());
                 //take date
                 if (result) {
                     Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.LOGIN));
@@ -75,17 +75,12 @@ public class SocketManager implements Runnable {
                 break;
             }
             case REGISTER:
-                try {
-                    result = userHandler.addUser(userOperations.getMailBox());
+                    result = userHandler.writeMailbox(userOperations.getMailBox());
                     if(result)
                         response.setMessage("welcome " + userOperations.getUsername() );
                     else
                         response.setMessage("Access denied");
                     response.setSuccess(result);
-
-                } catch (IOException e) {
-                    System.out.println("Failed to add user " + e);
-                }
                 break;
             case EXIT: {
                 username = userOperations.getUsername();
@@ -102,7 +97,7 @@ public class SocketManager implements Runnable {
                 List<String> userTotest = temp.getRecipients();
                 boolean control = true;
                 for (String user : userTotest) {
-                    control = userHandler.verifyUser(user);
+                    control = userHandler.checkUserExists(user);
                     if (!control) {
                         response.setSuccess(false);
                         response.setMessage("Wrong User");
@@ -133,8 +128,13 @@ public class SocketManager implements Runnable {
                     response.setMessage("Correct send email");
                 }
                 break;
-
             }
+            //Create a Thread at Client side which sends userOperation Update every 5 seconds which updates the current Client list. The following will return current Client's mailbox.
+            case UPDATE: {
+                MailBox mailBox = userHandler.readUserMailbox(userOperations.getUsername());
+                objectOutputStream.writeObject(new Gson().toJson(mailBox));
+            }
+            break;
             case RECEIVE: {
                 username = userOperations.getUsername();
                 MailBox mailbox = userHandler.readUserMailbox(username);
@@ -147,7 +147,6 @@ public class SocketManager implements Runnable {
                 }
                 break;
             }
-
         }
     }
 }

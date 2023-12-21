@@ -81,7 +81,6 @@ public class ControllerLogin {
                 newStage.initStyle(StageStyle.TRANSPARENT);
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd;");
                 newStage.show();
-
             } else {
                 errorMessage.setText("Access denied!!!");
             }
@@ -102,4 +101,23 @@ public class ControllerLogin {
         stage.setMaximized(!stage.isMaximized());
     }
 
+    private void showSuccessPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml"));
+            Parent root = loader.load();
+
+            ControllerPopUp controller = loader.getController();
+            controller.initialize("Registration Successful! Now you can log in.");
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Success");
+            stage.setScene(new Scene(root));
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
