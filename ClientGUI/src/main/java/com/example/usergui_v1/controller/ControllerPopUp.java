@@ -57,7 +57,7 @@ public class ControllerPopUp {
                 errorPopUp.setText("Mail sent successfully!");
                 break;
             case "EmailNotExist":
-                errorPopUp.setText("Impossible to send! Email does not exist.");
+                errorPopUp.setText("Impossible to send! Email address does not exist.");
                 break;
             case "NewMailArrived":
                 errorPopUp.setText("New emails has arrived!");

@@ -43,9 +43,13 @@ public class ControllerForward {
         errorHandling(email,false,false);
         if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             socket.setUsername(sender);
-            errorHandling(email,true, socket.setEmailToSend(email));
+            boolean sent = socket.setEmailToSend(email);
+            errorHandling(email,true, sent);
+            if(sent) {
+                handleClose();
+            }
         }
-        handleClose();
+
     }
 
     private List<String> getRecipients() {

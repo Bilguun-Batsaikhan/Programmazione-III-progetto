@@ -54,11 +54,11 @@ public class UserHandler {
     }
 
     public boolean deleteEmailFromMailbox(String username, Email emailToDel, Boolean inbox) {
-        String id = emailToDel.getID();
+        int id = emailToDel.getID();
         MailBox mailBox = readUserMailbox(username);
         ArrayList<Email> emails = inbox ? mailBox.getrEmails() : mailBox.getsEmails();
         for(Email e : emails) {
-            if(e.getID().equals(id)) {
+            if(e.getID() == id) {
                 emails.remove(e);
                 writeMailbox(mailBox);
                 return true;
