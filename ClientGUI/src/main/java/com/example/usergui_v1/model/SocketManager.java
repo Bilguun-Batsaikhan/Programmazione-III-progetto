@@ -98,7 +98,6 @@ public class SocketManager {
                         return false;
                     }
                     socketManager.closeConnection();
-
                 } catch (UnknownHostException e) {
                     System.out.println("Login failed " + e);
                 } catch (IOException e) {
@@ -128,7 +127,6 @@ public class SocketManager {
                     SocketManager socketManager = new SocketManager(hostName, 8080);
                     UserOperations left = new UserOperations(Operation.EXIT, username);
                     left.sendRequest(socketManager.getObjectOutputStream()); //request log out
-                    ServerResponse response = left.receiveServerResponse(socketManager.getObjectInputStream());
                     socketManager.closeConnection();
                 } catch (UnknownHostException e) {
                     System.out.println("Log out failed " + e);
@@ -153,19 +151,11 @@ public class SocketManager {
                  }
              }
              break;
+            default:
+                break;
         }
         return true;
     }
-
-//    public void closeConnection() {
-//        try {
-//            if (socket != null && !socket.isClosed()) {
-//                socket.close();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public ObjectInputStream getObjectInputStream() {
         return objectInputStream;
@@ -183,7 +173,7 @@ public class SocketManager {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             SocketManager socketManager = new SocketManager(hostName, 8080);
-            UserOperations mailboxRequest = new UserOperations(Operation.RECEIVE, this.username);
+            UserOperations mailboxRequest = new UserOperations(Operation.UPDATE, this.username);
             mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
             MailBox mailbox = mailboxRequest.receiveMailbox(socketManager.getObjectInputStream());
             socketManager.closeConnection();
@@ -193,5 +183,4 @@ public class SocketManager {
         }
         return null;
     }
-
 }

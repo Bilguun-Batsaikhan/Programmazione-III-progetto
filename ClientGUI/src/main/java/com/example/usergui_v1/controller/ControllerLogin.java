@@ -1,7 +1,10 @@
 package com.example.usergui_v1.controller;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
+
 import com.example.usergui_v1.model.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -62,8 +64,29 @@ public class ControllerLogin {
                 Parent newSceneRoot = loader.load();
                 Scene newScene = new Scene(newSceneRoot);
                 ControllerList temp = loader.getController();
-                // Create a new stage for the new scene
-                temp.setMailBox(socket.getMailbox());
+                
+                //This thread is used to update the mailbox every 10 seconds
+                new Thread(() -> {
+                    AtomicReference<MailBox> current = new AtomicReference<>(socket.getMailbox());
+                    System.out.println(current.get());
+                    temp.setMailBox(current.get());
+                    while (true) {
+                        try {
+                            socket.startSocket(Operation.UPDATE);
+                            Thread.sleep(10000);
+                            MailBox updated = socket.getMailbox();
+                            if (!current.get().equals(updated)) {
+                                System.out.println(updated);
+                                current.set(updated);
+                                Platform.runLater(() -> temp.setMailBox(current.get()));
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+
                 Stage newStage = new Stage();
                 newStage.setScene(newScene);
 
@@ -100,25 +123,5 @@ public class ControllerLogin {
     private void handleResize(MouseEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
-    }
-
-    private void showSuccessPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml"));
-            Parent root = loader.load();
-
-            ControllerPopUp controller = loader.getController();
-            controller.initialize("Registration Successful! Now you can log in.");
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Success");
-            stage.setScene(new Scene(root));
-
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
