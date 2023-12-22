@@ -50,9 +50,9 @@ public class ControllerPopUp {
             case "AccessDenied":
                 errorPopUp.setText("Access denied. Wrong password or email.");
                 break;
-            case "SignUp":
+            /*case "SignUp":
                 errorPopUp.setText("Registration Successful! Now you can log in.");
-                break;
+                break;*/
             case "MailSent":
                 errorPopUp.setText("Mail sent successfully!");
                 break;
@@ -86,7 +86,6 @@ public class ControllerPopUp {
         FXMLLoader loader;
         if(success){
             loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml")));
-
         }
         else {
             loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
@@ -98,7 +97,6 @@ public class ControllerPopUp {
         Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-
 
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);

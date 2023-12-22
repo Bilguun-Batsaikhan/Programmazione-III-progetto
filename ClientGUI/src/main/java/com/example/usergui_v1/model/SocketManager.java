@@ -32,9 +32,9 @@ public class SocketManager {
 
     }
 
-    public  void setEmailToDelete(Email toDelete){
+    public  boolean setEmailToDelete(Email toDelete){
         this.toDelete= toDelete;
-        System.out.println(toDelete);
+        return startSocket(Operation.DELETE);
     }
 
 
@@ -83,7 +83,7 @@ public class SocketManager {
             System.out.println("Error closing connection: " + e.getMessage());
         }
     }
-    public boolean startSocket(Operation LogReg) {
+    public boolean startSocket(Operation LogReg){
         switch (LogReg) {
             case LOGIN:
                 try {
@@ -151,6 +151,22 @@ public class SocketManager {
                  }
              }
              break;
+            case DELETE: {
+                try{
+                String hostName = InetAddress.getLocalHost().getHostName();
+                SocketManager socketManager = new SocketManager(hostName, 8080);
+                UserOperations deleteEmail = new UserOperations(Operation.DELETE, username, null, null, this.toDelete, false, null);
+                deleteEmail.sendRequest(socketManager.getObjectOutputStream());
+                ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
+                if (!response.isSuccess()) {
+                    System.out.println(response.getMessage());
+                    return false;
+                }
+                socketManager.closeConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            }
             default:
                 break;
         }

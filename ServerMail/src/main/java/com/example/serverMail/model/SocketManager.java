@@ -94,6 +94,8 @@ public class SocketManager implements Runnable {
             case SEND: {
                 username = userOperations.getUsername();
                 Email temp = userOperations.getToSend();
+                System.out.println(("\n"));
+                System.out.println(temp.toString());
                 List<String> userTotest = temp.getRecipients();
                 boolean control = true;
                 for (String user : userTotest) {
@@ -141,6 +143,19 @@ public class SocketManager implements Runnable {
                 }
                 break;
             }
+            case DELETE:
+                username = userOperations.getUsername();
+                result = userHandler.deleteEmailFromMailbox(username, userOperations.getToDelete(), true);
+                if (result) {
+                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.DELETE));
+                    t1.start();
+                    t1.join();
+                    response.setMessage("Login corretto");
+                }
+                else
+                    response.setMessage("User not exist");
+                response.setSuccess(result);
+                break;
+        }
         }
     }
-}

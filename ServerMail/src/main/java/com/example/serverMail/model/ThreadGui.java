@@ -70,6 +70,10 @@ public class ThreadGui implements Runnable{
                 });
                 System.out.println("send");
                 break;
+            case DELETE:
+                Platform.runLater(() -> {
+                    controller.addLogMessageLogin(username + " has delete one message at " + currentTime);
+                });
         }
 
     }

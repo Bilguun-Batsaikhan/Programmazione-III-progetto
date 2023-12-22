@@ -82,7 +82,9 @@ public class ControllerList implements Initializable {
     }
     @FXML
     private void Remove(){
-        socket.setEmailToDelete(currentEmail);
+        socket.setUsername(User.getText());
+        boolean remove = socket.setEmailToDelete(currentEmail);
+        //clean view client
     }
     @FXML
     private void WriteEmail() throws IOException {

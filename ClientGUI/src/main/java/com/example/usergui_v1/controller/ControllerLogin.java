@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 
+
 public class ControllerLogin {
     @FXML
     private Text errorMessage;
@@ -35,15 +36,18 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void register() throws IOException {
+    private void register() {
        try {
-           ControllerPopUp popUp = new ControllerPopUp();
+           //ControllerPopUp popUp = new ControllerPopUp();
            socket.setUsername(username.getText());
            boolean result = socket.startSocket(Operation.REGISTER);
            if (result) {
-               popUp.startPopUp("SignUp", true);
+               // popUp.startPopUp("SingUp", true);
+               feedback.setText("Registration Successful! Now you can log in.");
+               feedback.setFill(Color.GREEN);
            } else {
-               feedback.setText("Please write in form of username@example.com");
+               feedback.setText("Please write in the form of username@example.com");
+               feedback.setFill(Color.RED);
            }
        }
        catch (NullPointerException e){
@@ -106,7 +110,7 @@ public class ControllerLogin {
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd;");
                 newStage.show();
             } else {
-                errorMessage.setText("Access denied!!!");
+                errorMessage.setText("Wrong credentials, try again");
             }
 
         } catch (NullPointerException e) {

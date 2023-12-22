@@ -7,12 +7,15 @@ import java.io.ObjectInputStream;
 
 public class UserOperations {
 
+
     @SerializedName("operation")
     private Operation operation;
     @SerializedName("username")
     private String username;
     @SerializedName("toSend")
     private Email toSend;
+    @SerializedName("reply")
+    private Email reply;
     @SerializedName("toDelete")
     private Email toDelete;
     @SerializedName("disconnect")
@@ -22,10 +25,11 @@ public class UserOperations {
     private MailBox mailBox;
 
     // constructor for all fields
-    public UserOperations(Operation operation, String username, Email toSend, Email toDelete, boolean disconnect, MailBox mailBox) {
+    public UserOperations(Operation operation, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox) {
         this.operation = operation;
         this.username = username;
         this.toSend = toSend;
+        this.reply = reply;
         this.toDelete = toDelete;
         this.disconnect = disconnect;
         this.mailBox = mailBox;
@@ -33,19 +37,19 @@ public class UserOperations {
 
     // constructor for login
     public UserOperations(Operation operation, String username) {
-        this(operation, username, null,  null, false, null); // call the other constructor with default values for the other fields
+        this(operation, username, null, null, null, false, null); // call the other constructor with default values for the other fields
     }
 
     // constructor for registration
     public UserOperations(Operation operation, MailBox mailBox) {
-        this(operation, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
+        this(operation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
     }
+    //costructor for send email
     public UserOperations(Operation operation, String username, Email emailToSend)
     {
-        this.operation = operation;
-        this.username = username;
-        this.toSend = emailToSend;
+        this(operation,username,emailToSend, null, null, false, null);
     }
+
 
     @Override
     public String toString() {
@@ -64,9 +68,14 @@ public class UserOperations {
         return toSend;
     }
 
+    public Email getToDelete() {
+        return toDelete;
+    }
+
     public String getUsername() {
         return username;
     }
+
 
 
 }
