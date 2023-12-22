@@ -65,21 +65,20 @@ public class ControllerList implements Initializable {
             System.exit(0);
         }
     }
-
     @FXML
-    private  void Refresh() {
+    private void Refresh() {
         try{
-        socket.setUsername(User.getText());
-        this.mailBox = socket.getMailbox();
-        ControllerPopUp popUp = new ControllerPopUp();
-        if(setListView(emailRlist,true)){
-            popUp.startPopUp("NewMailArrived",true);
+            socket.setUsername(User.getText());
+            this.mailBox = socket.getMailbox();
+            ControllerPopUp popUp = new ControllerPopUp();
+            if(setListView(emailRlist,true)){
+                popUp.startPopUp("NewMailArrived",true);
+            }
+            setListView(emailSlist,false);
         }
-        setListView(emailSlist,false);
-    }
-    catch (NullPointerException | IOException e){
-        System.out.println("There is a problem while refreshing " + e);
-    }
+        catch (NullPointerException | IOException e){
+            System.out.println("There is a problem while refreshing " + e);
+        }
     }
     @FXML
     private void Remove(){

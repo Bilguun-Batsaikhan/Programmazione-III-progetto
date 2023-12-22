@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import static com.example.usergui_v1.model.Operation.EXIT;
-import static com.example.usergui_v1.model.Operation.LOGIN;
 
 public class UserOperations {
 
@@ -75,7 +73,6 @@ public class UserOperations {
             throw new IOException(e);
         }
     }
-
     @Override
     public String toString() {
         return this.username;
@@ -94,5 +91,4 @@ public class UserOperations {
             throw new IOException("Null Pointer Exception error", e);
         }
     }
-
 }

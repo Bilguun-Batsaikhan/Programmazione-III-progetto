@@ -14,7 +14,7 @@ public class MailServerApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("server-view.fxml"));
 
 
-        Scene scene = new Scene(loader.load(), 1000, 700);// Ora puoi chiamare il metodo init() dopo aver caricato il controller
+        Scene scene = new Scene(loader.load(), 1000, 700);
         MailServerController controller = loader.getController();
 
         stage.setTitle("Mail Server");
@@ -22,7 +22,7 @@ public class MailServerApp extends Application {
         stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
 
-        // Start the server in a separate thread
+        // Start the server in a separate thread so that it does not block the JavaFX application thread.
         new Thread(() -> {
             int port = 8080;
             Server server = new Server(port, controller);

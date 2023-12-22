@@ -2,7 +2,6 @@ package com.example.usergui_v1.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 public class MailBox implements Serializable {
     private final String mailBoxOwner;
     ArrayList<Email> rEmails;
@@ -13,6 +12,7 @@ public class MailBox implements Serializable {
         this.sEmails = sEmails;
         this.mailBoxOwner = me;
     }
+
     public String getMailBoxOwner() {
         return mailBoxOwner;
     }
@@ -24,4 +24,17 @@ public class MailBox implements Serializable {
     public ArrayList<Email> getsEmails() {
         return sEmails;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        MailBox other = (MailBox) obj;
+        return rEmails.equals(other.rEmails) && sEmails.equals(other.sEmails);
+    }
 }
+
