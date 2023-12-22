@@ -84,6 +84,17 @@ public class ControllerList implements Initializable {
     private void Remove(){
         socket.setUsername(User.getText());
         boolean remove = socket.setEmailToDelete(currentEmail);
+        if(remove) {
+            Introduction.setText("Email deleted");
+            SenderText.setText("");
+            DataText.setText("");
+            RecipientsText.setText("");
+            Subject.setText("");
+            Sender.setText("");
+            Body.setText("");
+            Data.setText("");
+            Recipients.setText("");
+        }
         //clean view client
     }
     @FXML
