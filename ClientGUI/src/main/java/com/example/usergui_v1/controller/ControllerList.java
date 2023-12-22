@@ -45,6 +45,7 @@ public class ControllerList implements Initializable {
     private ListView<Email> emailSlist;
     private Email currentEmail;
     private ClientModel model;
+    private boolean typeEmail;
 
     private final SocketManager socket = new SocketManager();
     private double xOffset = 0;
@@ -83,6 +84,7 @@ public class ControllerList implements Initializable {
     @FXML
     private void Remove(){
         socket.setUsername(User.getText());
+        socket.setType(typeEmail);
         boolean remove = socket.setEmailToDelete(currentEmail);
         if(remove) {
             Introduction.setText("Email deleted");
@@ -187,9 +189,11 @@ public class ControllerList implements Initializable {
         email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
             if (newEmail != null) {
                 if(received) {
+                    typeEmail = true;
                     emailSlist.getSelectionModel().clearSelection();
                 }
                 else{
+                    typeEmail = false;
                     emailRlist.getSelectionModel().clearSelection();
                 }
                 Introduction.setText("");

@@ -145,7 +145,7 @@ public class SocketManager implements Runnable {
             }
             case DELETE:
                 username = userOperations.getUsername();
-                result = userHandler.deleteEmailFromMailbox(username, userOperations.getToDelete(), true);
+                result = userHandler.deleteEmailFromMailbox(username, userOperations.getToDelete(), userOperations.getType());
                 if (result) {
                     Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.DELETE));
                     t1.start();

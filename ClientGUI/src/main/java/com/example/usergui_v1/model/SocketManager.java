@@ -18,6 +18,7 @@ public class SocketManager {
     private Email toSend;
 
     private Email toDelete;
+    private boolean type;
 
     public SocketManager() {
     }
@@ -155,7 +156,7 @@ public class SocketManager {
                 try{
                 String hostName = InetAddress.getLocalHost().getHostName();
                 SocketManager socketManager = new SocketManager(hostName, 8080);
-                UserOperations deleteEmail = new UserOperations(Operation.DELETE, username, null, null, this.toDelete, false, null);
+                UserOperations deleteEmail = new UserOperations(Operation.DELETE, username, null, null, this.toDelete, false, null, type);
                 deleteEmail.sendRequest(socketManager.getObjectOutputStream());
                 ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
                 if (!response.isSuccess()) {
@@ -199,4 +200,5 @@ public class SocketManager {
         }
         return null;
     }
+    public void setType(Boolean type){this.type = type;}
 }
