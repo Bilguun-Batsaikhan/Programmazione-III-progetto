@@ -2,6 +2,7 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
+import com.example.usergui_v1.model.SendType;
 import com.example.usergui_v1.model.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -48,7 +49,7 @@ public class ControllerWriteMail {
         errorHandling(email,false,false);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
             socket.setUsername(sender);
-            boolean sent = socket.setEmailToSend(email);
+            boolean sent = socket.setEmailToSend(email, SendType.SEND);
             errorHandling(email,true, sent);
             if(sent) {
                 handleClose();

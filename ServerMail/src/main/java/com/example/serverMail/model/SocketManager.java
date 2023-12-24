@@ -94,7 +94,6 @@ public class SocketManager implements Runnable {
             case SEND: {
                 username = userOperations.getUsername();
                 Email temp = userOperations.getToSend();
-                System.out.println(("\n"));
                 System.out.println(temp.toString());
                 List<String> userTotest = temp.getRecipients();
                 boolean control = true;
@@ -122,7 +121,7 @@ public class SocketManager implements Runnable {
                     userHandler.writeMailbox(sender);
                     currentData = new Date();
                     currentTime = timeFormat.format(currentData);
-                    Thread send = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.SEND, temp.getRecipients()));
+                    Thread send = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.SEND, userOperations.getSendType(), temp.getRecipients()));
                     send.start();
                     send.join();
 

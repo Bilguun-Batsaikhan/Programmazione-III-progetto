@@ -35,6 +35,9 @@ public class ControllerPopUp {
             case "ReplySent":
                 errorPopUp.setText("Impossible to reply to an email sent.");
                 break;
+            case "SameSender":
+                errorPopUp.setText("Impossible to send to you an email from you");
+                break;
             case "FewArguments":
                 errorPopUp.setText("Impossible to send email due to void field.");
                 break;
@@ -57,7 +60,7 @@ public class ControllerPopUp {
                 errorPopUp.setText("Mail sent successfully!");
                 break;
             case "EmailNotExist":
-                errorPopUp.setText("Impossible to send! Email address does not exist.");
+                errorPopUp.setText("Impossible to send! Email address does not exist or sender email is equals to receiver email");
                 break;
             case "NewMailArrived":
                 errorPopUp.setText("New emails has arrived!");

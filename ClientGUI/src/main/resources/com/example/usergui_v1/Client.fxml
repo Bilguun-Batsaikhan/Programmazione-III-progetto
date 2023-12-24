@@ -18,7 +18,6 @@
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 10;">
             <children>
                <Button mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email" />
-               <Button mnemonicParsing="false" onAction="#Refresh" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Refresh" />
             </children>
          </HBox>
 

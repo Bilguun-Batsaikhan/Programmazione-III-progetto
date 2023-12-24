@@ -2,6 +2,7 @@ package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
+import com.example.usergui_v1.model.SendType;
 import com.example.usergui_v1.model.SocketManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -98,7 +99,7 @@ public class ControllerReply {
         errorHandling(email,false,false);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             socket.setUsername(sender);
-            boolean sent = socket.setEmailToSend(email);
+            boolean sent = socket.setEmailToSend(email, SendType.REPLY);
             errorHandling(email,true, sent);
             if(sent) {
                 handleClose();

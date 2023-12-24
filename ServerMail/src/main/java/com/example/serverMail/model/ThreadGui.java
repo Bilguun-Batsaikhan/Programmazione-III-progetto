@@ -9,7 +9,9 @@ public class ThreadGui implements Runnable{
     private String username;
     String currentTime;
     Operation op;
+    SendType sendType;
     List<String> recipients;
+
     public  ThreadGui(MailServerController controller, String username, String currentTime,Operation op) {
         this.currentTime = currentTime;
         this.controller = controller;
@@ -17,12 +19,13 @@ public class ThreadGui implements Runnable{
         this.op = op;
     }
 
-    public ThreadGui(MailServerController controller, String username, String currentTime, Operation op, List<String> recipients)
+    public ThreadGui(MailServerController controller, String username, String currentTime, Operation op,SendType sendType, List<String> recipients)
     {
         this.currentTime = currentTime;
         this.controller = controller;
         this.username = username;
         this.op = op;
+        this.sendType = sendType;
         this.recipients= recipients;
     }
     @Override
@@ -65,10 +68,36 @@ public class ThreadGui implements Runnable{
                     }
                 }
                 String finalResult = result;
-                Platform.runLater(() -> {
-                    controller.addLogMessageLogin(username + " has sent an email to " + finalResult + " at " +currentTime);
-                });
-                System.out.println("send");
+                switch (sendType){
+                    case SEND :
+                        Platform.runLater(() -> {
+
+                            controller.addLogMessageLogin(username + " has sent an email to " + finalResult + " at " + currentTime);
+                        });
+                        System.out.println("send");
+                        break;
+                    case FOWARD:
+                        Platform.runLater(() -> {
+
+                            controller.addLogMessageLogin(username + " has foward an email to " + finalResult + " at " + currentTime);
+                        });
+                        System.out.println("foward");
+                        break;
+                    case REPLY:
+                        Platform.runLater(() -> {
+
+                            controller.addLogMessageLogin(username + " has reply an email to " + finalResult + " at " + currentTime);
+                        });
+                        System.out.println("reply");
+                        break;
+                    case REPLYALL:
+                        Platform.runLater(() -> {
+
+                            controller.addLogMessageLogin(username + " has reply all an email to " + finalResult + " at " + currentTime);
+                        });
+                        System.out.println("send");
+                        break;
+                }
                 break;
             case DELETE:
                 Platform.runLater(() -> {

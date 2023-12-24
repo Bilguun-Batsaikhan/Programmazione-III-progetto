@@ -76,8 +76,7 @@ public class ControllerLogin {
                     temp.setMailBox(current.get());
                     while (true) {
                         try {
-                            socket.startSocket(Operation.UPDATE);
-                            Thread.sleep(10000);
+                            Thread.sleep(6000);
                             MailBox updated = socket.getMailbox();
                             if (!current.get().equals(updated)) {
                                 System.out.println(updated);
@@ -104,7 +103,8 @@ public class ControllerLogin {
                     newStage.setY(event.getScreenY() - yOffset);
                 });
                 closeLoginWindow();
-                temp.setUsers(username.getText());
+                String user = username.getText();
+                temp.setUsers(user);
                 newScene.setFill(Color.TRANSPARENT);
                 newStage.initStyle(StageStyle.TRANSPARENT);
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd;");
