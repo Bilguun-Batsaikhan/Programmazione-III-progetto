@@ -22,12 +22,12 @@ public class SocketManager implements Runnable {
     private final MailServerController controllerView;
 
 
-    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out, MailServerController  controller) {
+    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler) {
         this.clientSocket = clientSocket;
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
-        userHandler = new UserHandler();
+        this.userHandler = userHandler;
     }
 
     @Override

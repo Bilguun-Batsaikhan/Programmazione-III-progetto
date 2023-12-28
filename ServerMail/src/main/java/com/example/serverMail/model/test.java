@@ -5,7 +5,7 @@ import java.util.List;
 
 public class test {
     public static void main(String args[]) {
-        String testFile = "test@gmail.com";
+        String testFile = "Alex@gmail.com";
         UserHandler userHandler = new UserHandler();
 
         MailBox mailBox = userHandler.readUserMailbox(testFile);

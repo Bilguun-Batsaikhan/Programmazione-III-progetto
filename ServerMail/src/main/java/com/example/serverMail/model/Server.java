@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-
+    private final UserHandler userHandler = new UserHandler();
     private final int port;
     private final ExecutorService executorService;
     private MailServerController controllerView;
@@ -37,7 +37,7 @@ public class Server {
                 // Server initiates communication
                 out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
-                executorService.submit(new SocketManager(clientSocket, in, out, controllerView));
+                executorService.submit(new SocketManager(clientSocket, in, out, controllerView, userHandler));
             }
         } catch (IOException e) {
             e.printStackTrace();
