@@ -12,6 +12,8 @@ public class UserOperations {
 
     @SerializedName("operation")
     private Operation operation;
+    @SerializedName("sendType")
+    private SendType sendType;
     @SerializedName("username")
     private String username;
     @SerializedName("toSend")
@@ -26,30 +28,35 @@ public class UserOperations {
     @SerializedName("mailbox")
     private MailBox mailBox;
 
+    @SerializedName("typeEmail")
+    private boolean type;
+
     // constructor for all fields
-    public UserOperations(Operation operation, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox) {
+    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
         this.operation = operation;
+        this.sendType=sendType;
         this.username = username;
         this.toSend = toSend;
         this.reply = reply;
         this.toDelete = toDelete;
         this.disconnect = disconnect;
         this.mailBox = mailBox;
+        this.type = type;
     }
 
     // constructor for login
     public UserOperations(Operation operation, String username) {
-        this(operation, username, null, null, null, false, null); // call the other constructor with default values for the other fields
+        this(operation,null, username, null, null, null, false, null, false); // call the other constructor with default values for the other fields
     }
 
     // constructor for registration
     public UserOperations(Operation operation, MailBox mailBox) {
-        this(operation, null, null, null, null, false, mailBox); // call the other constructor with default values for the other fields
+        this(operation, null, null, null, null, null, false, mailBox, false); // call the other constructor with default values for the other fields
     }
     //costructor for send email
-    public UserOperations(Operation operation, String username, Email emailToSend)
+    public UserOperations(Operation operation,SendType typeSend, String username, Email emailToSend)
     {
-        this(operation,username,emailToSend, null, null, false, null);
+        this(operation,typeSend, username, emailToSend,null, null, false, null, false);
     }
 
     public void sendRequest(ObjectOutputStream out) {

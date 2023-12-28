@@ -35,6 +35,9 @@ public class ControllerPopUp {
             case "ReplySent":
                 errorPopUp.setText("Impossible to reply to an email sent.");
                 break;
+            case "SameSender":
+                errorPopUp.setText("Impossible to send to you an email from you");
+                break;
             case "FewArguments":
                 errorPopUp.setText("Impossible to send email due to void field.");
                 break;
@@ -50,14 +53,14 @@ public class ControllerPopUp {
             case "AccessDenied":
                 errorPopUp.setText("Access denied. Wrong password or email.");
                 break;
-            case "SignUp":
+            /*case "SignUp":
                 errorPopUp.setText("Registration Successful! Now you can log in.");
-                break;
+                break;*/
             case "MailSent":
                 errorPopUp.setText("Mail sent successfully!");
                 break;
             case "EmailNotExist":
-                errorPopUp.setText("Impossible to send! Email address does not exist.");
+                errorPopUp.setText("Impossible to send! Email address does not exist or sender email is equals to receiver email");
                 break;
             case "NewMailArrived":
                 errorPopUp.setText("New emails has arrived!");
@@ -86,7 +89,6 @@ public class ControllerPopUp {
         FXMLLoader loader;
         if(success){
             loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml")));
-
         }
         else {
             loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpWarning.fxml")));
@@ -98,7 +100,6 @@ public class ControllerPopUp {
         Scene newScene = new Scene(newSceneRoot);
         Stage newStage = new Stage();
         newStage.setScene(newScene);
-
 
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);

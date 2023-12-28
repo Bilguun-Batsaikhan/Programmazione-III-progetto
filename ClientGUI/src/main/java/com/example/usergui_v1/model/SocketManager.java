@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SocketManager {
@@ -16,8 +17,10 @@ public class SocketManager {
     private String username;
 
     private Email toSend;
+    private SendType sendType;
 
     private Email toDelete;
+    private boolean type;
 
     public SocketManager() {
     }
@@ -26,15 +29,22 @@ public class SocketManager {
         this.username=username;
     }
 
-    public boolean setEmailToSend(Email toSend){
+    public boolean setEmailToSend(Email toSend, SendType sendType){
+        List<String> receiver = toSend.getRecipients();
+        for(String temp: receiver)
+        {
+            if(temp.equals(username))
+                return false;
+        }
         this.toSend=toSend;
+        this.sendType = sendType;
         return startSocket(Operation.SEND);
 
     }
 
-    public  void setEmailToDelete(Email toDelete){
+    public  boolean setEmailToDelete(Email toDelete){
         this.toDelete= toDelete;
-        System.out.println(toDelete);
+        return startSocket(Operation.DELETE);
     }
 
 
@@ -83,7 +93,7 @@ public class SocketManager {
             System.out.println("Error closing connection: " + e.getMessage());
         }
     }
-    public boolean startSocket(Operation LogReg) {
+    public boolean startSocket(Operation LogReg){
         switch (LogReg) {
             case LOGIN:
                 try {
@@ -138,7 +148,7 @@ public class SocketManager {
                  try {
                      String hostName = InetAddress.getLocalHost().getHostName();
                      SocketManager socketManager = new SocketManager(hostName, 8080);
-                     UserOperations sendEmail = new UserOperations(Operation.SEND, username, this.toSend);
+                     UserOperations sendEmail = new UserOperations(Operation.SEND,this.sendType, username, this.toSend);
                      sendEmail.sendRequest(socketManager.getObjectOutputStream());
                      ServerResponse response = sendEmail.receiveServerResponse(socketManager.objectInputStream);
                      if (!response.isSuccess()) {
@@ -151,6 +161,22 @@ public class SocketManager {
                  }
              }
              break;
+            case DELETE: {
+                try{
+                String hostName = InetAddress.getLocalHost().getHostName();
+                SocketManager socketManager = new SocketManager(hostName, 8080);
+                UserOperations deleteEmail = new UserOperations(Operation.DELETE,null, username, null, null, this.toDelete, false, null, type);
+                deleteEmail.sendRequest(socketManager.getObjectOutputStream());
+                ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
+                if (!response.isSuccess()) {
+                    System.out.println(response.getMessage());
+                    return false;
+                }
+                socketManager.closeConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            }
             default:
                 break;
         }
@@ -163,10 +189,6 @@ public class SocketManager {
 
     public ObjectOutputStream getObjectOutputStream() {
         return objectOutputStream;
-    }
-
-    public Socket getSocket() {
-        return socket;
     }
 
     public MailBox getMailbox() {
@@ -183,4 +205,6 @@ public class SocketManager {
         }
         return null;
     }
+    //email recived or send -> see server socket
+    public void setType(Boolean type){this.type = type;}
 }

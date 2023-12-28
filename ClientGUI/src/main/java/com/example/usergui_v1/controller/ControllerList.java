@@ -45,6 +45,7 @@ public class ControllerList implements Initializable {
     private ListView<Email> emailSlist;
     private Email currentEmail;
     private ClientModel model;
+    private boolean typeEmail;
 
     private final SocketManager socket = new SocketManager();
     private double xOffset = 0;
@@ -55,7 +56,6 @@ public class ControllerList implements Initializable {
     private void handleClose() {
         try {
             System.out.println("Close start");
-            socket.setUsername(User.getText());
             socket.startSocket(Operation.EXIT);
             System.out.println("Close request");
             System.exit(0);
@@ -65,24 +65,23 @@ public class ControllerList implements Initializable {
             System.exit(0);
         }
     }
-    @FXML
-    private void Refresh() {
-        try{
-            socket.setUsername(User.getText());
-            this.mailBox = socket.getMailbox();
-            ControllerPopUp popUp = new ControllerPopUp();
-            if(setListView(emailRlist,true)){
-                popUp.startPopUp("NewMailArrived",true);
-            }
-            setListView(emailSlist,false);
-        }
-        catch (NullPointerException | IOException e){
-            System.out.println("There is a problem while refreshing " + e);
-        }
-    }
+
     @FXML
     private void Remove(){
-        socket.setEmailToDelete(currentEmail);
+        socket.setType(typeEmail);
+        boolean remove = socket.setEmailToDelete(currentEmail);
+        //clean view client
+        if(remove) {
+            Introduction.setText("Email deleted");
+            SenderText.setText("");
+            DataText.setText("");
+            RecipientsText.setText("");
+            Subject.setText("");
+            Sender.setText("");
+            Body.setText("");
+            Data.setText("");
+            Recipients.setText("");
+        }
     }
     @FXML
     private void WriteEmail() throws IOException {
@@ -174,9 +173,11 @@ public class ControllerList implements Initializable {
         email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
             if (newEmail != null) {
                 if(received) {
+                    typeEmail = true;
                     emailSlist.getSelectionModel().clearSelection();
                 }
                 else{
+                    typeEmail = false;
                     emailRlist.getSelectionModel().clearSelection();
                 }
                 Introduction.setText("");
@@ -203,6 +204,7 @@ public class ControllerList implements Initializable {
     protected void setUsers(String username)
     {
         User.setText(username);
+        socket.setUsername(username);
     }
 
     public void setMailBox(MailBox mailBox) {

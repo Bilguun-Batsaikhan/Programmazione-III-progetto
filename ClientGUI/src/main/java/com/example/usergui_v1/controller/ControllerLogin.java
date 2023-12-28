@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 
+
 public class ControllerLogin {
     @FXML
     private Text errorMessage;
@@ -35,15 +36,18 @@ public class ControllerLogin {
     public ControllerLogin() {}
 
     @FXML
-    private void register() throws IOException {
+    private void register() {
        try {
-           ControllerPopUp popUp = new ControllerPopUp();
+           //ControllerPopUp popUp = new ControllerPopUp();
            socket.setUsername(username.getText());
            boolean result = socket.startSocket(Operation.REGISTER);
            if (result) {
-               popUp.startPopUp("SignUp", true);
+               // popUp.startPopUp("SingUp", true);
+               feedback.setText("Registration Successful! Now you can log in.");
+               feedback.setFill(Color.GREEN);
            } else {
-               feedback.setText("Please write in form of username@example.com");
+               feedback.setText("Please write in the form of username@example.com");
+               feedback.setFill(Color.RED);
            }
        }
        catch (NullPointerException e){
@@ -72,8 +76,7 @@ public class ControllerLogin {
                     temp.setMailBox(current.get());
                     while (true) {
                         try {
-                            socket.startSocket(Operation.UPDATE);
-                            Thread.sleep(10000);
+                            Thread.sleep(6000);
                             MailBox updated = socket.getMailbox();
                             if (!current.get().equals(updated)) {
                                 System.out.println(updated);
@@ -100,13 +103,14 @@ public class ControllerLogin {
                     newStage.setY(event.getScreenY() - yOffset);
                 });
                 closeLoginWindow();
-                temp.setUsers(username.getText());
+                String user = username.getText();
+                temp.setUsers(user);
                 newScene.setFill(Color.TRANSPARENT);
                 newStage.initStyle(StageStyle.TRANSPARENT);
                 newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-color: #e3dddd;");
                 newStage.show();
             } else {
-                errorMessage.setText("Access denied!!!");
+                errorMessage.setText("Wrong credentials, try again");
             }
 
         } catch (NullPointerException e) {
