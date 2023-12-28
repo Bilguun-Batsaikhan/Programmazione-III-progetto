@@ -17,7 +17,12 @@ public class UserHandler {
     String fileName = "usernames.txt";
     private final String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-    public UserHandler() {}
+    public UserHandler() {
+        List<String> users = readUsers();
+        for(String user: users) {
+            mailboxLocks.put(user, new ReentrantReadWriteLock());
+        }
+    }
 
     //Given a mailbox it writes it to username@email.com.json, so it can be used for updating existing mailbox
         public boolean writeMailbox(MailBox mailBox) {

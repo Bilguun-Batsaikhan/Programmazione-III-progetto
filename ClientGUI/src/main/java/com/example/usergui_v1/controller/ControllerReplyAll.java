@@ -37,7 +37,7 @@ public class ControllerReplyAll {
 
     public void initialize(Email selectedItem, String sender, ClientModel model) throws IOException {
         this.selectedItem = selectedItem;
-        this.sender=sender;
+        this.sender = sender;
         this.model = model;
         errorHandling(email,false,false);
         setRecipientsToReply();
@@ -47,7 +47,9 @@ public class ControllerReplyAll {
     private void setRecipientsToReply(){
         if(selectedItem!=null) {
             selectedItem.getRecipients().remove(sender);
-            Recipients.setText(selectedItem.getRecipientsString() + "  " + selectedItem.getSender());
+            String recipients = selectedItem.getRecipientsString();
+            System.out.println(recipients);
+            Recipients.setText(recipients + "" + selectedItem.getSender());
         }
     }
 

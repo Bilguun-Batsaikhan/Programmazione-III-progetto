@@ -33,7 +33,7 @@ public class Email {
     public String getRecipientsString() {
         StringBuilder recipientsString = new StringBuilder();
         for (String recipient : recipients) {
-            recipientsString.append(recipient).append("   ");
+            recipientsString.append(recipient).append(" ");
         }
         return recipientsString.toString();
     }

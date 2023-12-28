@@ -72,6 +72,8 @@ public class ControllerList implements Initializable {
         boolean remove = socket.setEmailToDelete(currentEmail);
         //clean view client
         if(remove) {
+            MailBox mailBox1 = socket.getMailbox();
+            setMailBox(mailBox1);
             Introduction.setText("Email deleted");
             SenderText.setText("");
             DataText.setText("");
