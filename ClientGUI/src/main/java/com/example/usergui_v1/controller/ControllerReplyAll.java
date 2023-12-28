@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,6 +29,7 @@ public class ControllerReplyAll {
     private Email email;
     private final SocketManager socket = new SocketManager();
 
+    private ArrayList<String> emailToRespond = new ArrayList<>();
 
     @FXML
     private void handleClose() {
@@ -48,14 +50,16 @@ public class ControllerReplyAll {
         if(selectedItem!=null) {
             selectedItem.getRecipients().remove(sender);
             String recipients = selectedItem.getRecipientsString();
-            System.out.println(recipients);
-            Recipients.setText(recipients + "" + selectedItem.getSender());
+            for(String inRec: selectedItem.getRecipients())
+                emailToRespond.add(inRec);
+            Recipients.setText(recipients + selectedItem.getSender());
+            emailToRespond.add(selectedItem.getSender());
         }
     }
 
     @FXML
     private void Send() throws IOException {
-        email = new Email(sender,selectedItem.getRecipients(), Subject.getText(), Body.getText(), new Date(), -1);
+        email = new Email(sender,emailToRespond, Subject.getText(), Body.getText(), new Date(), -1);
         errorHandling(email,false,false);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             socket.setUsername(sender);
