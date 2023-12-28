@@ -69,7 +69,7 @@ public class ThreadGui implements Runnable{
                 }
                 String finalResult = result;
                 switch (sendType){
-                    case SEND :
+                    case SEND:
                         Platform.runLater(() -> {
 
                             controller.addLogMessageLogin(username + " has sent an email to " + finalResult + " at " + currentTime);
@@ -79,9 +79,9 @@ public class ThreadGui implements Runnable{
                     case FOWARD:
                         Platform.runLater(() -> {
 
-                            controller.addLogMessageLogin(username + " has foward an email to " + finalResult + " at " + currentTime);
+                            controller.addLogMessageLogin(username + " has forward an email to " + finalResult + " at " + currentTime);
                         });
-                        System.out.println("foward");
+                        System.out.println("forward");
                         break;
                     case REPLY:
                         Platform.runLater(() -> {
