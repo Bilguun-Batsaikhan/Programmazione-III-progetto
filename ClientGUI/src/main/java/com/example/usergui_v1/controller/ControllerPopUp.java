@@ -1,5 +1,6 @@
 package com.example.usergui_v1.controller;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,9 +12,12 @@ import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.Objects;
 
+import static java.lang.Thread.sleep;
 
 
 public class ControllerPopUp {
@@ -104,12 +108,19 @@ public class ControllerPopUp {
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);
         if(success) {
-            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #3dda30;");
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-color: #808080ff; -fx-background-color: #ffffff; -fx-border-radius: 10px");
         }
         else{
             newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
         }
+        if(success) {
+                PauseTransition delay = new PauseTransition(Duration.seconds(6));
+                delay.setOnFinished(event -> {
+                    newStage.close();
+                });
+
+                delay.play();
+        }
         newStage.showAndWait();
     }
-
 }

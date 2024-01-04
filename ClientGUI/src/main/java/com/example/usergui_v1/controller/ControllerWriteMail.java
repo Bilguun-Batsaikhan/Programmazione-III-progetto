@@ -78,6 +78,8 @@ public class ControllerWriteMail {
         }
         if(send) {
             if (success) {
+                Stage stage = (Stage) loginRoot.getScene().getWindow();
+                stage.hide();
                 popUp.startPopUp("MailSent",true);
             } else {
                 popUp.startPopUp("EmailNotExist", false);

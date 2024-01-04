@@ -50,6 +50,10 @@ public class Email {
         return time.toString();
     }
 
+    public int getID() {
+        return ID;
+    }
+
     @Override
     public String toString() {
         return "Email{" +
@@ -78,4 +82,6 @@ public class Email {
     public int hashCode() {
         return Objects.hash(sender, recipients, subject, body, time, ID);
     }
+
+
 }
