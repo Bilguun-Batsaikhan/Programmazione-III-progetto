@@ -29,7 +29,7 @@ public class ControllerPopUp {
         stage.close();
     }
 
-    public void initialize(String errorType) throws IOException {
+    public void initialize(String errorType) {
         makeSceneDraggable();
         switch (errorType) {
             case "ReplySent":
@@ -53,9 +53,6 @@ public class ControllerPopUp {
             case "AccessDenied":
                 errorPopUp.setText("Access denied. Wrong password or email.");
                 break;
-            /*case "SignUp":
-                errorPopUp.setText("Registration Successful! Now you can log in.");
-                break;*/
             case "MailSent":
                 errorPopUp.setText("Mail sent successfully!");
                 break;

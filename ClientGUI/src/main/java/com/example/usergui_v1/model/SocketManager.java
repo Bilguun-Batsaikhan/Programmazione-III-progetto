@@ -205,6 +205,6 @@ public class SocketManager {
         }
         return null;
     }
-    //email recived or send -> see server socket
+    //email recived or send -> see server socket, true = recive, false = send
     public void setType(Boolean type){this.type = type;}
 }

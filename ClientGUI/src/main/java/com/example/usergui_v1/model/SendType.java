@@ -7,6 +7,10 @@ public enum SendType {
     REPLY(3),
     REPLYALL(4);
 
+    public int getType() {
+        return type;
+    }
+
     private final int type;
 
     SendType(int type) {

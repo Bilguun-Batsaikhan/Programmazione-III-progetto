@@ -1,6 +1,6 @@
 package com.example.serverMail.model;
 
-import java.nio.file.attribute.UserPrincipal;
+
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import com.example.serverMail.controller.MailServerController;
@@ -9,21 +9,17 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class SocketManager implements Runnable {
-
-    private final Socket clientSocket;
     private final UserHandler userHandler;
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
     private final MailServerController controllerView;
 
 
-    public SocketManager(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler) {
-        this.clientSocket = clientSocket;
+    public SocketManager(ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler) {
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
@@ -38,9 +34,9 @@ public class SocketManager implements Runnable {
             System.out.println(res);
 
             // Deserialize JSON string to Email object
-            UserOperations o = x.fromJson(res, UserOperations.class);
+            UserOperations userOperations = x.fromJson(res, UserOperations.class);
             ServerResponse response = new ServerResponse(true,null);
-            doOperation(o, controllerView, response);
+            doOperation(userOperations, controllerView, response);
             objectOutputStream.writeObject(new Gson().toJson(response));
         } catch (IOException e) {
             System.out.println("IOException " + e);
@@ -66,8 +62,8 @@ public class SocketManager implements Runnable {
                 if (result) {
                     Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.LOGIN));
                     t1.start();
-                    t1.join();
-                    response.setMessage("Login corretto");
+                    //t1.join();
+                    response.setMessage("Correct Login");
                 }
                 else
                     response.setMessage("User not exist");

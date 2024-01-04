@@ -1,7 +1,6 @@
 package com.example.usergui_v1.controller;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.example.usergui_v1.model.*;
 import javafx.application.Platform;
@@ -71,20 +70,24 @@ public class ControllerLogin {
                 
                 //This thread is used to update the mailbox every 10 seconds
                 new Thread(() -> {
-                    AtomicReference<MailBox> current = new AtomicReference<>(socket.getMailbox());
-                    System.out.println(current.get());
-                    temp.setMailBox(current.get());
+                    MailBox current = socket.getMailbox();
+                    System.out.println(current);
+                    temp.setMailBox(current);
                     while (true) {
                         try {
-                            Thread.sleep(6000);
-                            MailBox updated = socket.getMailbox();
-                            if (!current.get().equals(updated)) {
-                                System.out.println(updated);
-                                current.set(updated);
-                                Platform.runLater(() -> temp.setMailBox(current.get()));
+                            synchronized (socket) {
+                                socket.wait(6000);
+                                MailBox updated = socket.getMailbox();
+                                if (!current.equals(updated)) {
+                                    System.out.println(updated);
+                                    current = updated;
+                                    MailBox finalCurrent = current;
+                                    Platform.runLater(() -> temp.setMailBox(finalCurrent));
+                                }
                             }
+
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            System.out.println("Error in update thread " +e);
                         }
                     }
                 }).start();

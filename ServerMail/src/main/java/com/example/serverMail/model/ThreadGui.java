@@ -35,13 +35,13 @@ public class ThreadGui implements Runnable{
         {
             case LOGIN:
                 Platform.runLater(() -> {
-                    controller.addLogMessageLogin(username + " has joined " + currentTime);
+                    controller.addLogMessage(username + " has joined " + currentTime);
                 });
                 System.out.println("Join");
                 break;
             case EXIT:
                 Platform.runLater(() -> {
-                    controller.addLogMessageLogin(username + " has left " + currentTime);
+                    controller.addLogMessage(username + " has left " + currentTime);
                 });
                 System.out.println("Left");
                 break;
@@ -72,28 +72,28 @@ public class ThreadGui implements Runnable{
                     case SEND:
                         Platform.runLater(() -> {
 
-                            controller.addLogMessageLogin(username + " has sent an email to " + finalResult + " at " + currentTime);
+                            controller.addLogMessage(username + " has sent an email to " + finalResult + " at " + currentTime);
                         });
                         System.out.println("send");
                         break;
                     case FOWARD:
                         Platform.runLater(() -> {
 
-                            controller.addLogMessageLogin(username + " has forward an email to " + finalResult + " at " + currentTime);
+                            controller.addLogMessage(username + " has forward an email to " + finalResult + " at " + currentTime);
                         });
                         System.out.println("forward");
                         break;
                     case REPLY:
                         Platform.runLater(() -> {
 
-                            controller.addLogMessageLogin(username + " has reply an email to " + finalResult + " at " + currentTime);
+                            controller.addLogMessage(username + " has reply an email to " + finalResult + " at " + currentTime);
                         });
                         System.out.println("reply");
                         break;
                     case REPLYALL:
                         Platform.runLater(() -> {
 
-                            controller.addLogMessageLogin(username + " has reply all an email to " + finalResult + " at " + currentTime);
+                            controller.addLogMessage(username + " has reply all an email to " + finalResult + " at " + currentTime);
                         });
                         System.out.println("send");
                         break;
@@ -101,7 +101,7 @@ public class ThreadGui implements Runnable{
                 break;
             case DELETE:
                 Platform.runLater(() -> {
-                    controller.addLogMessageLogin(username + " has delete one message at " + currentTime);
+                    controller.addLogMessage(username + " has delete one message at " + currentTime);
                 });
         }
 
