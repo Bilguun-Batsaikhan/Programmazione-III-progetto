@@ -70,7 +70,7 @@ public class ControllerList implements Initializable {
     }
 
     @FXML
-    private void Remove() throws IOException {
+    private void Remove() {
         socket.setType(typeEmail);
         boolean remove = socket.setEmailToDelete(currentEmail);
         //clean view client
@@ -115,12 +115,12 @@ public class ControllerList implements Initializable {
             switch (fxmlToLoad){
                 case "ReplyAll.fxml": {
                     ControllerReplyAll controller = loader.getController();
-                    controller.initialize(currentEmail, User.getText(), model);
+                    controller.initialize(currentEmail, User.getText());
                     break;
                 }
                 case "Reply.fxml":{
                     ControllerReply controller = loader.getController();
-                    controller.initialize(currentEmail, User.getText(), model);
+                    controller.initialize(currentEmail, User.getText());
                     break;
                 }
                 case "Forward.fxml": {

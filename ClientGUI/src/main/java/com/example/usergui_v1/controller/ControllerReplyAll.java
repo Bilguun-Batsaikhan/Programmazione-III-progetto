@@ -25,7 +25,6 @@ public class ControllerReplyAll {
     private TextArea Body;
     private Email selectedItem;
     private String sender;
-    private ClientModel model;
     private Email email;
     private final SocketManager socket = new SocketManager();
 
@@ -37,10 +36,9 @@ public class ControllerReplyAll {
         stage.close();
     }
 
-    public void initialize(Email selectedItem, String sender, ClientModel model) throws IOException {
+    public void initialize(Email selectedItem, String sender) throws IOException {
         this.selectedItem = selectedItem;
         this.sender = sender;
-        this.model = model;
         errorHandling(email,false,false);
         setRecipientsToReply();
 

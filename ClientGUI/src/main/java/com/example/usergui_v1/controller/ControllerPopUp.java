@@ -17,8 +17,6 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.Objects;
 
-import static java.lang.Thread.sleep;
-
 
 public class ControllerPopUp {
 
@@ -112,9 +110,7 @@ public class ControllerPopUp {
         }
         if(success) {
                 PauseTransition delay = new PauseTransition(Duration.seconds(6));
-                delay.setOnFinished(event -> {
-                    newStage.close();
-                });
+                delay.setOnFinished(event -> newStage.close());
 
                 delay.play();
         }
