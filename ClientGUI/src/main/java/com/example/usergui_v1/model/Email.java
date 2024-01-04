@@ -50,9 +50,6 @@ public class Email {
         return time.toString();
     }
 
-    public int getID() {
-        return ID;
-    }
 
     @Override
     public String toString() {

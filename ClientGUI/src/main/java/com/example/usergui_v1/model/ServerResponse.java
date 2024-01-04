@@ -6,9 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.*;
 
 public class ServerResponse implements Serializable {
-  /*  @Serial
-    private static final long serialVersionUID = 1L;*/
-
     @SerializedName("success")
     private boolean success;
 

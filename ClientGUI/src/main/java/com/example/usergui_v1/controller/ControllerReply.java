@@ -1,6 +1,4 @@
 package com.example.usergui_v1.controller;
-
-import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
 import com.example.usergui_v1.model.SendType;
 import com.example.usergui_v1.model.SocketManager;
@@ -33,8 +31,6 @@ public class ControllerReply {
 
     private String sender;
 
-    private ClientModel model;
-
     private Email email;
 
     private final SocketManager socket = new SocketManager();
@@ -47,10 +43,9 @@ public class ControllerReply {
     }
 
 
-    public void initialize(Email selectedItem,String sender, ClientModel model) throws IOException {
+    public void initialize(Email selectedItem, String sender) throws IOException {
         this.selectedItem = selectedItem;
         this.sender = sender;
-        this.model = model;
         errorHandling(email,false,false);
         setRecipientsToReply();
 
