@@ -1,22 +1,10 @@
 package com.example.usergui_v1.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ClientModel {
-    private final StringProperty mailBoxOwner = new SimpleStringProperty();
-
-    public ClientModel() {
-    }
-
-    public StringProperty mailBoxOwnerProperty() {
-        return mailBoxOwner;
-    }
-
-
     public boolean CorrectFormatEmail(List<String> recipients) {
         if(recipients == null){
             return false;

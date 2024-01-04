@@ -46,11 +46,14 @@ public class ControllerList implements Initializable {
     private Email currentEmail;
     private ClientModel model;
     private boolean typeEmail;
-
+    ControllerPopUp popUp = new ControllerPopUp();
     private final SocketManager socket = new SocketManager();
     private double xOffset = 0;
     private double yOffset = 0;
     private MailBox mailBox;
+
+    private int count = 0;
+
 
     @FXML
     private void handleClose() {
@@ -67,13 +70,14 @@ public class ControllerList implements Initializable {
     }
 
     @FXML
-    private void Remove(){
+    private void Remove() throws IOException {
         socket.setType(typeEmail);
         boolean remove = socket.setEmailToDelete(currentEmail);
         //clean view client
         if(remove) {
-            MailBox mailBox1 = socket.getMailbox();
-            setMailBox(mailBox1);
+            this.mailBox = socket.getMailbox();
+            setListView(emailRlist,true);
+            setListView(emailSlist,false);
             Introduction.setText("Email deleted");
             SenderText.setText("");
             DataText.setText("");
@@ -84,6 +88,7 @@ public class ControllerList implements Initializable {
             Data.setText("");
             Recipients.setText("");
         }
+
     }
     @FXML
     private void WriteEmail() throws IOException {
@@ -159,7 +164,7 @@ public class ControllerList implements Initializable {
 
     protected boolean setListView(ListView<Email> email,boolean received) throws NullPointerException{
         List<Email> newEmails = received ? mailBox.getrEmails() : mailBox.getsEmails();
-        if (newEmails.equals(email.getItems())) {
+        if (newEmails.equals(email.getItems()))  {
             return false;
         }
         email.getItems().clear();
@@ -211,8 +216,15 @@ public class ControllerList implements Initializable {
 
     public void setMailBox(MailBox mailBox) {
         this.mailBox = mailBox;
-        setListView(emailRlist,true);
+        if(setListView(emailRlist,true) && count >1){
+            try {
+                popUp.startPopUp("NewMailArrived",true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         setListView(emailSlist,false);
+        count++;
     }
 }
 

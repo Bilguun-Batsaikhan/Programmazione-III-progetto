@@ -84,7 +84,7 @@ public class ControllerReplyAll {
                 stage.close();
             });
 
-        } else if (Objects.equals(selectedItem.getSender(), model.mailBoxOwnerProperty().get())) {
+        } else if (Objects.equals(selectedItem.getSender(), sender)) {
             popUp.startPopUp("ReplySent",false);
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
@@ -93,6 +93,8 @@ public class ControllerReplyAll {
         }
         if(send) {
             if (success) {
+                Stage stage = (Stage) loginRoot.getScene().getWindow();
+                stage.hide();
                 popUp.startPopUp("MailSent",true);
             } else {
                 popUp.startPopUp("EmailNotExist", false);

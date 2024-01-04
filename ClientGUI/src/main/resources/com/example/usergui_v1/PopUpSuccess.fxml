@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="popupRoot" prefHeight="140.0" prefWidth="291.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #3dda30;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerPopUp">
+<AnchorPane fx:id="popupRoot" prefHeight="89.0" prefWidth="291.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: light grey;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerPopUp">
    <children>
-      <Label fx:id="errorPopUp" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="14.0" prefHeight="67.0" prefWidth="278.0" style="-fx-text-fill: white; -fx-content-display: center;" text="text" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Label fx:id="errorPopUp" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="14.0" prefHeight="67.0" prefWidth="278.0" style="-fx-text-fill: black; -fx-content-display: center;" text="text" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
-      <Button layoutX="104.0" layoutY="89.0" mnemonicParsing="false" onAction="#Close" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" text="OK" textFill="#000000">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
+      <FontAwesomeIconView fill="#414141" glyphName="CLOSE" layoutX="275.0" layoutY="20.0" onMouseClicked="#Close" size="18" text="" />
    </children>
 </AnchorPane>
