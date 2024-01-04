@@ -12,8 +12,6 @@ public class MailServerApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("server-view.fxml"));
-
-
         Scene scene = new Scene(loader.load(), 1000, 700);
         MailServerController controller = loader.getController();
 

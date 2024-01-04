@@ -13,10 +13,6 @@ public class MailBox implements Serializable {
         this.mailBoxOwner = me;
     }
 
-    public String getMailBoxOwner() {
-        return mailBoxOwner;
-    }
-
     public ArrayList<Email> getrEmails() {
         return rEmails;
     }

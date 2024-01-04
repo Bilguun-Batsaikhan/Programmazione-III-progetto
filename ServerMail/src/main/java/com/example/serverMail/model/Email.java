@@ -21,24 +21,12 @@ public class Email {
         this.ID = id;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
     public List<String> getRecipients() {
         return recipients;
     }
 
     public String getSubject() {
         return subject;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public Date getTime() {
-        return time;
     }
 
     public int getID() {

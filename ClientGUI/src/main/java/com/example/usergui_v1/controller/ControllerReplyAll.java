@@ -29,7 +29,7 @@ public class ControllerReplyAll {
     private Email email;
     private final SocketManager socket = new SocketManager();
 
-    private ArrayList<String> emailToRespond = new ArrayList<>();
+    private final ArrayList<String> emailToRespond = new ArrayList<>();
 
     @FXML
     private void handleClose() {
@@ -50,8 +50,7 @@ public class ControllerReplyAll {
         if(selectedItem!=null) {
             selectedItem.getRecipients().remove(sender);
             String recipients = selectedItem.getRecipientsString();
-            for(String inRec: selectedItem.getRecipients())
-                emailToRespond.add(inRec);
+            emailToRespond.addAll(selectedItem.getRecipients());
             Recipients.setText(recipients + selectedItem.getSender());
             emailToRespond.add(selectedItem.getSender());
         }
