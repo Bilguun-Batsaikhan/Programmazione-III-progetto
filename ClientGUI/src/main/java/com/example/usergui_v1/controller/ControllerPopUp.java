@@ -25,6 +25,10 @@ public class ControllerPopUp {
     @FXML
     private Label errorPopUp;
     private double xOffset, yOffset;
+
+    private double x = 0;
+    private double y = 0;
+
     @FXML
     private void Close() {
         Stage stage = (Stage) popupRoot.getScene().getWindow();
@@ -84,8 +88,9 @@ public class ControllerPopUp {
             stage.setY(event.getScreenY() - yOffset);
         });
     }
-    public void startPopUp(String error, boolean success) throws IOException {
-        FXMLLoader loader;
+    public void startPopUp(String error, boolean success) {
+        try {
+            FXMLLoader loader;
         if(success){
             loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/PopUpSuccess.fxml")));
         }
@@ -103,7 +108,9 @@ public class ControllerPopUp {
         newScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);
         if(success) {
-            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-color: #808080ff; -fx-background-color: #ffffff; -fx-border-radius: 10px");
+            newStage.setX(x);
+            newStage.setY(y);
+            newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-border-color: #e3dddd; -fx-background-color: #ffffff; -fx-border-radius: 10px");
         }
         else{
             newSceneRoot.setStyle("-fx-background-radius: 10px; -fx-background-color: #ffc400;");
@@ -115,5 +122,14 @@ public class ControllerPopUp {
                 delay.play();
         }
         newStage.showAndWait();
+    } catch (IOException | RuntimeException e) {
+            System.out.println("There is a problem while starting the pop up" + e);
+        }
+    }
+
+
+    public void setPosition(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 }

@@ -4,18 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MailBox implements Serializable {
-    private final String mailBoxOwner;
+    private String mailboxOwner;
     ArrayList<Email> rEmails;
     ArrayList<Email> sEmails;
 
     public MailBox(ArrayList<Email> rEmails, ArrayList<Email> sEmails, String me) {
         this.rEmails = rEmails;
         this.sEmails = sEmails;
-        this.mailBoxOwner = me;
+        this.mailboxOwner = me;
     }
 
+
     public String getMailBoxOwner() {
-        return mailBoxOwner;
+        return mailboxOwner;
     }
 
     public ArrayList<Email> getrEmails() {
@@ -36,7 +37,7 @@ public class MailBox implements Serializable {
 
     @Override
     public String toString() {
-        String mailbox = "MailBox{ \n" + "mailBoxOwner='" + mailBoxOwner + '\n' + "Received Emails: \n";
+        String mailbox = "MailBox{ \n" + "mailBoxOwner='" + mailboxOwner + '\n' + "Received Emails: \n";
         for (Email email : rEmails) {
             mailbox = mailbox + email + "\n";
         }

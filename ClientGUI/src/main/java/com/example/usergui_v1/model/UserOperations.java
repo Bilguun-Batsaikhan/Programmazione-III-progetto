@@ -76,9 +76,10 @@ public class UserOperations {
             Gson x = new Gson();
             String result = (String) in.readObject();
             return x.fromJson(result, ServerResponse.class);
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e);
+        } catch (ClassNotFoundException | NullPointerException e) {
+            System.out.println("There is an error with the server" + e);
         }
+        return null;
     }
     @Override
     public String toString() {

@@ -3,7 +3,6 @@ package com.example.usergui_v1.controller;
 import java.io.IOException;
 
 import com.example.usergui_v1.model.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -68,30 +67,7 @@ public class ControllerLogin {
                 Scene newScene = new Scene(newSceneRoot);
                 ControllerList temp = loader.getController();
                 
-                //This thread is used to update the mailbox every 10 seconds
-                new Thread(() -> {
-                    MailBox current = socket.getMailbox();
-                    System.out.println(current);
-                    temp.setMailBox(current);
-                    while (true) {
-                        try {
-                            synchronized (socket) {
-                                socket.wait(6000);
-                                MailBox updated = socket.getMailbox();
-                                if (!current.equals(updated)) {
-                                    System.out.println(updated);
-                                    current = updated;
-                                    MailBox finalCurrent = current;
-                                    Platform.runLater(() -> temp.setMailBox(finalCurrent));
-                                }
-                            }
-
-                        } catch (InterruptedException e) {
-                            System.out.println("Error in update thread " +e);
-                        }
-                    }
-                }).start();
-
+                socket.Refresh(temp, username.getText());
 
                 Stage newStage = new Stage();
                 newStage.setScene(newScene);

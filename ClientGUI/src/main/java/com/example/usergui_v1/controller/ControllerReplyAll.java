@@ -1,6 +1,5 @@
 package com.example.usergui_v1.controller;
 
-import com.example.usergui_v1.model.ClientModel;
 import com.example.usergui_v1.model.Email;
 import com.example.usergui_v1.model.SendType;
 import com.example.usergui_v1.model.SocketManager;
@@ -9,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -36,7 +34,7 @@ public class ControllerReplyAll {
         stage.close();
     }
 
-    public void initialize(Email selectedItem, String sender) throws IOException {
+    public void initialize(Email selectedItem, String sender)  {
         this.selectedItem = selectedItem;
         this.sender = sender;
         errorHandling(email,false,false);
@@ -55,8 +53,8 @@ public class ControllerReplyAll {
     }
 
     @FXML
-    private void Send() throws IOException {
-        email = new Email(sender,emailToRespond, Subject.getText(), Body.getText(), new Date(), -1);
+    private void Send()  {
+        try{email = new Email(sender,emailToRespond, Subject.getText(), Body.getText(), new Date(), -1);
         errorHandling(email,false,false);
         if(!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) {
             socket.setUsername(sender);
@@ -65,11 +63,14 @@ public class ControllerReplyAll {
             if(sent) {
                 handleClose();
             }
+        }}
+        catch (NullPointerException e){
+            System.out.println("There was a problem while replying an email " +e);
         }
     }
 
 
-    private void errorHandling(Email email,boolean send,boolean success) throws IOException {
+    private void errorHandling(Email email,boolean send,boolean success) {
         ControllerPopUp popUp = new ControllerPopUp();
         if (email!=null && Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), "")){
             popUp.startPopUp("FewArguments",false);
@@ -88,10 +89,13 @@ public class ControllerReplyAll {
                 stage.close();
             });
         }
-        if(send) {
+        if(email != null && send) {
             if (success) {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.hide();
+                double newX = stage.getX() + 5;
+                double newY = stage.getY() + 400 ;
+                popUp.setPosition(newX, newY);
                 popUp.startPopUp("MailSent",true);
             } else {
                 popUp.startPopUp("EmailNotExist", false);

@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,6 +40,8 @@ public class ControllerList implements Initializable {
     private Label DataText;
     @FXML
     private Label RecipientsText;
+    @FXML
+    private AnchorPane clientRoot;
     @FXML
     private ListView<Email> emailRlist;
     @FXML
@@ -71,7 +74,7 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void Remove() {
-        socket.setType(typeEmail);
+        try{socket.setType(typeEmail);
         boolean remove = socket.setEmailToDelete(currentEmail);
         //clean view client
         if(remove) {
@@ -87,6 +90,9 @@ public class ControllerList implements Initializable {
             Body.setText("");
             Data.setText("");
             Recipients.setText("");
+        }}
+        catch (RuntimeException e){
+            System.out.println("There was an error while deleting an email" + e);
         }
 
     }
@@ -162,44 +168,49 @@ public class ControllerList implements Initializable {
         this.model = new ClientModel();
     }
 
-    protected boolean setListView(ListView<Email> email,boolean received) throws NullPointerException{
-        List<Email> newEmails = received ? mailBox.getrEmails() : mailBox.getsEmails();
-        if (newEmails.equals(email.getItems()))  {
-            return false;
-        }
-        email.getItems().clear();
-        email.getItems().addAll(newEmails);
+    protected boolean setListView(ListView<Email> email,boolean received){
+        try {
+            List<Email> newEmails = received ? mailBox.getrEmails() : mailBox.getsEmails();
+            if (newEmails.equals(email.getItems())) {
+                return false;
+            }
+            email.getItems().clear();
+            email.getItems().addAll(newEmails);
 
-        email.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(Email email, boolean empty) {
-                super.updateItem(email, empty);
-                setText(empty || email == null ? "" : email.getSubject());
-            }
-        });
-        email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
-            if (newEmail != null) {
-                if(received) {
-                    typeEmail = true;
-                    emailSlist.getSelectionModel().clearSelection();
+            email.setCellFactory(lv -> new ListCell<>() {
+                @Override
+                protected void updateItem(Email email, boolean empty) {
+                    super.updateItem(email, empty);
+                    setText(empty || email == null ? "" : email.getSubject());
                 }
-                else{
-                    typeEmail = false;
-                    emailRlist.getSelectionModel().clearSelection();
+            });
+            email.getSelectionModel().selectedItemProperty().addListener((observableValue, oldEmail, newEmail) -> {
+                if (newEmail != null) {
+                    if (received) {
+                        typeEmail = true;
+                        emailSlist.getSelectionModel().clearSelection();
+                    } else {
+                        typeEmail = false;
+                        emailRlist.getSelectionModel().clearSelection();
+                    }
+                    Introduction.setText("");
+                    SenderText.setText("Sender : ");
+                    DataText.setText("Data : ");
+                    RecipientsText.setText("Recipients :");
+                    currentEmail = newEmail;
+                    Subject.setText(currentEmail.getSubject());
+                    Sender.setText(currentEmail.getSender());
+                    Body.setText(currentEmail.getBody());
+                    Data.setText(currentEmail.getTime());
+                    Recipients.setText(currentEmail.getRecipientsString());
                 }
-                Introduction.setText("");
-                SenderText.setText("Sender : ");
-                DataText.setText("Data : ");
-                RecipientsText.setText("Recipients :");
-                currentEmail = newEmail;
-                Subject.setText(currentEmail.getSubject());
-                Sender.setText(currentEmail.getSender());
-                Body.setText(currentEmail.getBody());
-                Data.setText(currentEmail.getTime());
-                Recipients.setText(currentEmail.getRecipientsString());
-            }
-        });
-        return true;
+            });
+            return true;
+        }
+        catch (NullPointerException e){
+            System.out.println("There was a problem while setting the list view" + e);
+        }
+        return false;
     }
 
     @FXML
@@ -216,12 +227,12 @@ public class ControllerList implements Initializable {
 
     public void setMailBox(MailBox mailBox) {
         this.mailBox = mailBox;
-        if(setListView(emailRlist,true) && count >1){
-            try {
-                popUp.startPopUp("NewMailArrived",true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if(setListView(emailRlist,true) && count >0){
+            Stage parentStage = (Stage) clientRoot.getScene().getWindow();
+            double newX = parentStage.getX() + 5;
+            double newY = parentStage.getY() + 380 ;
+            popUp.setPosition(newX, newY);
+            popUp.startPopUp("NewMailArrived",true);
         }
         setListView(emailSlist,false);
         count++;

@@ -1,5 +1,8 @@
 package com.example.usergui_v1.model;
+import com.example.usergui_v1.controller.ControllerList;
 import com.example.usergui_v1.controller.ControllerPopUp;
+import javafx.application.Platform;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,16 +33,14 @@ public class SocketManager {
     }
 
     public boolean setEmailToSend(Email toSend, SendType sendType){
-        List<String> receiver = toSend.getRecipients();
-        for(String temp: receiver)
-        {
-            if(temp.equals(username))
-                return false;
-        }
-        this.toSend=toSend;
-        this.sendType = sendType;
-        return startSocket(Operation.SEND);
-
+            List<String> receiver = toSend.getRecipients();
+            for (String temp : receiver) {
+                if (temp.equals(username))
+                    return false;
+            }
+            this.toSend = toSend;
+            this.sendType = sendType;
+            return startSocket(Operation.SEND);
     }
 
     public  boolean setEmailToDelete(Email toDelete){
@@ -140,7 +141,7 @@ public class SocketManager {
                     socketManager.closeConnection();
                 } catch (UnknownHostException e) {
                     System.out.println("Log out failed " + e);
-                } catch (IOException e) {
+                } catch (IOException | NullPointerException e) {
                     throw new RuntimeException(e);
                 }
                 break;
@@ -157,10 +158,13 @@ public class SocketManager {
                      }
                      socketManager.closeConnection();
                  } catch (IOException e) {
-                     throw new RuntimeException(e);
+                     System.out.println("Error while sending email" + e);
                  }
+                 catch (NullPointerException e){
+                     throw new NullPointerException();
+                 }
+                 break;
              }
-             break;
             case DELETE: {
                 try{
                 String hostName = InetAddress.getLocalHost().getHostName();
@@ -173,8 +177,8 @@ public class SocketManager {
                     return false;
                 }
                 socketManager.closeConnection();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException | NullPointerException e) {
+                    System.out.println("There is a problem while deleting email" + e);
             }
             }
             default:
@@ -207,4 +211,33 @@ public class SocketManager {
     }
     //email recived or send -> see server socket, true = recive, false = send
     public void setType(Boolean type){this.type = type;}
+
+    public synchronized void Refresh(ControllerList temp, String username) {
+        try {
+            this.username = username;
+            //This thread is used to update the mailbox every 6 seconds
+            new Thread(() -> {
+                MailBox current = getMailbox();
+                System.out.println(current);
+                temp.setMailBox(current);
+                while (true) {
+                    try {
+                        Thread.sleep(6000);
+                        MailBox updated = getMailbox();
+                        if (!current.equals(updated)) {
+                            System.out.println(updated);
+                            current = updated;
+                            MailBox finalCurrent = current;
+                            Platform.runLater(() -> temp.setMailBox(finalCurrent));
+                        }
+                    } catch (InterruptedException | NullPointerException e) {
+                        System.out.println("Error in update thread " + e);
+                    }
+                }
+            }).start();
+        }
+        catch (NullPointerException e){
+            System.out.println("There was a problem while refreshing" +e);
+        }
+    }
 }
