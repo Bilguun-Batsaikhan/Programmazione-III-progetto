@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.*;
 
 public class ControllerWriteMail {
@@ -43,8 +42,8 @@ public class ControllerWriteMail {
     }
 
     @FXML
-    private void SendEmail() throws IOException {
-
+    private void SendEmail()  {
+        try{
         Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), -1);
         errorHandling(email,false,false);
         if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
@@ -54,13 +53,16 @@ public class ControllerWriteMail {
             if(sent) {
                 handleClose();
             }
-        }
+        }}
+        catch (NullPointerException e){
+                System.out.println("There was a problem while sending an email " +e);
+            }
     }
 
     private List<String> getRecipients() {
-        String[] destinatari = Recipient.getText().split(" ");
+        String[] recipients_arr = Recipient.getText().split(" ");
         List<String> recipients = new ArrayList<>();
-        for (String s : destinatari) {
+        for (String s : recipients_arr) {
             if (!s.isEmpty()) {
                 recipients.add(s);
             }
@@ -68,7 +70,7 @@ public class ControllerWriteMail {
         return recipients;
     }
 
-    private void errorHandling(Email email,boolean send,boolean success) throws IOException {
+    private void errorHandling(Email email,boolean send,boolean success)  {
         ControllerPopUp popUp = new ControllerPopUp();
         if (email!=null && (getRecipients().isEmpty() ||  Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))){
             popUp.startPopUp("FewArguments",false);
@@ -76,10 +78,13 @@ public class ControllerWriteMail {
         else if(email!=null && !model.CorrectFormatEmail(getRecipients())){
             popUp.startPopUp("WrongFormatEmail",false);
         }
-        if(send) {
+        if(email != null && send) {
             if (success) {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.hide();
+                double newX = stage.getX() + 5;
+                double newY = stage.getY() + 400 ;
+                popUp.setPosition(newX, newY);
                 popUp.startPopUp("MailSent",true);
             } else {
                 popUp.startPopUp("EmailNotExist", false);

@@ -36,7 +36,7 @@ public class Server {
                 // Server initiates communication
                 out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
-                executorService.submit(new SocketManager(in, out, controllerView, userHandler));
+                executorService.submit(new SocketManager(in, out, controllerView, userHandler, new PersistentCounter()));
             }
         } catch (IOException e) {
             System.out.println("There is an exception in server socket " +e);
