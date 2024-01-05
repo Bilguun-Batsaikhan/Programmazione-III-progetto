@@ -1,9 +1,5 @@
 package com.example.serverMail.model;
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 
 public class UserOperations {
 

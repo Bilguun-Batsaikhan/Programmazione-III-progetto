@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 
 public class SocketManager implements Runnable {
@@ -18,13 +19,16 @@ public class SocketManager implements Runnable {
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
     private final MailServerController controllerView;
+    private final ExecutorService serverGui;
 
 
-    public SocketManager(ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler, PersistentCounter counter) {
+
+    public SocketManager(ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler, PersistentCounter counter, ExecutorService serverGui) {
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
         this.userHandler = userHandler;
+        this.serverGui = serverGui;
         this.counter = counter;
     }
 
@@ -62,9 +66,7 @@ public class SocketManager implements Runnable {
                 result = userHandler.checkUserExists(userOperations.getUsername());
                 //take date
                 if (result) {
-                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.LOGIN));
-                    t1.start();
-                    //t1.join();
+                    serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.LOGIN));
                     response.setMessage("Correct Login");
                 }
                 else
@@ -83,9 +85,7 @@ public class SocketManager implements Runnable {
             }
             case EXIT: {
                 username = userOperations.getUsername();
-                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
-                    t1.start();
-                    t1.join();
+                    serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
                     response.setSuccess(true);
                     response.setMessage("Bye");
                     break;
@@ -120,13 +120,13 @@ public class SocketManager implements Runnable {
                     userHandler.writeMailbox(sender);
                     currentData = new Date();
                     currentTime = timeFormat.format(currentData);
-                    Thread send = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.SEND, userOperations.getSendType(), temp.getRecipients()));
-                    send.start();
-                    send.join();
+                    serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.SEND, userOperations.getSendType(), temp.getRecipients()));
 
                     response.setSuccess(true);
                     response.setMessage("Correct send email");
                 }
+                else
+                  serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.ERROR, userOperations.getSendType(), temp.getRecipients()));
                 break;
             }
             case UPDATE: {
@@ -145,9 +145,7 @@ public class SocketManager implements Runnable {
                 username = userOperations.getUsername();
                 result = userHandler.deleteEmailFromMailbox(username, userOperations.getToDelete(), userOperations.getType());
                 if (result) {
-                    Thread t1 = new Thread(new ThreadGui(controllerView, username, currentTime, Operation.DELETE));
-                    t1.start();
-                    t1.join();
+                    serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.DELETE));
                     response.setMessage("Login corretto");
                 }
                 else

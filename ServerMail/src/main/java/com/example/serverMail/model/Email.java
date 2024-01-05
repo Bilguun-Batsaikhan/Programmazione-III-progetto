@@ -25,10 +25,6 @@ public class Email {
         return recipients;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
     public int getID() {
         return ID;
     }
