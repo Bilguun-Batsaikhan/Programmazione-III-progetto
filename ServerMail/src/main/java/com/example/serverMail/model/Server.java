@@ -14,11 +14,13 @@ public class Server {
     private final UserHandler userHandler = new UserHandler();
     private final int port;
     private final ExecutorService executorService;
+    private final ExecutorService serverGui;
     private final MailServerController controllerView;
 
     public Server(int port, MailServerController controller) {
         this.port = port;
         this.executorService = Executors.newCachedThreadPool();
+        this.serverGui = Executors.newCachedThreadPool();
         this.controllerView = controller;
 
     }
@@ -36,7 +38,7 @@ public class Server {
                 // Server initiates communication
                 out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
-                executorService.submit(new SocketManager(in, out, controllerView, userHandler));
+                executorService.submit(new SocketManager(in, out, controllerView, userHandler, serverGui));
             }
         } catch (IOException e) {
             System.out.println("There is an exception in server socket " +e);

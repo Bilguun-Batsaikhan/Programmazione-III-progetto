@@ -3,7 +3,7 @@ package com.example.usergui_v1.model;
 public enum SendType {
 
     SEND(1),
-    FOWARD(2),
+    FORWARD(2),
     REPLY(3),
     REPLYALL(4);
 
