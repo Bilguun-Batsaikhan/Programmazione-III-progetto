@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ControllerForward {
         stage.close();
     }
 
-    public void initialize(Email selectedItem, String sender, ClientModel model) throws IOException {
+    public void initialize(Email selectedItem, String sender, ClientModel model) {
         this.selectedItem = selectedItem;
         this.sender = sender;
         this.model = model;
@@ -39,16 +38,21 @@ public class ControllerForward {
     }
 
     @FXML
-    private void Send() throws IOException {
-        email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), -1);
-        errorHandling(email,false,false);
-        if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
-            socket.setUsername(sender);
-            boolean sent = socket.setEmailToSend(email, SendType.FORWARD);
-            errorHandling(email,true, sent);
-            if(sent) {
-                handleClose();
+    private void Send() {
+        try {
+            email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), -1);
+            errorHandling(email, false, false);
+            if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
+                socket.setUsername(sender);
+                boolean sent = socket.setEmailToSend(email, SendType.FOWARD);
+                errorHandling(email, true, sent);
+                if (sent) {
+                    handleClose();
+                }
             }
+        }
+        catch (NullPointerException e){
+            System.out.println("There was a problem while forwarding an email " +e);
         }
 
     }
@@ -65,7 +69,7 @@ public class ControllerForward {
     }
 
 
-    private void errorHandling(Email email, boolean send,boolean success) throws IOException {
+    private void errorHandling(Email email, boolean send,boolean success) {
         ControllerPopUp popUp = new ControllerPopUp();
         if (selectedItem == null) {
             popUp.startPopUp("NullEmail",false);
@@ -79,10 +83,13 @@ public class ControllerForward {
         } else if (email != null && !model.CorrectFormatEmail(getRecipients())) {
             popUp.startPopUp("WrongFormatEmail",false);
         }
-        if(send) {
+        if( email != null && send) {
             if (success) {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.hide();
+                double newX = stage.getX() + 5;
+                double newY = stage.getY() + 100 ;
+                popUp.setPosition(newX, newY);
                 popUp.startPopUp("MailSent",true);
             } else {
                 popUp.startPopUp("EmailNotExist", false);

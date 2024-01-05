@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 
 
 public class SocketManager implements Runnable {
+    private final PersistentCounter counter;
     private final UserHandler userHandler;
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
@@ -21,12 +22,14 @@ public class SocketManager implements Runnable {
     private final ExecutorService serverGui;
 
 
-    public SocketManager(ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler, ExecutorService serverGui) {
+
+    public SocketManager(ObjectInputStream in, ObjectOutputStream out, MailServerController  controller, UserHandler userHandler, PersistentCounter counter, ExecutorService serverGui) {
         objectInputStream = in;
         objectOutputStream = out;
         controllerView = controller;
         this.userHandler = userHandler;
         this.serverGui = serverGui;
+        this.counter = counter;
     }
 
     @Override
@@ -71,14 +74,15 @@ public class SocketManager implements Runnable {
                 response.setSuccess(result);
                 break;
             }
-            case REGISTER:
-                    result = userHandler.writeMailbox(userOperations.getMailBox());
-                    if(result)
-                        response.setMessage("welcome " + userOperations.getUsername() );
-                    else
-                        response.setMessage("Access denied");
-                    response.setSuccess(result);
+            case REGISTER: {
+                result = userHandler.writeMailbox(userOperations.getMailBox());
+                if (result)
+                    response.setMessage("welcome " + userOperations.getUsername());
+                else
+                    response.setMessage("Access denied");
+                response.setSuccess(result);
                 break;
+            }
             case EXIT: {
                 username = userOperations.getUsername();
                     serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
@@ -104,7 +108,7 @@ public class SocketManager implements Runnable {
                         System.out.println(s);
                         MailBox prov = userHandler.readUserMailbox(s);
                         System.out.println("Aggiungo email a " + prov.getMailBoxOwner());
-                        PersistentCounter ID = new PersistentCounter();
+                        PersistentCounter ID = counter;
                         temp.setID(ID.increment());
                         prov.addReceivedEmail(temp);
                         userHandler.writeMailbox(prov);
