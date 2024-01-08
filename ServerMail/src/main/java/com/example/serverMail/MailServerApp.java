@@ -1,6 +1,7 @@
 package com.example.serverMail;
 import com.example.serverMail.controller.MailServerController;
 import com.example.serverMail.model.Server;
+import com.example.serverMail.model.UserHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +15,8 @@ public class MailServerApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("server-view.fxml"));
         Scene scene = new Scene(loader.load(), 1000, 700);
         MailServerController controller = loader.getController();
-
+        UserHandler userHandler = new UserHandler();
+        controller.setUserHandler(userHandler);
         stage.setTitle("Mail Server");
         stage.setScene(scene);
         stage.setOnCloseRequest(windowEvent -> System.exit(0));
@@ -23,7 +25,7 @@ public class MailServerApp extends Application {
         // Start the server in a separate thread so that it does not block the JavaFX application thread.
         new Thread(() -> {
             int port = 8080;
-            Server server = new Server(port, controller);
+            Server server = new Server(port, controller, userHandler);
             server.start();
         }).start();
     }

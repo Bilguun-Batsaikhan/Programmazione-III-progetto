@@ -11,14 +11,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private final UserHandler userHandler = new UserHandler();
+    private  UserHandler userHandler;
     private final int port;
     private final ExecutorService executorService;
     private final ExecutorService serverGui;
     private final MailServerController controllerView;
 
-    public Server(int port, MailServerController controller) {
+    public Server(int port, MailServerController controller, UserHandler userHandler) {
         this.port = port;
+        this.userHandler= userHandler;
         this.executorService = Executors.newCachedThreadPool();
         this.serverGui = Executors.newCachedThreadPool();
         this.controllerView = controller;
