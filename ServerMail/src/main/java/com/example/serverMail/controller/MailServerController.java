@@ -18,7 +18,7 @@ public class MailServerController implements Initializable {
         private TextArea userList;
 
         private final MailServer model = new MailServer();
-        private final UserHandler userHandler = new UserHandler();
+        private UserHandler userHandler;
 
         @Override
         public void initialize(URL location, ResourceBundle resources) {
@@ -66,4 +66,7 @@ public class MailServerController implements Initializable {
                 userList.setText(listUsers);
         }
 
+        public void setUserHandler(UserHandler userHandler) {
+                this.userHandler = userHandler;
+        }
 }
