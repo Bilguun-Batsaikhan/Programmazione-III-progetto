@@ -42,7 +42,7 @@ public class SocketManager implements Runnable {
             // Deserialize JSON string to Email object
             UserOperations userOperations = x.fromJson(res, UserOperations.class);
             ServerResponse response = new ServerResponse(true,null);
-            doOperation(userOperations, controllerView, response);
+            doOperation(userOperations, response);
             objectOutputStream.writeObject(new Gson().toJson(response));
         } catch (IOException e) {
             System.out.println("IOException " + e);
@@ -54,7 +54,7 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public void doOperation(UserOperations userOperations, MailServerController controllerView, ServerResponse response) throws InterruptedException, IOException {
+    public void doOperation(UserOperations userOperations, ServerResponse response) throws InterruptedException, IOException {
         String username;
         boolean result;
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");

@@ -17,6 +17,8 @@ public class Server {
     private final ExecutorService serverGui;
     private final MailServerController controllerView;
 
+    private final PersistentCounter persistentCounter = new PersistentCounter();
+
     public Server(int port, MailServerController controller, UserHandler userHandler) {
         this.port = port;
         this.userHandler= userHandler;
@@ -40,7 +42,7 @@ public class Server {
                 out.writeObject("Hello from server!");
                 // Handle the connection using a SocketManager
 
-                executorService.submit(new SocketManager(in, out, controllerView, userHandler, new PersistentCounter(), serverGui));
+                executorService.submit(new SocketManager(in, out, controllerView, userHandler, persistentCounter, serverGui));
             }
         } catch (IOException e) {
             System.out.println("There is an exception in server socket " +e);
