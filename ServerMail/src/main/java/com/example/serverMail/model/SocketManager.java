@@ -1,6 +1,7 @@
 package com.example.serverMail.model;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import com.example.serverMail.controller.MailServerController;
@@ -86,6 +87,7 @@ public class SocketManager implements Runnable {
             case EXIT: {
                 username = userOperations.getUsername();
                     serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
+                    userHandler.resetRefreshTime(username);
                     response.setSuccess(true);
                     response.setMessage("Bye");
                     break;
@@ -130,16 +132,20 @@ public class SocketManager implements Runnable {
                 break;
             }
             case UPDATE: {
-                username = userOperations.getUsername();
-                MailBox mailbox = userHandler.readUserMailbox(username);
-                if (mailbox != null) {
-                    response.sendMailbox(mailbox, objectOutputStream);
-                    response.setSuccess(true);
-                } else {
-                    response.setMessage("Mailbox not found");
-                    response.setSuccess(false);
-                }
-                break;
+
+                    username = userOperations.getUsername();
+                    Date lastRefreshTime = userHandler.getLastRefreshTime(username);
+                    ArrayList<Email> newREmails = userHandler.getNewREmails(username, lastRefreshTime);
+                    ArrayList<Email> newSEmails = userHandler.getNewSEmails(username, lastRefreshTime);
+                if ((newREmails != null && !newREmails.isEmpty()) || (newSEmails != null && !newSEmails.isEmpty()) ) {
+                        response.sendMailbox(new MailBox(newREmails,newSEmails,username), objectOutputStream);
+                        userHandler.updateLastRefreshTime(username);
+                        response.setSuccess(true);
+                    } else {
+                        response.setMessage("No new emails since last refresh");
+                        response.setSuccess(false);
+                    }
+                    break;
             }
             case DELETE:
                 username = userOperations.getUsername();

@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class UserOperations {
@@ -30,6 +32,8 @@ public class UserOperations {
 
     @SerializedName("typeEmail")
     private boolean type;
+    @SerializedName("lastUpdate")
+    private Date lastUpdate;
 
     // constructor for all fields
     public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
@@ -87,7 +91,7 @@ public class UserOperations {
     }
 
 
-    public MailBox receiveMailbox(ObjectInputStream in) throws IOException {
+    public MailBox receiveUpdatedMailbox(ObjectInputStream in) throws IOException {
         try {
             Gson gson = new Gson();
             String mailboxJson = (String) in.readObject();
@@ -98,5 +102,9 @@ public class UserOperations {
         catch (NullPointerException e){
             throw new IOException("Null Pointer Exception error", e);
         }
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

@@ -10,7 +10,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class SocketManager {
@@ -195,49 +197,53 @@ public class SocketManager {
         return objectOutputStream;
     }
 
-    public MailBox getMailbox() {
+    public MailBox getUpdatedMailbox(Date lastUpdate) {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             SocketManager socketManager = new SocketManager(hostName, 8080);
             UserOperations mailboxRequest = new UserOperations(Operation.UPDATE, this.username);
+
+            mailboxRequest.setLastUpdate(lastUpdate);
             mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
-            MailBox mailbox = mailboxRequest.receiveMailbox(socketManager.getObjectInputStream());
+
+            MailBox updatedMailbox = mailboxRequest.receiveUpdatedMailbox(socketManager.getObjectInputStream());
             socketManager.closeConnection();
-            return mailbox;
+            return updatedMailbox;
+
         } catch (IOException e) {
-            System.out.println("Error in getting mailbox: " + e.getMessage());
+            System.out.println("Error in getting updated mailbox: " + e.getMessage());
         }
         return null;
     }
+
+
     //email recived or send -> see server socket, true = recive, false = send
     public void setType(Boolean type){this.type = type;}
 
     public synchronized void Refresh(ControllerList temp, String username) {
         try {
             this.username = username;
-            //This thread is used to update the mailbox every 6 seconds
+            final Date[] lastUpdate = {new Date(0)};
+
             new Thread(() -> {
-                MailBox current = getMailbox();
-                System.out.println(current);
-                temp.setMailBox(current);
                 while (true) {
                     try {
-                        Thread.sleep(6000);
-                        MailBox updated = getMailbox();
-                        if (!current.equals(updated)) {
+                        Date currentUpdate = new Date();
+                        MailBox updated = getUpdatedMailbox(lastUpdate[0]);
+                        if (updated != null) {
                             System.out.println(updated);
-                            current = updated;
-                            MailBox finalCurrent = current;
-                            Platform.runLater(() -> temp.setMailBox(finalCurrent));
+                            Platform.runLater(() -> temp.setMailBox(updated));
+                            lastUpdate[0] = currentUpdate;
                         }
+                        Thread.sleep(6000);
                     } catch (InterruptedException | NullPointerException e) {
                         System.out.println("Error in update thread " + e);
                     }
                 }
             }).start();
-        }
-        catch (NullPointerException e){
-            System.out.println("There was a problem while refreshing" +e);
+        } catch (NullPointerException e) {
+            System.out.println("There was a problem while refreshing" + e);
         }
     }
+
 }
