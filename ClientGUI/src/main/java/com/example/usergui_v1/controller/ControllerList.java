@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -78,9 +79,12 @@ public class ControllerList implements Initializable {
         boolean remove = socket.setEmailToDelete(currentEmail);
         //clean view client
         if(remove) {
-            this.mailBox = socket.getMailbox();
-            setListView(emailRlist,true);
-            setListView(emailSlist,false);
+            if(typeEmail) {
+                emailRlist.getItems().remove(currentEmail);
+            }
+            else {
+                emailSlist.getItems().remove(currentEmail);
+            }
             Introduction.setText("Email deleted");
             SenderText.setText("");
             DataText.setText("");
@@ -171,11 +175,10 @@ public class ControllerList implements Initializable {
     protected boolean setListView(ListView<Email> email,boolean received){
         try {
             List<Email> newEmails = received ? mailBox.getrEmails() : mailBox.getsEmails();
-            if (newEmails.equals(email.getItems())) {
+            if(newEmails == null || newEmails.isEmpty()){
                 return false;
             }
-            email.getItems().clear();
-            email.getItems().addAll(newEmails);
+            email.getItems().addAll(0,newEmails);
 
             email.setCellFactory(lv -> new ListCell<>() {
                 @Override

@@ -21,6 +21,10 @@ public class Email {
         this.ID = id;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
     public List<String> getRecipients() {
         return recipients;
     }

@@ -2,10 +2,8 @@ package com.example.serverMail.model;
 import com.google.gson.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -17,10 +15,19 @@ public class UserHandler {
     String fileName = "usernames.txt";
     private final String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+
+    private final HashMap<String, Date> lastRefreshTimes = new HashMap<>();
+
     public UserHandler() {
-        List<String> users = readUsers();
-        for(String user: users) {
-            mailboxLocks.put(user, new ReentrantReadWriteLock());
+        try {
+            List<String> users = readUsers();
+            for (String user : users) {
+                mailboxLocks.put(user, new ReentrantReadWriteLock());
+            }
+            initializeLastRefreshTimes();
+        }
+        catch (IOException e){
+            System.out.println("There was an error" + e);
         }
     }
 
@@ -39,6 +46,7 @@ public class UserHandler {
                     try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
                         usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
                         mailboxLocks.put(user, new ReentrantReadWriteLock());
+                        lastRefreshTimes.put(user, new Date(0));
                     } catch (IOException e) {
                         System.out.println("There is a problem while writing to usernames.txt " + e);
                         return false;
@@ -152,4 +160,47 @@ public class UserHandler {
             }
             return false;
         }
+
+    private void initializeLastRefreshTimes() throws IOException {
+        List<String> allUsernames = readUsers();
+        Date initialDate = new Date(0);
+        for (String username : allUsernames) {
+            lastRefreshTimes.put(username, initialDate);
+        }
+    }
+
+    public Date getLastRefreshTime(String username) {
+        return lastRefreshTimes.getOrDefault(username , new Date(0));
+    }
+
+    public ArrayList<Email> getNewREmails(String username, Date lastRefreshTime) {
+        ArrayList<Email> newEmails = new ArrayList<>();
+        MailBox mailbox = readUserMailbox(username);
+        for (Email email : mailbox.getrEmails()) {
+            if (email.getTime().after(lastRefreshTime)) {
+                newEmails.add(email);
+            }
+        }
+        return newEmails;
+    }
+
+    public ArrayList<Email> getNewSEmails(String username, Date lastRefreshTime) {
+        ArrayList<Email> newEmails = new ArrayList<>();
+        MailBox mailbox = readUserMailbox(username);
+        for (Email email : mailbox.getsEmails()) {
+            if (email.getTime().after(lastRefreshTime)) {
+                newEmails.add(email);
+            }
+        }
+
+        return newEmails;
+    }
+
+    public void updateLastRefreshTime(String username) {
+        lastRefreshTimes.put(username, new Date());
+    }
+
+    public void resetRefreshTime(String username) {
+        lastRefreshTimes.put(username, new Date(0));
+    }
 }
