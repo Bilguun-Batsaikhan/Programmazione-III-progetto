@@ -76,6 +76,10 @@ public class ThreadGui implements Runnable {
                     controller.addLogMessage(
                             username + " has tried to sent an email to " + werongRecipients + " at " + currentTime);
                 });
+            case RECEIVE:
+                Platform.runLater(() -> {
+                    controller.addLogMessage(username + " has received new email at " + currentTime);
+                });
             default:
                 break;
         }

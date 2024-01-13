@@ -205,13 +205,13 @@ public class SocketManager {
         return objectOutputStream;
     }
 
-    public MailBox getUpdatedMailbox(Date lastUpdate) {
+    public MailBox getUpdatedMailbox() {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             SocketManager socketManager = new SocketManager(hostName, 8080);
             UserOperations mailboxRequest = new UserOperations(Operation.UPDATE, this.username);
 
-            mailboxRequest.setLastUpdate(lastUpdate);
+
             mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
 
             MailBox updatedMailbox = mailboxRequest.receiveUpdatedMailbox(socketManager.getObjectInputStream());
@@ -231,17 +231,14 @@ public class SocketManager {
     public synchronized void Refresh(ControllerList temp, String username) {
         try {
             this.username = username;
-            final Date[] lastUpdate = {new Date(0)};
 
             new Thread(() -> {
                 while (true) {
                     try {
-                        Date currentUpdate = new Date();
-                        MailBox updated = getUpdatedMailbox(lastUpdate[0]);
+                        MailBox updated = getUpdatedMailbox();
                         if (updated != null) {
                             System.out.println(updated);
                             Platform.runLater(() -> temp.setMailBox(updated));
-                            lastUpdate[0] = currentUpdate;
                         }
                         Thread.sleep(6000);
                     } catch (InterruptedException | NullPointerException e) {

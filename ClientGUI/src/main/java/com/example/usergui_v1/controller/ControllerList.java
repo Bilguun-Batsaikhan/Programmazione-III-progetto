@@ -10,7 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
@@ -46,6 +48,21 @@ public class ControllerList implements Initializable {
     private ListView<Email> emailRlist;
     @FXML
     private ListView<Email> emailSlist;
+    @FXML
+    private Button delete;
+    @FXML
+    private Button forward;
+    @FXML
+    private Button reply;
+    @FXML
+    private Button replyAll;
+    @FXML
+    private HBox hbox;
+
+    private double originalHboxSize;
+    private double originalButtonSize;
+    double fontSize = Double.parseDouble("12px".replaceAll("[^\\d.]", ""));
+
     private Email currentEmail;
     private ClientModel model;
     private boolean typeEmail;
@@ -219,7 +236,42 @@ public class ControllerList implements Initializable {
     private void handleResize(MouseEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
+
+        if (stage.isMaximized()) {
+            // Store the original size
+            originalHboxSize = hbox.getWidth();
+            originalButtonSize = replyAll.getWidth();
+            // Increase the size
+            double newSizeButton = originalButtonSize * 2.5;
+            double newSizeText = fontSize + 5;
+            double newSizeHbox = originalHboxSize * 2.5;
+
+            hbox.setPrefWidth(newSizeHbox);
+            delete.setPrefWidth(newSizeButton);
+            forward.setPrefWidth(newSizeButton);
+            reply.setPrefWidth(newSizeButton);
+            replyAll.setPrefWidth(newSizeButton);
+
+            delete.setFont(new javafx.scene.text.Font(newSizeText));
+            forward.setFont(new javafx.scene.text.Font(newSizeText));
+            reply.setFont(new javafx.scene.text.Font(newSizeText));
+            replyAll.setFont(new javafx.scene.text.Font(newSizeText));
+
+        } else {
+            // Restore the original size
+            hbox.setPrefWidth(originalHboxSize);
+            delete.setPrefWidth(originalButtonSize);
+            forward.setPrefWidth(originalButtonSize);
+            reply.setPrefWidth(originalButtonSize);
+            replyAll.setPrefWidth(originalButtonSize);
+
+            delete.setFont(new javafx.scene.text.Font(fontSize));
+            forward.setFont(new javafx.scene.text.Font(fontSize));
+            reply.setFont(new javafx.scene.text.Font(fontSize));
+            replyAll.setFont(new javafx.scene.text.Font(fontSize));
+        }
     }
+
 
     protected void setUsers(String username)
     {

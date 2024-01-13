@@ -37,12 +37,15 @@ public class SocketManager implements Runnable {
             // res is String because we're reading a JSON string
             String res = (String) objectInputStream.readObject();
             System.out.println(res);
-
+            boolean exit = false;
             // Deserialize JSON string to Email object
             UserOperations userOperations = x.fromJson(res, UserOperations.class);
             ServerResponse response = new ServerResponse(true, null);
+            if(userOperations.getOperation() == Operation.EXIT) { exit = true; }
             doOperation(userOperations, response);
-            objectOutputStream.writeObject(new Gson().toJson(response));
+            if(!exit) {
+                objectOutputStream.writeObject(new Gson().toJson(response));
+            }
         } catch (IOException e) {
             System.out.println("IOException " + e);
         } catch (ClassNotFoundException e) {
@@ -146,6 +149,9 @@ public class SocketManager implements Runnable {
                     response.sendMailbox(new MailBox(newREmails, newSEmails, username), objectOutputStream);
                     userHandler.updateLastRefreshTime(username);
                     response.setSuccess(true);
+                    if(newREmails != null && !newREmails.isEmpty()) {
+                        serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.RECEIVE));
+                    }
                 } else {
                     response.setMessage("No new emails since last refresh");
                     response.setSuccess(false);
