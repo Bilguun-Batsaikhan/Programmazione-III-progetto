@@ -1,6 +1,7 @@
 package com.example.usergui_v1.controller;
 
 import com.example.usergui_v1.model.*;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -97,9 +98,11 @@ public class ControllerList implements Initializable {
         if(remove) {
             if(typeEmail) {
                 emailRlist.getItems().remove(currentEmail);
+                emailRlist.getSelectionModel().clearSelection();
             }
             else {
                 emailSlist.getItems().remove(currentEmail);
+                emailSlist.getSelectionModel().clearSelection();
             }
             Introduction.setText("Email deleted");
             SenderText.setText("");

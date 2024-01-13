@@ -69,17 +69,19 @@ public class ThreadGui implements Runnable {
                 Platform.runLater(() -> {
                     controller.addLogMessage(username + " has delete one message at " + currentTime);
                 });
-
+                break;
             case ERROR:
                 String werongRecipients = recipientsString();
                 Platform.runLater(() -> {
                     controller.addLogMessage(
                             username + " has tried to sent an email to " + werongRecipients + " at " + currentTime);
                 });
+                break;
             case RECEIVE:
                 Platform.runLater(() -> {
                     controller.addLogMessage(username + " has received new email at " + currentTime);
                 });
+                break;
             default:
                 break;
         }

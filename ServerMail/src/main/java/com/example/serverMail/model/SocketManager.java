@@ -112,7 +112,7 @@ public class SocketManager implements Runnable {
                         response.setMessage("Wrong User");
                     }
                 }
-                if (control) {
+                if (response.isSuccess()) {
                     for (String user : usersToSend) {
                         //System.out.println(user);
                         MailBox userToSend = userHandler.readUserMailbox(user);
@@ -140,16 +140,21 @@ public class SocketManager implements Runnable {
                 break;
             }
             case UPDATE: {
-
                 username = userOperations.getUsername();
                 Date lastRefreshTime = userHandler.getLastRefreshTime(username);
+                Date newRefreshTime = userOperations.getLastUpdate();
+                Date firstTime = new Date(0);
+                if(newRefreshTime.after(firstTime) && lastRefreshTime.equals(firstTime)){
+                    lastRefreshTime = new Date(newRefreshTime.getTime() - 6000);
+                }
                 ArrayList<Email> newREmails = userHandler.getNewREmails(username, lastRefreshTime);
                 ArrayList<Email> newSEmails = userHandler.getNewSEmails(username, lastRefreshTime);
                 if ((newREmails != null && !newREmails.isEmpty()) || (newSEmails != null && !newSEmails.isEmpty())) {
                     response.sendMailbox(new MailBox(newREmails, newSEmails, username), objectOutputStream);
-                    userHandler.updateLastRefreshTime(username);
+
+                    userHandler.updateLastRefreshTime(username, newRefreshTime);
                     response.setSuccess(true);
-                    if(newREmails != null && !newREmails.isEmpty()) {
+                    if((newREmails != null && !newREmails.isEmpty()) && !firstTime.equals(newRefreshTime)) {
                         serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.RECEIVE));
                     }
                 } else {
