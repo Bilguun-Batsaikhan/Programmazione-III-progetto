@@ -37,7 +37,7 @@
                   <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" onMouseClicked="#exit" size="18" text="" />
                </children>
             </HBox>
-            <FontAwesomeIconView fill="#0598ff" glyphName="USERS" size="27" />
+            <FontAwesomeIconView fx:id="icon" fill="#0598ff" glyphName="USERS" size="27" />
             <HBox prefHeight="55.0" prefWidth="350.0" style="-fx-alignment: BOTTOM_CENTER; -fx-spacing: 10; -fx-padding: 10;" VBox.vgrow="ALWAYS">
                <children>
                   <FontAwesomeIconView fill="#0598ff" glyphName="USER" selectionFill="#0598ff" size="15" />
@@ -56,13 +56,13 @@
                <children>
                   <VBox spacing="5">
                      <StackPane HBox.hgrow="ALWAYS">
-                        <Button mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE" />
+                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE" />
                      </StackPane>
                      <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
                   </VBox>
                </children>
             </HBox>
-            <Text fill="#0598ff" layoutX="114.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to our Email!" />
+            <Text fx:id="welcome" fill="#0598ff" layoutX="114.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to our Email!" />
          </children>
       </VBox>
    </center>

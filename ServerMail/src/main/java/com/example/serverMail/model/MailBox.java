@@ -14,7 +14,6 @@ public class MailBox implements Serializable {
         this.mailboxOwner = me;
     }
 
-
     public String getMailBoxOwner() {
         return mailboxOwner;
     }
@@ -28,11 +27,11 @@ public class MailBox implements Serializable {
     }
 
     public void addReceivedEmail(Email email) {
-        rEmails.add(0,email);
+        rEmails.add(0, email);
     }
 
     public void addSentEmail(Email email) {
-        sEmails.add(0,email);
+        sEmails.add(0, email);
     }
 
     @Override

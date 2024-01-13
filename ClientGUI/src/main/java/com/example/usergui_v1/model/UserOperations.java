@@ -54,8 +54,8 @@ public class UserOperations {
     }
 
     // constructor for registration
-    public UserOperations(Operation operation, MailBox mailBox) {
-        this(operation, null, null, null, null, null, false, mailBox, false); // call the other constructor with default values for the other fields
+    public UserOperations(Operation operation, MailBox mailBox, String username) {
+        this(operation, null, username, null, null, null, false, mailBox, false); // call the other constructor with default values for the other fields
     }
     //costructor for send email
     public UserOperations(Operation operation,SendType typeSend, String username, Email emailToSend)

@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 public class ClientModel {
     public boolean CorrectFormatEmail(List<String> recipients) {
-        if(recipients == null){
+        if (recipients == null) {
             return false;
         }
         String emailRegex = "^([0-9]|[a-z])+((\\.)|[0-9]|[a-z])*+@[a-z]+(\\.[a-z]+)*\\.(it|com)$";

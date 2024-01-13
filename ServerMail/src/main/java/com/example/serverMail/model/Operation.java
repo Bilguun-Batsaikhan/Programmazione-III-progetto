@@ -10,7 +10,6 @@ public enum Operation {
     UPDATE(7),
     ERROR(8);
 
-  
     private final int id;
 
     Operation(int id) {
@@ -22,4 +21,3 @@ public enum Operation {
     }
 
 }
-

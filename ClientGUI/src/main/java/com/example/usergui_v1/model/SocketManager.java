@@ -26,6 +26,7 @@ public class SocketManager {
 
     private Email toDelete;
     private boolean type;
+    private String responseRegister;
 
     public SocketManager() {
     }
@@ -96,6 +97,12 @@ public class SocketManager {
             System.out.println("Error closing connection: " + e.getMessage());
         }
     }
+
+
+    public String getResponseMessageRegister() {
+        return responseRegister;
+    }
+
     public boolean startSocket(Operation LogReg){
         switch (LogReg) {
             case LOGIN:
@@ -121,11 +128,12 @@ public class SocketManager {
                 try {
                     String hostName = InetAddress.getLocalHost().getHostName();
                     SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<>(), new ArrayList<>(), username));
+                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<>(), new ArrayList<>(), username), username);
                     register.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
                     if(!response.isSuccess()) {
                         System.out.println(response.getMessage());
+                        responseRegister = response.getMessage();
                         return false;
                     } else
                         return true;

@@ -1,14 +1,15 @@
 package com.example.serverMail.model;
+
 import com.google.gson.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 public class UserHandler {
     private final Map<String, ReadWriteLock> mailboxLocks = new HashMap<>();
     private final ReadWriteLock usernameLock = new ReentrantReadWriteLock();
@@ -25,61 +26,60 @@ public class UserHandler {
                 mailboxLocks.put(user, new ReentrantReadWriteLock());
             }
             initializeLastRefreshTimes();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("There was an error" + e);
         }
     }
 
-    //Given a mailbox it writes it to username@email.com.json, so it can be used for updating existing mailbox
-        public boolean writeMailbox(MailBox mailBox) {
-            String user = mailBox.getMailBoxOwner();
-            if (!isEmailValid(user)) {
-                return false;
-            }
-
-            // If it's a new user then add it to the user list
-            if (!checkUserExists(user)) {
-                Lock writeLock = usernameLock.writeLock();
-                try {
-                    writeLock.lock();
-                    try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
-                        usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
-                        mailboxLocks.put(user, new ReentrantReadWriteLock());
-                        lastRefreshTimes.put(user, new Date(0));
-                    } catch (IOException e) {
-                        System.out.println("There is a problem while writing to usernames.txt " + e);
-                        return false;
-                    }
-                } finally {
-                    writeLock.unlock();
-                }
-            }
-
-            String folderPath = "user_files";
-            String userFileName = folderPath + File.separator + user + ".json";
-
-            // Create the directory if it doesn't exist
-            File directory = new File(folderPath);
-            if (!directory.exists()) {
-                if(!directory.mkdirs()) return false;
-            }
-            Lock wl = mailboxLocks.get(user).writeLock();
-            try (FileWriter fileWriter = new FileWriter(userFileName)) {
-                wl.lock();
-                Gson gson = new GsonBuilder().create();
-                String json = gson.toJson(mailBox);
-                fileWriter.write(json);
-                return true;
-            } catch (IOException e) {
-                System.out.println("There is a problem while writing a mailbox " + e);
-            } finally {
-                wl.unlock();
-            }
+    // Given a mailbox it writes it to username@email.com.json, so it can be used
+    // for updating existing mailbox
+    public boolean writeMailbox(MailBox mailBox) {
+        String user = mailBox.getMailBoxOwner();
+        if (!isEmailValid(user)) {
             return false;
         }
 
+        // If it's a new user then add it to the user list
+        if (!checkUserExists(user)) {
+            Lock writeLock = usernameLock.writeLock();
+            try {
+                writeLock.lock();
+                try (FileWriter usernamesWriter = new FileWriter(fileName, true)) {
+                    usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
+                    mailboxLocks.put(user, new ReentrantReadWriteLock());
+                    lastRefreshTimes.put(user, new Date(0));
+                } catch (IOException e) {
+                    System.out.println("There is a problem while writing to usernames.txt " + e);
+                    return false;
+                }
+            } finally {
+                writeLock.unlock();
+            }
+        }
 
+        String folderPath = "user_files";
+        String userFileName = folderPath + File.separator + user + ".json";
+
+        // Create the directory if it doesn't exist
+        File directory = new File(folderPath);
+        if (!directory.exists()) {
+            if (!directory.mkdirs())
+                return false;
+        }
+        Lock wl = mailboxLocks.get(user).writeLock();
+        try (FileWriter fileWriter = new FileWriter(userFileName)) {
+            wl.lock();
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(mailBox);
+            fileWriter.write(json);
+            return true;
+        } catch (IOException e) {
+            System.out.println("There is a problem while writing a mailbox " + e);
+        } finally {
+            wl.unlock();
+        }
+        return false;
+    }
 
     public MailBox readUserMailbox(String username) {
         if (!checkUserExists(username)) {
@@ -105,62 +105,69 @@ public class UserHandler {
         }
     }
 
-
+    // deletes Email from both mailbox file and ArrayList of Emails for given user
     public boolean deleteEmailFromMailbox(String username, Email emailToDel, Boolean inbox) {
-            int id = emailToDel.getID();
-            MailBox mailBox = readUserMailbox(username);
-            ArrayList<Email> emails = inbox ? mailBox.getrEmails() : mailBox.getsEmails();
-            for(Email e : emails) {
-                if(e.getID() == id) {
-                    emails.remove(e);
-                    writeMailbox(mailBox);
-                    return true;
-                }
+        int id = emailToDel.getID();
+        MailBox mailBox = readUserMailbox(username);
+        ArrayList<Email> emails = inbox ? mailBox.getrEmails() : mailBox.getsEmails();
+        for (Email e : emails) {
+            if (e.getID() == id) {
+                emails.remove(e);
+                writeMailbox(mailBox);
+                return true;
             }
-            return false;
         }
+        return false;
+    }
 
-        //reads user list from usernames.txt then returns List of users
-        public List<String> readUsers() {
-            List<String> usernames = new ArrayList<>();
-            Lock readLock = usernameLock.readLock();
-            try {
-                readLock.lock();
-                File file = new File(fileName);
-                if (file.exists()) {
-                    try (FileReader fileReader = new FileReader(file);
-                         BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            usernames.add(line);
-                        }
+    // reads user list from usernames.txt then returns List of users
+    public List<String> readUsers() {
+        List<String> usernames = new ArrayList<>();
+        Lock readLock = usernameLock.readLock();
+        try {
+            readLock.lock();
+            File file = new File(fileName);
+            if (file.exists()) {
+                try (FileReader fileReader = new FileReader(file);
+                        BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        usernames.add(line);
                     }
                 }
-            } catch (IOException e) {
-                System.out.println("Exception in UserHandler reading usernames " + e);
-            } finally {
-                readLock.unlock();
             }
-            return usernames;
+        } catch (IOException e) {
+            System.out.println("Exception in UserHandler reading usernames " + e);
+        } finally {
+            readLock.unlock();
         }
-        private boolean isEmailValid(String email) {
-            if(email == null || email.isEmpty()){
-                return false;
-            }
-            Matcher matcher = pattern.matcher(email);
-            return matcher.find();
-        }
-        public boolean checkUserExists(String userName) {
-            List<String> usernames = readUsers();
-            System.out.println(usernames);
-            for (String user : usernames) {
-                if (user.equals(userName)) {
-                    return true;
-                }
-            }
+        return usernames;
+    }
+
+    // checks if email format is valid by using pattern matcher
+    private boolean isEmailValid(String email) {
+        if (email == null || email.isEmpty()) {
             return false;
         }
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
+    }
 
+    // checks if the user exists or not by reading usernames.txt file
+    public boolean checkUserExists(String userName) {
+        List<String> usernames = readUsers();
+        System.out.println(usernames);
+        for (String user : usernames) {
+            if (user.equals(userName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Initializes the lastRefreshTimes HashMap by setting the last refresh time of
+    // all users to the epoch time (January 1, 1970, 00:00:00 GMT). It does this by
+    // creating a new Date object with the argument 0
     private void initializeLastRefreshTimes() throws IOException {
         List<String> allUsernames = readUsers();
         Date initialDate = new Date(0);
@@ -169,10 +176,17 @@ public class UserHandler {
         }
     }
 
+    // Returns the last refresh time for a given username. If the username does not
+    // exist in the lastRefreshTimes HashMap, it returns a new Date object set to
+    // the epoch time
     public Date getLastRefreshTime(String username) {
-        return lastRefreshTimes.getOrDefault(username , new Date(0));
+        return lastRefreshTimes.getOrDefault(username, new Date(0));
     }
 
+    // Returns a list of received emails for a given username that were received
+    // after the last refresh time. It does this by iterating over the user's
+    // mailbox and adding any emails with a time after the last refresh time to the
+    // newEmails list.
     public ArrayList<Email> getNewREmails(String username, Date lastRefreshTime) {
         ArrayList<Email> newEmails = new ArrayList<>();
         MailBox mailbox = readUserMailbox(username);
@@ -184,6 +198,8 @@ public class UserHandler {
         return newEmails;
     }
 
+    // Returns a list of sent emails for a given username that were sent after the
+    // last refresh time.
     public ArrayList<Email> getNewSEmails(String username, Date lastRefreshTime) {
         ArrayList<Email> newEmails = new ArrayList<>();
         MailBox mailbox = readUserMailbox(username);
@@ -192,14 +208,17 @@ public class UserHandler {
                 newEmails.add(email);
             }
         }
-
         return newEmails;
     }
 
+    // Updates the last refresh time for a given username to the current time. It
+    // does this by creating a new Date object, which is initialized to the current
+    // time.
     public void updateLastRefreshTime(String username) {
         lastRefreshTimes.put(username, new Date());
     }
 
+    // Resets the last refresh time for a given username to the epoch time.
     public void resetRefreshTime(String username) {
         lastRefreshTimes.put(username, new Date(0));
     }

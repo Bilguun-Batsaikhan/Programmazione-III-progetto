@@ -25,31 +25,32 @@ public class MailServerController implements Initializable {
                 eventListView.itemsProperty().bind(model.getListOfAction());
         }
 
-        // Metodo per aggiungere un evento alla lista degli eventi
+        // Method to add an event to the event list
         @FXML
         public void addLogMessage(String message) {
                 model.addMessage(message);
-                // Dopo aver aggiunto un messaggio, scorri automaticamente alla fine della lista
+                // After adding a message, automatically scroll to the end of the list
                 eventListView.scrollTo(model.getListOfAction().size() - 1);
         }
 
-
         @FXML
-        public void handleEventReset(){
+        public void handleEventReset() {
                 model.resetList();
         }
-        public void handleEventOrderAscending()
-        {
+
+        // Method to handle ordering events in ascending order
+        public void handleEventOrderAscending() {
                 model.orderListAscending();
         }
-        public void handleEventSearch()
-        {
 
+        // Method to handle searching for events
+        public void handleEventSearch() {
                 String searchText = searchTextField.getText().toLowerCase();
                 model.searchInList(searchText);
         }
-        public void handleEventOrderDescending()
-        {
+
+        // Method to handle ordering events in descending order
+        public void handleEventOrderDescending() {
                 model.orderListDescending();
         }
 
@@ -57,7 +58,7 @@ public class MailServerController implements Initializable {
         public void readUsers() {
                 List<String> usernames = userHandler.readUsers();
                 String listUsers = "";
-                for(String user: usernames) {
+                for (String user : usernames) {
                         listUsers += user + "\n";
                 }
 

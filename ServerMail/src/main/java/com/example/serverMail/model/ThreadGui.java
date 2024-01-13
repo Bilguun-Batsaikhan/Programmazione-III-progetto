@@ -4,7 +4,7 @@ import com.example.serverMail.controller.MailServerController;
 import javafx.application.Platform;
 import java.util.List;
 
-public class ThreadGui implements Runnable{
+public class ThreadGui implements Runnable {
     private final MailServerController controller;
     private final String username;
     String currentTime;
@@ -12,27 +12,26 @@ public class ThreadGui implements Runnable{
     SendType sendType;
     List<String> recipients;
 
-    public  ThreadGui(MailServerController controller, String username, String currentTime,Operation op) {
+    public ThreadGui(MailServerController controller, String username, String currentTime, Operation op) {
         this.currentTime = currentTime;
         this.controller = controller;
         this.username = username;
         this.op = op;
     }
 
-    public ThreadGui(MailServerController controller, String username, String currentTime, Operation op,SendType sendType, List<String> recipients)
-    {
+    public ThreadGui(MailServerController controller, String username, String currentTime, Operation op,
+            SendType sendType, List<String> recipients) {
         this.currentTime = currentTime;
         this.controller = controller;
         this.username = username;
         this.op = op;
         this.sendType = sendType;
-        this.recipients= recipients;
+        this.recipients = recipients;
     }
+
     @Override
-    public void run()
-    {
-        switch (op)
-        {
+    public void run() {
+        switch (op) {
             case LOGIN:
                 Platform.runLater(() -> {
                     controller.addLogMessage(username + " has joined " + currentTime);
@@ -74,31 +73,30 @@ public class ThreadGui implements Runnable{
             case ERROR:
                 String werongRecipients = recipientsString();
                 Platform.runLater(() -> {
-                    controller.addLogMessage(username + " has tried to sent an email to "+ werongRecipients + " at " + currentTime);
+                    controller.addLogMessage(
+                            username + " has tried to sent an email to " + werongRecipients + " at " + currentTime);
                 });
+            default:
+                break;
         }
 
     }
 
-    public String recipientsString()
-    {  String result = "";
-        if(recipients.size() < 2) {
+    public String recipientsString() {
+        String result = "";
+        if (recipients.size() < 2) {
             for (String s : recipients)
                 result += s + " ";
-        }
-        else {
+        } else {
             int length = recipients.size();
             for (String s : recipients) {
-                if(length > 2)
-                {
-                    result += result+ ", ";
+                if (length > 2) {
+                    result += result + ", ";
                     length--;
-                }
-                else if (length == 2) {
+                } else if (length == 2) {
                     result += s + " and ";
                     length--;
-                }
-                else
+                } else
                     result += s;
             }
         }

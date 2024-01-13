@@ -1,4 +1,5 @@
 package com.example.serverMail.model;
+
 import com.google.gson.annotations.SerializedName;
 
 public class UserOperations {
@@ -26,9 +27,10 @@ public class UserOperations {
     private boolean type;
 
     // constructor for all fields
-    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
+    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply,
+            Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
         this.operation = operation;
-        this.sendType=sendType;
+        this.sendType = sendType;
         this.username = username;
         this.toSend = toSend;
         this.reply = reply;
@@ -58,15 +60,17 @@ public class UserOperations {
     public Email getToDelete() {
         return toDelete;
     }
-    public boolean getType(){return type;}
+
+    public boolean getType() {
+        return type;
+    }
+
     public String getUsername() {
         return username;
     }
+
     public SendType getSendType() {
         return sendType;
     }
-
-
-
 
 }

@@ -28,7 +28,7 @@ public class PersistentCounter {
             String line = reader.readLine();
             return line != null ? Integer.parseInt(line) : 0;
         } catch (FileNotFoundException e) {
-            return 0; // Se il file non esiste, inizia da 0
+            return 0; // if the file doesn't exist, return 0
         } catch (IOException e) {
             e.printStackTrace();
             return 0;

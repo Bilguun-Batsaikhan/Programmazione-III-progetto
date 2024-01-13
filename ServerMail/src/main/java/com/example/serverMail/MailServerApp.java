@@ -1,4 +1,5 @@
 package com.example.serverMail;
+
 import com.example.serverMail.controller.MailServerController;
 import com.example.serverMail.model.Server;
 import com.example.serverMail.model.UserHandler;
@@ -22,14 +23,14 @@ public class MailServerApp extends Application {
         stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
 
-        // Start the server in a separate thread so that it does not block the JavaFX application thread.
+        // Start the server in a separate thread so that it does not block the JavaFX
+        // application thread.
         new Thread(() -> {
             int port = 8080;
             Server server = new Server(port, controller, userHandler);
             server.start();
         }).start();
     }
-
 
     public static void main(String[] args) {
         launch();
