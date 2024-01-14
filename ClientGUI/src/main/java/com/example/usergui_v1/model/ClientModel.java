@@ -1,6 +1,5 @@
 package com.example.usergui_v1.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -20,16 +19,5 @@ public class ClientModel {
 
         }
         return correct;
-    }
-
-    public List<String> getRecipients(String recipient_view) {
-        String[] recipients_arr = recipient_view.split("[ \\n\\t]+");
-        List<String> recipients = new ArrayList<>();
-        for (String s : recipients_arr) {
-            if (!s.isEmpty()) {
-                recipients.add(s);
-            }
-        }
-        return recipients;
     }
 }

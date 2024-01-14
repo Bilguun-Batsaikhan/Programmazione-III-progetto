@@ -8,10 +8,10 @@ import javafx.collections.ObservableList;
 public class MailServer {
     // List of actions to be displayed in the GUI, it's bound to the ListView in the
     // controller
-    private final SimpleListProperty<String> listOfAction;
+    private SimpleListProperty<String> listOfAction;
     // Observable list cannot be bound to the ListView, so we use a
     // SimpleListProperty
-    private final ObservableList<String> data;
+    private ObservableList<String> data;
 
     public MailServer() {
         data = FXCollections.observableArrayList();

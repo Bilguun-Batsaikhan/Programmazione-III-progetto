@@ -12,11 +12,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Server {
-    private final UserHandler userHandler; // handle user related actions
+    private UserHandler userHandler; // handle user related actions
     private final int port; // port to listen on
     private final ExecutorService executorService; // thread pool for handling clients
     private final ExecutorService serverGui; // thread pool for updating GUI
     private final MailServerController controllerView;
+
     private final PersistentCounter persistentCounter = new PersistentCounter();
 
     public Server(int port, MailServerController controller, UserHandler userHandler) {
