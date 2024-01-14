@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
@@ -32,17 +33,17 @@ public class ControllerList implements Initializable {
     @FXML
     private Label Recipients;
     @FXML
-    private Label Subject;
-    @FXML
     private Label Body;
     @FXML
+    private Label Subject;
+    @FXML
     private Label Sender;
+    @FXML
+    private Label SenderText;
     @FXML
     private Label Data;
     @FXML
     private Label Introduction;
-    @FXML
-    private Label SenderText;
     @FXML
     private Label DataText;
     @FXML
@@ -64,6 +65,7 @@ public class ControllerList implements Initializable {
     @FXML
     private HBox hbox;
 
+    private double originalLabelSize;
     private double originalVboxSize;
     private double originalButtonSize;
     double fontSize = Double.parseDouble("12px".replaceAll("[^\\d.]", ""));
@@ -253,11 +255,12 @@ public class ControllerList implements Initializable {
 
         if (stage.isMaximized()) {
             // Store the original size
+            originalLabelSize = fontSize;
             originalVboxSize = vbox.getWidth();
             originalButtonSize = replyAll.getWidth();
             // Increase the size
             double newSizeButton = originalButtonSize * 2.5;
-            double newSizeText = fontSize + 5;
+            double newSizeText = originalLabelSize + 10;
             double newSizeVbox = originalVboxSize * 2.5;
 
             delete.setPrefWidth(newSizeButton);
@@ -270,6 +273,17 @@ public class ControllerList implements Initializable {
             reply.setFont(new javafx.scene.text.Font(newSizeText));
             replyAll.setFont(new javafx.scene.text.Font(newSizeText));
 
+            SenderText.setFont(new javafx.scene.text.Font(newSizeText));
+            DataText.setFont(new javafx.scene.text.Font(newSizeText));
+            RecipientsText.setFont(new javafx.scene.text.Font(newSizeText));
+            Subject.setFont(new javafx.scene.text.Font(newSizeText));
+            Body.setFont(new javafx.scene.text.Font(newSizeText));
+            
+            Sender.setFont(new Font(newSizeText));
+            Data.setFont(new Font(newSizeText));
+            Recipients.setFont(new Font(newSizeText));
+
+
         } else {
             // Restore the original size
             delete.setPrefWidth(originalButtonSize);
@@ -277,10 +291,21 @@ public class ControllerList implements Initializable {
             reply.setPrefWidth(originalButtonSize);
             replyAll.setPrefWidth(originalButtonSize);
 
-            delete.setFont(new javafx.scene.text.Font(fontSize));
-            forward.setFont(new javafx.scene.text.Font(fontSize));
-            reply.setFont(new javafx.scene.text.Font(fontSize));
-            replyAll.setFont(new javafx.scene.text.Font(fontSize));
+            delete.setFont(new javafx.scene.text.Font(originalLabelSize));
+            forward.setFont(new javafx.scene.text.Font(originalLabelSize));
+            reply.setFont(new javafx.scene.text.Font(originalLabelSize));
+            replyAll.setFont(new javafx.scene.text.Font(originalLabelSize));
+
+            SenderText.setFont(new javafx.scene.text.Font(originalLabelSize));
+            DataText.setFont(new javafx.scene.text.Font(originalLabelSize));
+            RecipientsText.setFont(new javafx.scene.text.Font(originalLabelSize));
+            Subject.setFont(new javafx.scene.text.Font(originalLabelSize));
+            Body.setFont(new javafx.scene.text.Font(originalLabelSize));
+
+            Sender.setFont(new javafx.scene.text.Font(originalLabelSize));
+            Data.setFont(new javafx.scene.text.Font(originalLabelSize));
+            Recipients.setFont(new javafx.scene.text.Font(originalLabelSize));
+
         }
     }
 

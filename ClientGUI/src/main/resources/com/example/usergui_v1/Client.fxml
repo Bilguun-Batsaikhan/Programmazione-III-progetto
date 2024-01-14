@@ -32,50 +32,44 @@
             <ListView fx:id="emailSlist" style="-fx-background-radius: 10px;"/>
          </TitledPane>
       </VBox>
-   </VBox>
-   <!-- Main Content -->
-   <VBox style="-fx-background-color: white; -fx-background-radius: 10px;"
-         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="0.0"
-         AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-      <HBox style="-fx-alignment: CENTER_RIGHT; -fx-spacing: 5; -fx-padding: 10;">
-         <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" layoutX="420.0" layoutY="27.0"
-                              onMouseClicked="#handleResize" size="16"/>
-         <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" layoutX="450.0" layoutY="27.0"
-                              onMouseClicked="#handleClose" size="18" text=""/>
-      </HBox>
-      <HBox VBox.vgrow="ALWAYS">
-         <Label fx:id="Subject"
-                style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0598ff; -fx-spacing: 10px;"
-                wrapText="true"/>
-      </HBox>
-      <HBox>
-         <Label fx:id="SenderText" prefHeight="17.0" prefWidth="88.0"
-                style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;"/>
-         <Label fx:id="Sender" style="-fx-text-fill: #303030;" wrapText="true"/>
-      </HBox>
-      <HBox>
-         <Label fx:id="RecipientsText" prefHeight="17.0" prefWidth="88.0"
-                style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;"/>
-         <Label fx:id="Recipients"/>
-      </HBox>
-      <HBox>
-         <Label fx:id="DataText" prefHeight="17.0" prefWidth="88.0"
-                style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;"/>
-         <Label fx:id="Data"/>
 
-      </HBox>
-      <Pane fx:id="contentPane" VBox.vgrow="ALWAYS">
-         <Label fx:id="Body" alignment="TOP_LEFT" prefHeight="${contentPane.height}" prefWidth="${contentPane.width}"
-                style="-fx-padding: 10;" wrapText="true"/>
-         <Label fx:id="Introduction" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="65.0"
-                prefHeight="111.0" prefWidth="466.0"
-                style="-fx-padding: 10; -fx-background-color: transparent; -fx-text-fill: #0598ff; -fx-alignment: CENTER;"
-                text="No mail selected. Select one to view it. " textAlignment="CENTER" wrapText="true"
-                VBox.vgrow="ALWAYS">
-            <font>
-               <Font name="Arial Bold" size="24.0"/>
-            </font>
-         </Label>
+      <!-- Main Content -->
+      <VBox fillWidth="true" style="-fx-background-color: white; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+         <HBox style="-fx-alignment: CENTER_RIGHT; -fx-spacing: 5; -fx-padding: 10;">
+            <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" layoutX="420.0" layoutY="27.0" onMouseClicked="#handleResize" size="16" />
+            <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" layoutX="450.0" layoutY="27.0" onMouseClicked="#handleClose" size="18" text="" />
+         </HBox>
+         <HBox VBox.vgrow="ALWAYS">
+            <children>
+               <Label fx:id="Subject" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0598ff; -fx-spacing: 10px;" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="SenderText" prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;" />
+               <Label fx:id="Sender" style="-fx-text-fill: #303030;" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="RecipientsText" prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;" />
+               <Label fx:id="Recipients" />
+            </children>
+         </HBox>
+         <HBox>
+            <children>
+               <Label fx:id="DataText" prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;" />
+               <Label fx:id="Data" />
+            </children>
+         </HBox>
+         <Pane fx:id="contentPane" VBox.vgrow="ALWAYS">
+            <children>
+               <Label fx:id="Body" alignment="TOP_LEFT" prefHeight="${contentPane.height}" prefWidth="${contentPane.width}" style="-fx-padding: 10;" wrapText="true" />
+               <Label fx:id="Introduction" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="65.0" prefHeight="111.0" prefWidth="466.0" style="-fx-padding: 10; -fx-background-color: transparent; -fx-text-fill: #0598ff; -fx-alignment: CENTER;" text="No mail selected. Select one to view it. " textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+                  <font>
+                     <Font name="Arial Bold" size="24.0" />
+                  </font></Label>
+
 
 
       </Pane>

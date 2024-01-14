@@ -28,8 +28,6 @@ public class ControllerWriteMail {
 
     private final SocketManager socket = new SocketManager();
 
-
-
     public void initialize(String sender, ClientModel model) {
         this.sender = sender;
         this.model = model;
@@ -42,6 +40,7 @@ public class ControllerWriteMail {
     }
 
     @FXML
+
     private void SendEmail()  {
         try{
         List<String> recipients = model.getRecipients(Recipient.getText());
@@ -57,8 +56,18 @@ public class ControllerWriteMail {
         }}
         catch (NullPointerException e){
                 System.out.println("There was a problem while sending an email " +e);
+
             }
+        } catch (NullPointerException e) {
+            System.out.println("There was a problem while sending an email " + e);
+        }
     }
+    
+    private boolean isEmailValid(Email email) {
+        return (!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), ""))
+                && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients());
+    }
+
 
     private void errorHandling(Email email,boolean send,boolean success)  {
         ControllerPopUp popUp = new ControllerPopUp();
@@ -67,23 +76,23 @@ public class ControllerWriteMail {
         }
         else if(email!=null && !model.CorrectFormatEmail(model.getRecipients(Recipient.getText()))){
             popUp.startPopUp("WrongFormatEmail",false);
+
         }
-        if(email != null && send) {
-            if (success) {
-                Stage stage = (Stage) loginRoot.getScene().getWindow();
-                stage.hide();
-                double newX = stage.getX() + 5;
-                double newY = stage.getY() + 400 ;
-                popUp.setPosition(newX, newY);
-                popUp.startPopUp("MailSent",true);
+
+        if (success) {
+            Stage stage = (Stage) loginRoot.getScene().getWindow();
+            stage.hide();
+            double newX = stage.getX() + 5;
+            double newY = stage.getY() + 400;
+            popUp.setPosition(newX, newY);
+            popUp.startPopUp("MailSent", true);
+        } else {
+            boolean recipientSame = email.getRecipients().stream()
+                    .anyMatch(recipient -> Objects.equals(recipient, email.getSender()));
+            if (recipientSame) {
+                popUp.startPopUp("SameSender", false);
             } else {
-                boolean recipientSame = email.getRecipients().stream().anyMatch(recipient -> Objects.equals(recipient, email.getSender()));
-                if(recipientSame) {
-                    popUp.startPopUp("SameSender", false);
-                }
-                else{
-                    popUp.startPopUp("EmailNotExist", false);
-                }
+                popUp.startPopUp("EmailNotExist", false);
             }
         }
     }

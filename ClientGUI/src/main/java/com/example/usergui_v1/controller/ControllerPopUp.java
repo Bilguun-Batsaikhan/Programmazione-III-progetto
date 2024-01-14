@@ -39,37 +39,37 @@ public class ControllerPopUp {
         makeSceneDraggable();
         switch (errorType) {
             case "ReplySent":
-                errorPopUp.setText("Impossible to reply to an email sent.");
+                errorPopUp.setText("Unable to reply to a sent email.");
                 break;
             case "SameSender":
-                errorPopUp.setText("Impossible to send to you an email from you");
+                errorPopUp.setText("You cannot send an email to yourself.");
                 break;
             case "FewArguments":
-                errorPopUp.setText("Impossible to send email due to void field.");
+                errorPopUp.setText("Unable to send email due to empty fields.");
                 break;
             case "ServerConnection":
-                errorPopUp.setText("Impossible to connect to the server right now. Try again later.");
+                errorPopUp.setText("Unable to connect to the server at the moment. Please try again later.");
                 break;
             case "NullEmail":
-                errorPopUp.setText("No email selected. Select one and try again.");
+                errorPopUp.setText("No email selected. Please select an email and try again.");
                 break;
             case "WrongFormatEmail":
-                errorPopUp.setText("Please write email in the form of username@example.com/.it");
+                errorPopUp.setText("Please enter a valid email address in the format username@example.com/.it");
                 break;
             case "AccessDenied":
-                errorPopUp.setText("Access denied. Wrong password or email.");
+                errorPopUp.setText("Access denied. Please check your email address and password.");
                 break;
             case "MailSent":
-                errorPopUp.setText("Mail sent successfully!");
+                errorPopUp.setText("Email sent successfully!");
                 break;
             case "EmailNotExist":
-                errorPopUp.setText("Impossible to send! Email address does not exist or sender email is equals to receiver email");
+                errorPopUp.setText("Unable to send! The email address does not exist or the sender's email is the same as the receiver's email.");
                 break;
             case "NewMailArrived":
-                errorPopUp.setText("New emails has arrived!");
+                errorPopUp.setText("New emails have arrived!");
                 break;
             default:
-                errorPopUp.setText("Unexpected Error");
+                errorPopUp.setText("An unexpected error occurred.");
                 // Handle unexpected errorType
                 System.err.println("Unexpected ErrorType: " + errorType);
                 break;
