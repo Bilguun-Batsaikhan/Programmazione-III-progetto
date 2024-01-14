@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MailBox implements Serializable {
-    private String mailboxOwner;
+    private final String mailboxOwner;
     ArrayList<Email> rEmails;
     ArrayList<Email> sEmails;
 
@@ -27,23 +27,25 @@ public class MailBox implements Serializable {
     }
 
     public void addReceivedEmail(Email email) {
-        rEmails.add(0, email);
+        rEmails.addFirst(email);
     }
 
     public void addSentEmail(Email email) {
-        sEmails.add(0, email);
+        sEmails.addFirst(email);
     }
 
     @Override
     public String toString() {
-        String mailbox = "MailBox{ \n" + "mailBoxOwner='" + mailboxOwner + '\n' + "Received Emails: \n";
+        StringBuilder mailboxBuilder = new StringBuilder("MailBox{ \n" + "mailBoxOwner='" + mailboxOwner + '\n' + "Received Emails: \n");
         for (Email email : rEmails) {
-            mailbox = mailbox + email + "\n";
+            mailboxBuilder.append(email).append("\n");
         }
-        mailbox = mailbox + "Sent Emails: \n";
+        String mailbox = mailboxBuilder.toString();
+        StringBuilder mailboxBuilder1 = new StringBuilder(mailbox + "Sent Emails: \n");
         for (Email email : sEmails) {
-            mailbox = mailbox + email + "\n";
+            mailboxBuilder1.append(email).append("\n");
         }
+        mailbox = mailboxBuilder1.toString();
         return mailbox;
     }
 }

@@ -34,20 +34,23 @@ public class SocketManager implements AutoCloseable {
         this.username = username;
     }
 
-    public boolean setEmailToSend(Email toSend, SendType sendType) {
-        List<String> receiver = toSend.getRecipients();
-        for (String temp : receiver) {
-            if (temp.equals(username))
-                return false;
-        }
-        this.toSend = toSend;
-        this.sendType = sendType;
-        return startSocket(Operation.SEND);
+    public boolean setEmailToSend(Email toSend, SendType sendType) throws IOException {
+            List<String> receiver = toSend.getRecipients();
+            for (String temp : receiver) {
+                if (temp.equals(username))
+                    return false;
+            }
+            this.toSend = toSend;
+            this.sendType = sendType;
+            return startSocket(Operation.SEND);
     }
 
     public boolean setEmailToDelete(Email toDelete) {
-        this.toDelete = toDelete;
-        return startSocket(Operation.DELETE);
+        try{this.toDelete = toDelete;
+        return startSocket(Operation.DELETE);}
+        catch (IOException e){
+            return false;
+        }
     }
 
     public SocketManager(String serverAddress, int port) throws IOException {
@@ -98,7 +101,7 @@ public class SocketManager implements AutoCloseable {
         return responseRegister;
     }
 
-    public boolean startSocket(Operation operationType) {
+    public boolean startSocket(Operation operationType) throws IOException {
         String hostName;
         try {
             hostName = InetAddress.getLocalHost().getHostName();
@@ -145,14 +148,15 @@ public class SocketManager implements AutoCloseable {
                 }
                 return false;
             }
-        } catch (IOException e) {
-            System.out.println("Operation failed: " + e);
-            return false;
+            else{
+                return true;
+            }
         } catch (Exception e) {
             System.out.println("Operation failed: " + e);
-        }
-
-        return true;
+            if(operationType == Operation.SEND){
+                throw new IOException();
+            }}
+        return false;
     }
 
     public ObjectInputStream getObjectInputStream() {

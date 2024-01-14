@@ -11,11 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ControllerList implements Initializable {
+    public Pane contentPane;
     @FXML
     private VBox vbox;
     @FXML
@@ -86,8 +89,7 @@ public class ControllerList implements Initializable {
             socket.startSocket(Operation.EXIT);
             System.out.println("Close request");
             System.exit(0);
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException | IOException e) {
             System.out.println("Logout failed, server not connected : " + e);
             System.exit(0);
         }
@@ -95,33 +97,41 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void Remove() {
-        try{socket.setType(typeEmail);
-        boolean remove = socket.setEmailToDelete(currentEmail);
-        //clean view client
-        if(remove) {
-            if(typeEmail) {
-                emailRlist.getItems().remove(currentEmail);
-                emailRlist.getSelectionModel().clearSelection();
+        try{
+            if(currentEmail == null) {
+                popUp.startPopUp("NullEmail", false);
             }
-            else {
-                emailSlist.getItems().remove(currentEmail);
-                emailSlist.getSelectionModel().clearSelection();
-            }
-            Introduction.setText("Email deleted");
-            SenderText.setText("");
-            DataText.setText("");
-            RecipientsText.setText("");
-            Subject.setText("");
-            Sender.setText("");
-            Body.setText("");
-            Data.setText("");
-            Recipients.setText("");
-        }}
+            else{
+                socket.setType(typeEmail);
+                boolean remove = socket.setEmailToDelete(currentEmail);
+                //clean view client
+                if(remove) {
+                    if(typeEmail) {
+                        emailRlist.getSelectionModel().clearSelection();
+                        emailRlist.getItems().remove(currentEmail);
+                    }
+                    else {
+                        emailSlist.getSelectionModel().clearSelection();
+                        emailSlist.getItems().remove(currentEmail);
+                    }
+                    currentEmail = null;
+                    Introduction.setText("Email deleted");
+                    SenderText.setText("");
+                    DataText.setText("");
+                    RecipientsText.setText("");
+                    Subject.setText("");
+                    Sender.setText("");
+                    Body.setText("");
+                    Data.setText("");
+                    Recipients.setText("");
+                }}}
         catch (RuntimeException e){
             System.out.println("There was an error while deleting an email" + e);
         }
 
     }
+
+
     @FXML
     private void WriteEmail() throws IOException {
         initializeNewScene("WriteEmail.fxml");
@@ -131,10 +141,12 @@ public class ControllerList implements Initializable {
     private void Forward() throws IOException {
         initializeNewScene("Forward.fxml");
     }
+
     @FXML
     private void Reply() throws IOException {
         initializeNewScene("Reply.fxml");
     }
+
     @FXML
     private void ReplyAll() throws IOException {
         initializeNewScene("ReplyAll.fxml");
@@ -144,13 +156,13 @@ public class ControllerList implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/usergui_v1/" + fxmlToLoad)));
             Parent newSceneRoot = loader.load();
-            switch (fxmlToLoad){
+            switch (fxmlToLoad) {
                 case "ReplyAll.fxml": {
                     ControllerReplyAll controller = loader.getController();
                     controller.initialize(currentEmail, User.getText());
                     break;
                 }
-                case "Reply.fxml":{
+                case "Reply.fxml": {
                     ControllerReply controller = loader.getController();
                     controller.initialize(currentEmail, User.getText());
                     break;
@@ -194,13 +206,13 @@ public class ControllerList implements Initializable {
         this.model = new ClientModel();
     }
 
-    protected boolean setListView(ListView<Email> email,boolean received){
+    protected boolean setListView(ListView<Email> email, boolean received) {
         try {
             List<Email> newEmails = received ? mailBox.getrEmails() : mailBox.getsEmails();
-            if(newEmails == null || newEmails.isEmpty()){
+            if (newEmails == null || newEmails.isEmpty()) {
                 return false;
             }
-            email.getItems().addAll(0,newEmails);
+            email.getItems().addAll(0, newEmails);
 
             email.setCellFactory(lv -> new ListCell<>() {
                 @Override
@@ -231,8 +243,7 @@ public class ControllerList implements Initializable {
                 }
             });
             return true;
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("There was a problem while setting the list view" + e);
         }
         return false;
@@ -240,7 +251,7 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void handleResize(MouseEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
 
         if (stage.isMaximized()) {
@@ -269,7 +280,7 @@ public class ControllerList implements Initializable {
             RecipientsText.setFont(new javafx.scene.text.Font(newSizeText));
             Subject.setFont(new javafx.scene.text.Font(newSizeText));
             Body.setFont(new javafx.scene.text.Font(newSizeText));
-            
+
             Sender.setFont(new Font(newSizeText));
             Data.setFont(new Font(newSizeText));
             Recipients.setFont(new Font(newSizeText));
@@ -302,23 +313,23 @@ public class ControllerList implements Initializable {
     }
 
 
-    protected void setUsers(String username)
-    {
+    protected void setUsers(String username) {
         User.setText(username);
         socket.setUsername(username);
     }
 
     public void setMailBox(MailBox mailBox) {
         this.mailBox = mailBox;
-        if(setListView(emailRlist,true) && count >0){
+        setListView(emailSlist, false);
+        if (setListView(emailRlist, true) && count > 0) {
             Stage parentStage = (Stage) clientRoot.getScene().getWindow();
             double newX = parentStage.getX() + 5;
-            double newY = parentStage.getY() + 380 ;
+            double newY = parentStage.getY() + 380;
             popUp.setPosition(newX, newY);
-            popUp.startPopUp("NewMailArrived",true);
+            popUp.startPopUp("NewMailArrived", true);
         }
-        setListView(emailSlist,false);
         count++;
     }
 }
+
 

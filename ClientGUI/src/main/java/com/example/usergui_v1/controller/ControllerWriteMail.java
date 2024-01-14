@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.*;
 
 public class ControllerWriteMail {
@@ -42,38 +44,21 @@ public class ControllerWriteMail {
     @FXML
     private void SendEmail() {
         try {
-            Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), -1);
-            errorHandling(email, false, false);
-            if (isEmailValid(email)) {
+            List<String> recipients = model.getRecipients(Recipient.getText());
+            Email email = new Email(sender, recipients, Subject.getText(), mailBody.getText(), new Date(), -1);
+            errorHandling(email,false,false);
+            if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !recipients.isEmpty() && model.CorrectFormatEmail(recipients)) {
                 socket.setUsername(sender);
                 boolean sent = socket.setEmailToSend(email, SendType.SEND);
-                errorHandling(email, true, sent);
+                errorHandling(email,true, sent);
                 if (sent) {
                     handleClose();
                 }
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException  e) {
             System.out.println("There was a problem while sending an email " + e);
         }
     }
-    
-    private boolean isEmailValid(Email email) {
-        return (!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), ""))
-                && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients());
-    }
-
-    // It returns a list of recipients
-    private List<String> getRecipients() {
-        String[] recipients_arr = Recipient.getText().split("[ \\n\\t]+");
-        List<String> recipients = new ArrayList<>();
-        for (String s : recipients_arr) {
-            if (!s.isEmpty()) {
-                recipients.add(s);
-            }
-        }
-        return recipients;
-    }
-
     // It checks if the email is valid and if it is not, it shows a pop up with the
     // error
     private void errorHandling(Email email, boolean send, boolean success) {
@@ -83,10 +68,10 @@ public class ControllerWriteMail {
             return;
         }
 
-        if (getRecipients().isEmpty()
+        if (model.getRecipients(Recipient.getText()).isEmpty()
                 || (Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))) {
             popUp.startPopUp("FewArguments", false);
-        } else if (!model.CorrectFormatEmail(getRecipients())) {
+        } else if (!model.CorrectFormatEmail(model.getRecipients(Recipient.getText()))) {
             popUp.startPopUp("WrongFormatEmail", false);
         }
 

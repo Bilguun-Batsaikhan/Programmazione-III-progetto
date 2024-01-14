@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 public class Server {
-    private UserHandler userHandler; // handle user related actions
+    private final UserHandler userHandler; // handle user related actions
     private final int port; // port to listen on
     private final ExecutorService executorService; // thread pool for handling clients
     private final ExecutorService serverGui; // thread pool for updating GUI
