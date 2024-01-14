@@ -73,17 +73,17 @@ public class ControllerReplyAll {
     private void errorHandling(Email email,boolean send,boolean success) {
         ControllerPopUp popUp = new ControllerPopUp();
         if (email!=null && Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), "")){
-            popUp.startPopUp("FewArguments",false);
+            popUp.startPopUp("FewArguments",success);
         }
         if (selectedItem == null) {
-            popUp.startPopUp("NullEmail",false);
+            popUp.startPopUp("NullEmail",success);
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();
             });
 
         } else if (Objects.equals(selectedItem.getSender(), sender)) {
-            popUp.startPopUp("ReplySent",false);
+            popUp.startPopUp("ReplySent",success);
             Platform.runLater(() -> {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();

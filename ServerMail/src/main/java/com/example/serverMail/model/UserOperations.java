@@ -2,8 +2,9 @@ package com.example.serverMail.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserOperations {
+import java.util.Date;
 
+public class UserOperations {
     @SerializedName("operation")
     private Operation operation;
 
@@ -26,9 +27,13 @@ public class UserOperations {
     @SerializedName("typeEmail")
     private boolean type;
 
+    @SerializedName("lastUpdate")
+    private final Date lastUpdate;
+
+
     // constructor for all fields
     public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply,
-            Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
+            Email toDelete, boolean disconnect, MailBox mailBox, boolean type, Date lastUpdate) {
         this.operation = operation;
         this.sendType = sendType;
         this.username = username;
@@ -38,6 +43,7 @@ public class UserOperations {
         this.disconnect = disconnect;
         this.mailBox = mailBox;
         this.type = type;
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -69,8 +75,7 @@ public class UserOperations {
         return username;
     }
 
-    public SendType getSendType() {
-        return sendType;
-    }
+    public SendType getSendType() { return sendType;}
 
+    public Date getLastUpdate() { return lastUpdate; }
 }

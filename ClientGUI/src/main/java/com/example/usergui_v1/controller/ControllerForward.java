@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ControllerForward {
     @FXML
@@ -92,7 +93,13 @@ public class ControllerForward {
                 popUp.setPosition(newX, newY);
                 popUp.startPopUp("MailSent",true);
             } else {
-                popUp.startPopUp("EmailNotExist", false);
+                boolean recipientSame = email.getRecipients().stream().anyMatch(recipient -> Objects.equals(recipient, email.getSender()));
+                if(recipientSame) {
+                    popUp.startPopUp("SameSender", false);
+                }
+                else{
+                    popUp.startPopUp("EmailNotExist", false);
+                }
             }
         }
     }

@@ -12,8 +12,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 
 public class SocketManager {
     private ObjectInputStream objectInputStream;
@@ -179,7 +177,7 @@ public class SocketManager {
                 try{
                 String hostName = InetAddress.getLocalHost().getHostName();
                 SocketManager socketManager = new SocketManager(hostName, 8080);
-                UserOperations deleteEmail = new UserOperations(Operation.DELETE,null, username, null, null, this.toDelete, false, null, type);
+                UserOperations deleteEmail = new UserOperations(Operation.DELETE,null, username, null, null, this.toDelete, false, null, type, null);
                 deleteEmail.sendRequest(socketManager.getObjectOutputStream());
                 ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
                 if (!response.isSuccess()) {
@@ -205,20 +203,24 @@ public class SocketManager {
         return objectOutputStream;
     }
 
-    public MailBox getUpdatedMailbox() {
+    public MailBox getUpdatedMailbox(boolean first_load) {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             SocketManager socketManager = new SocketManager(hostName, 8080);
-            UserOperations mailboxRequest = new UserOperations(Operation.UPDATE, this.username);
-
-
+            UserOperations mailboxRequest;
+            if(first_load){
+                mailboxRequest = new UserOperations(Operation.UPDATE, this.username, new Date (0));
+            }
+            else{
+                mailboxRequest = new UserOperations(Operation.UPDATE, this.username , new Date());
+            }
             mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
 
             MailBox updatedMailbox = mailboxRequest.receiveUpdatedMailbox(socketManager.getObjectInputStream());
             socketManager.closeConnection();
             return updatedMailbox;
 
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             System.out.println("Error in getting updated mailbox: " + e.getMessage());
         }
         return null;
@@ -228,14 +230,22 @@ public class SocketManager {
     //email recived or send -> see server socket, true = recive, false = send
     public void setType(Boolean type){this.type = type;}
 
-    public synchronized void Refresh(ControllerList temp, String username) {
+    public void Refresh(ControllerList temp, String username) {
         try {
             this.username = username;
-
             new Thread(() -> {
+                int count = 0;
                 while (true) {
                     try {
-                        MailBox updated = getUpdatedMailbox();
+                        MailBox updated;
+                        if(count == 0){
+                            updated = getUpdatedMailbox(true);
+
+                        }
+                        else{
+                            updated = getUpdatedMailbox(false);
+                        }
+                        count++;
                         if (updated != null) {
                             System.out.println(updated);
                             Platform.runLater(() -> temp.setMailBox(updated));

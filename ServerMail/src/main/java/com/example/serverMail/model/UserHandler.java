@@ -191,6 +191,7 @@ public class UserHandler {
         ArrayList<Email> newEmails = new ArrayList<>();
         MailBox mailbox = readUserMailbox(username);
         for (Email email : mailbox.getrEmails()) {
+            System.out.println(email.getTime());
             if (email.getTime().after(lastRefreshTime)) {
                 newEmails.add(email);
             }
@@ -214,8 +215,8 @@ public class UserHandler {
     // Updates the last refresh time for a given username to the current time. It
     // does this by creating a new Date object, which is initialized to the current
     // time.
-    public void updateLastRefreshTime(String username) {
-        lastRefreshTimes.put(username, new Date());
+    public void updateLastRefreshTime(String username, Date lastUpdate) {
+        lastRefreshTimes.put(username, lastUpdate);
     }
 
     // Resets the last refresh time for a given username to the epoch time.

@@ -60,7 +60,7 @@ public class ControllerWriteMail {
     }
 
     private List<String> getRecipients() {
-        String[] recipients_arr = Recipient.getText().split(" ");
+        String[] recipients_arr = Recipient.getText().split("[ \\n\\t]+");
         List<String> recipients = new ArrayList<>();
         for (String s : recipients_arr) {
             if (!s.isEmpty()) {
@@ -87,7 +87,13 @@ public class ControllerWriteMail {
                 popUp.setPosition(newX, newY);
                 popUp.startPopUp("MailSent",true);
             } else {
-                popUp.startPopUp("EmailNotExist", false);
+                boolean recipientSame = email.getRecipients().stream().anyMatch(recipient -> Objects.equals(recipient, email.getSender()));
+                if(recipientSame) {
+                    popUp.startPopUp("SameSender", false);
+                }
+                else{
+                    popUp.startPopUp("EmailNotExist", false);
+                }
             }
         }
     }

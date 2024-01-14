@@ -36,7 +36,7 @@ public class UserOperations {
     private Date lastUpdate;
 
     // constructor for all fields
-    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox, boolean type) {
+    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply, Email toDelete, boolean disconnect, MailBox mailBox, boolean type, Date lastUpdate) {
         this.operation = operation;
         this.sendType=sendType;
         this.username = username;
@@ -46,21 +46,26 @@ public class UserOperations {
         this.disconnect = disconnect;
         this.mailBox = mailBox;
         this.type = type;
+        this.lastUpdate = lastUpdate;
     }
 
     // constructor for login
     public UserOperations(Operation operation, String username) {
-        this(operation,null, username, null, null, null, false, null, false); // call the other constructor with default values for the other fields
+        this(operation,null, username, null, null, null, false, null, false,null); // call the other constructor with default values for the other fields
+    }
+
+    public UserOperations(Operation operation, String username, Date lastUpdate) {
+        this(operation,null, username, null, null, null, false, null, false,lastUpdate); // call the other constructor with default values for the other fields
     }
 
     // constructor for registration
     public UserOperations(Operation operation, MailBox mailBox, String username) {
-        this(operation, null, username, null, null, null, false, mailBox, false); // call the other constructor with default values for the other fields
+        this(operation, null, username, null, null, null, false, mailBox, false,null); // call the other constructor with default values for the other fields
     }
     //costructor for send email
     public UserOperations(Operation operation,SendType typeSend, String username, Email emailToSend)
     {
-        this(operation,typeSend, username, emailToSend,null, null, false, null, false);
+        this(operation,typeSend, username, emailToSend,null, null, false, null, false,null);
     }
 
     public void sendRequest(ObjectOutputStream out) {
@@ -104,7 +109,4 @@ public class UserOperations {
         }
     }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 }

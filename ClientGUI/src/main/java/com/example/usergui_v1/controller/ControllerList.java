@@ -11,8 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ControllerList implements Initializable {
+    @FXML
+    private VBox vbox;
     @FXML
     private Label User;
     @FXML
@@ -59,7 +61,7 @@ public class ControllerList implements Initializable {
     @FXML
     private HBox hbox;
 
-    private double originalHboxSize;
+    private double originalVboxSize;
     private double originalButtonSize;
     double fontSize = Double.parseDouble("12px".replaceAll("[^\\d.]", ""));
 
@@ -97,9 +99,11 @@ public class ControllerList implements Initializable {
         if(remove) {
             if(typeEmail) {
                 emailRlist.getItems().remove(currentEmail);
+                emailRlist.getSelectionModel().clearSelection();
             }
             else {
                 emailSlist.getItems().remove(currentEmail);
+                emailSlist.getSelectionModel().clearSelection();
             }
             Introduction.setText("Email deleted");
             SenderText.setText("");
@@ -213,11 +217,11 @@ public class ControllerList implements Initializable {
                         emailRlist.getSelectionModel().clearSelection();
                     }
                     Introduction.setText("");
-                    SenderText.setText("Sender : ");
-                    DataText.setText("Data : ");
-                    RecipientsText.setText("Recipients :");
+                    SenderText.setText("  Sender : ");
+                    DataText.setText("  Data : ");
+                    RecipientsText.setText("  Recipients :");
                     currentEmail = newEmail;
-                    Subject.setText(currentEmail.getSubject());
+                    Subject.setText(" " + currentEmail.getSubject());
                     Sender.setText(currentEmail.getSender());
                     Body.setText(currentEmail.getBody());
                     Data.setText(currentEmail.getTime());
@@ -239,14 +243,14 @@ public class ControllerList implements Initializable {
 
         if (stage.isMaximized()) {
             // Store the original size
-            originalHboxSize = hbox.getWidth();
+            originalVboxSize = vbox.getWidth();
             originalButtonSize = replyAll.getWidth();
             // Increase the size
             double newSizeButton = originalButtonSize * 2.5;
             double newSizeText = fontSize + 5;
-            double newSizeHbox = originalHboxSize * 2.5;
+            double newSizeVbox = originalVboxSize * 2.5;
 
-            hbox.setPrefWidth(newSizeHbox);
+            hbox.setPrefWidth(newSizeVbox);
             delete.setPrefWidth(newSizeButton);
             forward.setPrefWidth(newSizeButton);
             reply.setPrefWidth(newSizeButton);
@@ -259,7 +263,7 @@ public class ControllerList implements Initializable {
 
         } else {
             // Restore the original size
-            hbox.setPrefWidth(originalHboxSize);
+            hbox.setPrefWidth(originalVboxSize);
             delete.setPrefWidth(originalButtonSize);
             forward.setPrefWidth(originalButtonSize);
             reply.setPrefWidth(originalButtonSize);
