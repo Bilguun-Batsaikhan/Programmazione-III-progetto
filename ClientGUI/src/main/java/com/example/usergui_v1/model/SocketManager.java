@@ -111,7 +111,7 @@ public class SocketManager {
                     System.out.println(username);
                     askAuthentication.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(!response.isSuccess()){
+                    if(response.isNotSuccess()){
                         System.out.println(response.getMessage());
                         return false;
                     }
@@ -129,7 +129,7 @@ public class SocketManager {
                     UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<>(), new ArrayList<>(), username), username);
                     register.sendRequest(socketManager.getObjectOutputStream());
                     ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(!response.isSuccess()) {
+                    if(response.isNotSuccess()) {
                         System.out.println(response.getMessage());
                         responseRegister = response.getMessage();
                         return false;
@@ -160,7 +160,7 @@ public class SocketManager {
                      UserOperations sendEmail = new UserOperations(Operation.SEND,this.sendType, username, this.toSend);
                      sendEmail.sendRequest(socketManager.getObjectOutputStream());
                      ServerResponse response = sendEmail.receiveServerResponse(socketManager.objectInputStream);
-                     if (!response.isSuccess()) {
+                     if (response.isNotSuccess()) {
                          System.out.println(response.getMessage());
                          return false;
                      }
@@ -180,7 +180,7 @@ public class SocketManager {
                 UserOperations deleteEmail = new UserOperations(Operation.DELETE,null, username, null, null, this.toDelete, false, null, type, null);
                 deleteEmail.sendRequest(socketManager.getObjectOutputStream());
                 ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
-                if (!response.isSuccess()) {
+                if (response.isNotSuccess()) {
                     System.out.println(response.getMessage());
                     return false;
                 }

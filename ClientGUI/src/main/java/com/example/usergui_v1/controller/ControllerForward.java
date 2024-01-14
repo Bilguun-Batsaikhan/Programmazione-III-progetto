@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -41,9 +40,10 @@ public class ControllerForward {
     @FXML
     private void Send() {
         try {
-            email = new Email(sender, getRecipients(), selectedItem.getSubject(), selectedItem.getBody(), new Date(), -1);
+            List<String> recipients = model.getRecipients(Recipients.getText());
+            email = new Email(sender, recipients, selectedItem.getSubject(), selectedItem.getBody(), new Date(), -1);
             errorHandling(email, false, false);
-            if (!getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
+            if (!recipients.isEmpty() && model.CorrectFormatEmail(recipients)) {
                 socket.setUsername(sender);
                 boolean sent = socket.setEmailToSend(email, SendType.FORWARD);
                 errorHandling(email, true, sent);
@@ -58,19 +58,9 @@ public class ControllerForward {
 
     }
 
-    private List<String> getRecipients() {
-        String[] recipients_array = Recipients.getText().split(" ");
-        List<String> recipients = new ArrayList<>();
-        for (String s : recipients_array) {
-            if (!s.isEmpty()) {
-                recipients.add(s);
-            }
-        }
-        return recipients;
-    }
-
 
     private void errorHandling(Email email, boolean send,boolean success) {
+        List<String> recipients = model.getRecipients(Recipients.getText());
         ControllerPopUp popUp = new ControllerPopUp();
         if (selectedItem == null) {
             popUp.startPopUp("NullEmail",false);
@@ -78,10 +68,10 @@ public class ControllerForward {
                 Stage stage = (Stage) loginRoot.getScene().getWindow();
                 stage.close();
             });
-        } else if (email != null && getRecipients().isEmpty()) {
+        } else if (email != null && recipients.isEmpty()) {
             popUp.startPopUp("FewArguments",false);
 
-        } else if (email != null && !model.CorrectFormatEmail(getRecipients())) {
+        } else if (email != null && !model.CorrectFormatEmail(recipients)) {
             popUp.startPopUp("WrongFormatEmail",false);
         }
         if( email != null && send) {

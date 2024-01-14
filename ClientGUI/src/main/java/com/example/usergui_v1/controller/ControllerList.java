@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,6 +23,8 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ControllerList implements Initializable {
+    @FXML
+    public Pane contentPane;
     @FXML
     private VBox vbox;
     @FXML
@@ -73,7 +76,6 @@ public class ControllerList implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private MailBox mailBox;
-
     private int count = 0;
 
 
@@ -98,12 +100,12 @@ public class ControllerList implements Initializable {
         //clean view client
         if(remove) {
             if(typeEmail) {
-                emailRlist.getItems().remove(currentEmail);
                 emailRlist.getSelectionModel().clearSelection();
+                emailRlist.getItems().remove(currentEmail);
             }
             else {
-                emailSlist.getItems().remove(currentEmail);
                 emailSlist.getSelectionModel().clearSelection();
+                emailSlist.getItems().remove(currentEmail);
             }
             Introduction.setText("Email deleted");
             SenderText.setText("");
@@ -118,8 +120,8 @@ public class ControllerList implements Initializable {
         catch (RuntimeException e){
             System.out.println("There was an error while deleting an email" + e);
         }
-
     }
+
     @FXML
     private void WriteEmail() throws IOException {
         initializeNewScene("WriteEmail.fxml");

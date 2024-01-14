@@ -44,9 +44,10 @@ public class ControllerWriteMail {
     @FXML
     private void SendEmail()  {
         try{
-        Email email = new Email(sender, getRecipients(), Subject.getText(), mailBody.getText(), new Date(), -1);
+        List<String> recipients = model.getRecipients(Recipient.getText());
+        Email email = new Email(sender, recipients, Subject.getText(), mailBody.getText(), new Date(), -1);
         errorHandling(email,false,false);
-        if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !getRecipients().isEmpty() && model.CorrectFormatEmail(getRecipients())) {
+        if((!Objects.equals(email.getBody(), "") || !Objects.equals(email.getSubject(), "")) && !recipients.isEmpty() && model.CorrectFormatEmail(recipients)) {
             socket.setUsername(sender);
             boolean sent = socket.setEmailToSend(email, SendType.SEND);
             errorHandling(email,true, sent);
@@ -59,23 +60,12 @@ public class ControllerWriteMail {
             }
     }
 
-    private List<String> getRecipients() {
-        String[] recipients_arr = Recipient.getText().split("[ \\n\\t]+");
-        List<String> recipients = new ArrayList<>();
-        for (String s : recipients_arr) {
-            if (!s.isEmpty()) {
-                recipients.add(s);
-            }
-        }
-        return recipients;
-    }
-
     private void errorHandling(Email email,boolean send,boolean success)  {
         ControllerPopUp popUp = new ControllerPopUp();
-        if (email!=null && (getRecipients().isEmpty() ||  Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))){
+        if (email!=null && (model.getRecipients(Recipient.getText()).isEmpty() ||  Objects.equals(email.getBody(), "") && Objects.equals(email.getSubject(), ""))){
             popUp.startPopUp("FewArguments",false);
         }
-        else if(email!=null && !model.CorrectFormatEmail(getRecipients())){
+        else if(email!=null && !model.CorrectFormatEmail(model.getRecipients(Recipient.getText()))){
             popUp.startPopUp("WrongFormatEmail",false);
         }
         if(email != null && send) {
