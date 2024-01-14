@@ -14,8 +14,12 @@ public class UserOperations {
     private String username;
     @SerializedName("toSend")
     private Email toSend;
+    @SerializedName("reply")
+    private Email reply;
     @SerializedName("toDelete")
     private Email toDelete;
+    @SerializedName("disconnect")
+    private boolean disconnect;
 
     @SerializedName("mailbox")
     private MailBox mailBox;
@@ -28,13 +32,15 @@ public class UserOperations {
 
 
     // constructor for all fields
-    public UserOperations(Operation operation, SendType sendType, String username, Email toSend,
-                          Email toDelete, MailBox mailBox, boolean type, Date lastUpdate) {
+    public UserOperations(Operation operation, SendType sendType, String username, Email toSend, Email reply,
+            Email toDelete, boolean disconnect, MailBox mailBox, boolean type, Date lastUpdate) {
         this.operation = operation;
         this.sendType = sendType;
         this.username = username;
         this.toSend = toSend;
+        this.reply = reply;
         this.toDelete = toDelete;
+        this.disconnect = disconnect;
         this.mailBox = mailBox;
         this.type = type;
         this.lastUpdate = lastUpdate;

@@ -5,34 +5,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="clientRoot" prefHeight="445.0" prefWidth="734.0" stylesheets="@listview-style.css"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.usergui_v1.controller.ControllerList">
-   <!-- Sidebar -->
-   <VBox fx:id="vbox" prefHeight="445.0" prefWidth="257.0"
-         style="-fx-background-color: #0598ff; -fx-background-radius: 10px; -fx-alignment: CENTER; -fx-spacing: 10;"
-         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-      <HBox/>
-      <Label fx:id="User" style="-fx-text-fill: white;">
-         <font>
-            <Font name="System Bold" size="13.0"/>
-         </font>
-      </Label>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 10;">
-         <Button mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0"
-                 style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email"/>
-      </HBox>
+<AnchorPane fx:id="clientRoot" prefHeight="445.0" prefWidth="734.0" stylesheets="@listview-style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerList">
+   <children>
+      <!-- Sidebar -->
+      <VBox fx:id="vbox" prefHeight="445.0" prefWidth="257.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px; -fx-alignment: CENTER; -fx-spacing: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+         <HBox fx:id="hbox" />
+         <Label fx:id="User" style="-fx-text-fill: white;" text="">
+            <font>
+               <Font name="System Bold" size="13.0" />
+            </font>
+         </Label>
+         <HBox fx:id="hbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 10;">
+            <children>
+               <Button mnemonicParsing="false" onAction="#WriteEmail" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: white; -fx-text-fill: #0598ff;" text="Write new email" />
+            </children>
+         </HBox>
 
-      <VBox VBox.vgrow="ALWAYS">
-         <TitledPane animated="false" style="-fx-background-color: white; -fx-text-fill: white;" text="Received">
-            <ListView fx:id="emailRlist"/>
-         </TitledPane>
-         <TitledPane animated="false"
-                     style="-fx-background-color: white; -fx-text-fill: white; -fx-border-radius: 10px;" text="Sent">
-            <ListView fx:id="emailSlist" style="-fx-background-radius: 10px;"/>
-         </TitledPane>
+         <VBox VBox.vgrow="ALWAYS">
+            <TitledPane animated="false" style="-fx-background-color: white; -fx-text-fill: white;" text="Received">
+               <ListView fx:id="emailRlist" />
+            </TitledPane>
+            <TitledPane animated="false" style="-fx-background-color: white; -fx-text-fill: white; -fx-border-radius: 10px;" text="Sent">
+               <ListView fx:id="emailSlist" style="-fx-background-radius: 10px;" />
+            </TitledPane>
+         </VBox>
       </VBox>
-
       <!-- Main Content -->
       <VBox fillWidth="true" style="-fx-background-color: white; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
          <HBox style="-fx-alignment: CENTER_RIGHT; -fx-spacing: 5; -fx-padding: 10;">
@@ -71,23 +68,19 @@
                   </font></Label>
 
 
-
-      </Pane>
-      <HBox alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="475.0" style="-fx-alignment: CENTER; -fx-padding: 10;"
-            VBox.vgrow="ALWAYS">
-         <Region HBox.hgrow="ALWAYS"/>
-         <Button fx:id="delete" mnemonicParsing="false" onAction="#Remove"
-                 style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Delete" VBox.vgrow="ALWAYS"/>
-         <Region HBox.hgrow="ALWAYS"/>
-         <Button fx:id="forward" mnemonicParsing="false" onAction="#Forward"
-                 style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Forward" VBox.vgrow="ALWAYS"/>
-         <Region HBox.hgrow="ALWAYS"/>
-         <Button fx:id="reply" mnemonicParsing="false" onAction="#Reply"
-                 style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply" VBox.vgrow="ALWAYS"/>
-         <Region HBox.hgrow="ALWAYS"/>
-         <Button fx:id="replyAll" mnemonicParsing="false" onAction="#ReplyAll"
-                 style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply all" VBox.vgrow="ALWAYS"/>
-         <Region HBox.hgrow="ALWAYS"/>
-      </HBox>
-   </VBox>
+            </children>
+         </Pane>
+         <HBox alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="475.0" style="-fx-alignment: CENTER; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="delete" mnemonicParsing="false" onAction="#Remove" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Delete" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="forward" mnemonicParsing="false" onAction="#Forward" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Forward" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="reply" mnemonicParsing="false" onAction="#Reply" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="replyAll" mnemonicParsing="false" onAction="#ReplyAll" style="-fx-background-color: #0598ff; -fx-text-fill: white;" text="Reply all" VBox.vgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+      </VBox>
+   </children>
 </AnchorPane>

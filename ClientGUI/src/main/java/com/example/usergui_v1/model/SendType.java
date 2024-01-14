@@ -2,12 +2,19 @@ package com.example.usergui_v1.model;
 
 public enum SendType {
 
-    SEND(),
-    FORWARD(),
-    REPLY(),
-    REPLYALL();
+    SEND(1),
+    FORWARD(2),
+    REPLY(3),
+    REPLYALL(4);
 
-    SendType() {
+    public int getType() {
+        return type;
+    }
+
+    private final int type;
+
+    SendType(int type) {
+        this.type = type;
     }
 
 }

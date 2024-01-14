@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,8 +23,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ControllerList implements Initializable {
-    @FXML
-    public Pane contentPane;
     @FXML
     private VBox vbox;
     @FXML
@@ -78,6 +75,7 @@ public class ControllerList implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private MailBox mailBox;
+
     private int count = 0;
 
 
@@ -97,41 +95,33 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void Remove() {
-        try{
-            socket.setType(typeEmail);
-            if(currentEmail == null) {
-                popUp.startPopUp("NullEmail", false);
+        try{socket.setType(typeEmail);
+        boolean remove = socket.setEmailToDelete(currentEmail);
+        //clean view client
+        if(remove) {
+            if(typeEmail) {
+                emailRlist.getItems().remove(currentEmail);
+                emailRlist.getSelectionModel().clearSelection();
             }
-            else{
-            boolean remove = socket.setEmailToDelete(currentEmail);
-            //clean view client
-            if(!remove) {
-                if(typeEmail) {
-                    emailRlist.getSelectionModel().clearSelection();
-                    emailRlist.getItems().remove(currentEmail);
-                    currentEmail = null;
-                }
-                else {
-                    emailSlist.getSelectionModel().clearSelection();
-                    emailSlist.getItems().remove(currentEmail);
-                    currentEmail = null;
-                }
-                Introduction.setText("Email deleted");
-                SenderText.setText("");
-                DataText.setText("");
-                RecipientsText.setText("");
-                Subject.setText("");
-                Sender.setText("");
-                Body.setText("");
-                Data.setText("");
-                Recipients.setText("");
-            }}}
+            else {
+                emailSlist.getItems().remove(currentEmail);
+                emailSlist.getSelectionModel().clearSelection();
+            }
+            Introduction.setText("Email deleted");
+            SenderText.setText("");
+            DataText.setText("");
+            RecipientsText.setText("");
+            Subject.setText("");
+            Sender.setText("");
+            Body.setText("");
+            Data.setText("");
+            Recipients.setText("");
+        }}
         catch (RuntimeException e){
-                System.out.println("There was an error while deleting an email" + e);
-            }
+            System.out.println("There was an error while deleting an email" + e);
+        }
 
     }
-
     @FXML
     private void WriteEmail() throws IOException {
         initializeNewScene("WriteEmail.fxml");
@@ -263,6 +253,7 @@ public class ControllerList implements Initializable {
             double newSizeText = originalLabelSize + 10;
             double newSizeVbox = originalVboxSize * 2.5;
 
+            hbox.setPrefWidth(newSizeVbox);
             delete.setPrefWidth(newSizeButton);
             forward.setPrefWidth(newSizeButton);
             reply.setPrefWidth(newSizeButton);
@@ -286,6 +277,7 @@ public class ControllerList implements Initializable {
 
         } else {
             // Restore the original size
+            hbox.setPrefWidth(originalVboxSize);
             delete.setPrefWidth(originalButtonSize);
             forward.setPrefWidth(originalButtonSize);
             reply.setPrefWidth(originalButtonSize);
@@ -318,16 +310,15 @@ public class ControllerList implements Initializable {
 
     public void setMailBox(MailBox mailBox) {
         this.mailBox = mailBox;
-            setListView(emailSlist,false);
-            if (setListView(emailRlist, true) && count > 0) {
-                Stage parentStage = (Stage) clientRoot.getScene().getWindow();
-                double newX = parentStage.getX() + 5;
-                double newY = parentStage.getY() + 380;
-                popUp.setPosition(newX, newY);
-                popUp.startPopUp("NewMailArrived", true);
-            }
-
-
-    count++;}
+        if(setListView(emailRlist,true) && count >0){
+            Stage parentStage = (Stage) clientRoot.getScene().getWindow();
+            double newX = parentStage.getX() + 5;
+            double newY = parentStage.getY() + 380 ;
+            popUp.setPosition(newX, newY);
+            popUp.startPopUp("NewMailArrived",true);
+        }
+        setListView(emailSlist,false);
+        count++;
+    }
 }
 
