@@ -19,7 +19,7 @@ public class PersistentCounter {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             writer.write(String.valueOf(counter));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("There was an error while writing the counter" + e);
         }
     }
 
@@ -30,13 +30,9 @@ public class PersistentCounter {
         } catch (FileNotFoundException e) {
             return 0; // if the file doesn't exist, return 0
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("There was an error while reading the counter" +e);
             return 0;
         }
-    }
-
-    public int getCounter() {
-        return counter;
     }
 
 }

@@ -8,7 +8,7 @@ public class Email {
     private final List<String> recipients;
     private final String subject;
     private final String body;
-    private final Date time;
+    private Date time;
     private int ID;
 
     // Constructor
@@ -47,5 +47,9 @@ public class Email {
                 ", time=" + time +
                 ", ID='" + ID + '\'' +
                 '}';
+    }
+
+    public void setDate(Date timestamp) {
+        this.time = timestamp;
     }
 }

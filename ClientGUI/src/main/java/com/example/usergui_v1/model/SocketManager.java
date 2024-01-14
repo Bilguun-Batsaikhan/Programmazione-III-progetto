@@ -98,6 +98,7 @@ public class SocketManager implements AutoCloseable {
         return responseRegister;
     }
 
+
     public boolean startSocket(Operation operationType) {
         String hostName;
         try {

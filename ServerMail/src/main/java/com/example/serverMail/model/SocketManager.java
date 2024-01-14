@@ -59,7 +59,7 @@ public class SocketManager implements Runnable {
     public void doOperation(UserOperations userOperations, ServerResponse response)
             throws InterruptedException, IOException {
         String username;
-        boolean result = false;
+        boolean result;
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         Date currentData = new Date();
         String currentTime = timeFormat.format(currentData);
@@ -96,6 +96,8 @@ public class SocketManager implements Runnable {
                 username = userOperations.getUsername();
                 serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
                 userHandler.resetRefreshTime(username);
+                userHandler.resetIdReceive(username);
+                userHandler.resetIdSent(username);
                 response.setSuccess(true);
                 response.setMessage("Bye");
                 break;
@@ -104,7 +106,7 @@ public class SocketManager implements Runnable {
                 username = userOperations.getUsername();
                 Email emailToBeSent = userOperations.getToSend();
                 List<String> usersToSend = emailToBeSent.getRecipients();
-                boolean control = true;
+                boolean control;
                 for (String user : usersToSend) {
                     control = userHandler.checkUserExists(user);
                     if (!control) {
@@ -113,12 +115,13 @@ public class SocketManager implements Runnable {
                     }
                 }
                 if (response.isSuccess()) {
+                    Date Timestamp = new Date();
                     for (String user : usersToSend) {
                         //System.out.println(user);
                         MailBox userToSend = userHandler.readUserMailbox(user);
                         //System.out.println("Aggiungo email a " + userToSend.getMailBoxOwner());
-                        PersistentCounter ID = counter;
-                        emailToBeSent.setID(ID.increment());
+                        emailToBeSent.setID(counter.increment());
+                        emailToBeSent.setDate(Timestamp);
                         userToSend.addReceivedEmail(emailToBeSent);
                         userHandler.writeMailbox(userToSend);
                         //System.out.println("Aggiunta");
@@ -144,14 +147,13 @@ public class SocketManager implements Runnable {
                 Date lastRefreshTime = userHandler.getLastRefreshTime(username);
                 Date newRefreshTime = userOperations.getLastUpdate();
                 Date firstTime = new Date(0);
-                if(newRefreshTime.after(firstTime) && lastRefreshTime.equals(firstTime)){
-                    lastRefreshTime = new Date(newRefreshTime.getTime() - 6000);
-                }
-                ArrayList<Email> newREmails = userHandler.getNewREmails(username, lastRefreshTime);
-                ArrayList<Email> newSEmails = userHandler.getNewSEmails(username, lastRefreshTime);
+                /*if(newRefreshTime.after(firstTime) && !lastRefreshTime.equals(firstTime) && lastRefreshTime.equals(newRefreshTime)){
+
+                 */
+                ArrayList<Email> newSEmails = userHandler.getNewSEmails(username);
+                ArrayList<Email> newREmails = userHandler.getNewREmails(username);
                 if ((newREmails != null && !newREmails.isEmpty()) || (newSEmails != null && !newSEmails.isEmpty())) {
                     response.sendMailbox(new MailBox(newREmails, newSEmails, username), objectOutputStream);
-
                     userHandler.updateLastRefreshTime(username, newRefreshTime);
                     response.setSuccess(true);
                     if((newREmails != null && !newREmails.isEmpty()) && !firstTime.equals(newRefreshTime)) {
@@ -160,7 +162,7 @@ public class SocketManager implements Runnable {
                 } else {
                     response.setMessage("No new emails since last refresh");
                     response.setSuccess(false);
-                }
+                }//}
                 break;
             }
             case DELETE:
