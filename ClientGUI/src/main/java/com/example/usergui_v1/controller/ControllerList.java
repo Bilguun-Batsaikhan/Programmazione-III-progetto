@@ -95,31 +95,39 @@ public class ControllerList implements Initializable {
 
     @FXML
     private void Remove() {
-        try{socket.setType(typeEmail);
-        boolean remove = socket.setEmailToDelete(currentEmail);
-        //clean view client
-        if(remove) {
-            if(typeEmail) {
-                emailRlist.getSelectionModel().clearSelection();
-                emailRlist.getItems().remove(currentEmail);
+        try{
+            socket.setType(typeEmail);
+            if(currentEmail == null) {
+                popUp.startPopUp("NullEmail", false);
             }
-            else {
-                emailSlist.getSelectionModel().clearSelection();
-                emailSlist.getItems().remove(currentEmail);
-            }
-            Introduction.setText("Email deleted");
-            SenderText.setText("");
-            DataText.setText("");
-            RecipientsText.setText("");
-            Subject.setText("");
-            Sender.setText("");
-            Body.setText("");
-            Data.setText("");
-            Recipients.setText("");
-        }}
+            else{
+            boolean remove = socket.setEmailToDelete(currentEmail);
+            //clean view client
+            if(!remove) {
+                if(typeEmail) {
+                    emailRlist.getSelectionModel().clearSelection();
+                    emailRlist.getItems().remove(currentEmail);
+                    currentEmail = null;
+                }
+                else {
+                    emailSlist.getSelectionModel().clearSelection();
+                    emailSlist.getItems().remove(currentEmail);
+                    currentEmail = null;
+                }
+                Introduction.setText("Email deleted");
+                SenderText.setText("");
+                DataText.setText("");
+                RecipientsText.setText("");
+                Subject.setText("");
+                Sender.setText("");
+                Body.setText("");
+                Data.setText("");
+                Recipients.setText("");
+            }}}
         catch (RuntimeException e){
-            System.out.println("There was an error while deleting an email" + e);
-        }
+                System.out.println("There was an error while deleting an email" + e);
+            }
+
     }
 
     @FXML
@@ -252,7 +260,6 @@ public class ControllerList implements Initializable {
             double newSizeText = fontSize + 5;
             double newSizeVbox = originalVboxSize * 2.5;
 
-            hbox.setPrefWidth(newSizeVbox);
             delete.setPrefWidth(newSizeButton);
             forward.setPrefWidth(newSizeButton);
             reply.setPrefWidth(newSizeButton);
@@ -265,7 +272,6 @@ public class ControllerList implements Initializable {
 
         } else {
             // Restore the original size
-            hbox.setPrefWidth(originalVboxSize);
             delete.setPrefWidth(originalButtonSize);
             forward.setPrefWidth(originalButtonSize);
             reply.setPrefWidth(originalButtonSize);
@@ -287,15 +293,16 @@ public class ControllerList implements Initializable {
 
     public void setMailBox(MailBox mailBox) {
         this.mailBox = mailBox;
-        if(setListView(emailRlist,true) && count >0){
-            Stage parentStage = (Stage) clientRoot.getScene().getWindow();
-            double newX = parentStage.getX() + 5;
-            double newY = parentStage.getY() + 380 ;
-            popUp.setPosition(newX, newY);
-            popUp.startPopUp("NewMailArrived",true);
-        }
-        setListView(emailSlist,false);
-        count++;
-    }
+            setListView(emailSlist,false);
+            if (setListView(emailRlist, true) && count > 0) {
+                Stage parentStage = (Stage) clientRoot.getScene().getWindow();
+                double newX = parentStage.getX() + 5;
+                double newY = parentStage.getY() + 380;
+                popUp.setPosition(newX, newY);
+                popUp.startPopUp("NewMailArrived", true);
+            }
+
+
+    count++;}
 }
 

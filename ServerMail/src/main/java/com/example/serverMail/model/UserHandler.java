@@ -18,6 +18,9 @@ public class UserHandler {
     private final Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
 
     private final HashMap<String, Date> lastRefreshTimes = new HashMap<>();
+    private final HashMap<String, Integer> lastIdSent = new HashMap<>();
+    private final HashMap<String, Integer> lastIdReceive = new HashMap<>();
+
 
     public UserHandler() {
         try {
@@ -48,6 +51,8 @@ public class UserHandler {
                     usernamesWriter.write(mailBox.getMailBoxOwner() + System.lineSeparator());
                     mailboxLocks.put(user, new ReentrantReadWriteLock());
                     lastRefreshTimes.put(user, new Date(0));
+                    lastIdSent.put(user, -1);
+                    lastIdReceive.put(user,-1);
                 } catch (IOException e) {
                     System.out.println("There is a problem while writing to usernames.txt " + e);
                     return false;
@@ -173,6 +178,8 @@ public class UserHandler {
         Date initialDate = new Date(0);
         for (String username : allUsernames) {
             lastRefreshTimes.put(username, initialDate);
+            lastIdReceive.put(username,-1);
+            lastIdSent.put(username,-1);
         }
     }
 
@@ -183,32 +190,43 @@ public class UserHandler {
         return lastRefreshTimes.getOrDefault(username, new Date(0));
     }
 
+    public Integer getLastIdSent(String username) {
+        return lastIdSent.get(username);
+    }
+
+    public Integer getLastIdReceive(String username) {
+        return lastIdReceive.get(username);
+    }
+
     // Returns a list of received emails for a given username that were received
     // after the last refresh time. It does this by iterating over the user's
     // mailbox and adding any emails with a time after the last refresh time to the
     // newEmails list.
-    public ArrayList<Email> getNewREmails(String username, Date lastRefreshTime) {
+    public ArrayList<Email> getNewREmails(String username) {
         ArrayList<Email> newEmails = new ArrayList<>();
         MailBox mailbox = readUserMailbox(username);
+        Integer newLastIdReceived = mailbox.getrEmails().getFirst().getID();
         for (Email email : mailbox.getrEmails()) {
-            System.out.println(email.getTime());
-            if (email.getTime().after(lastRefreshTime)) {
+            if (email.getID() > getLastIdReceive(username)) {
                 newEmails.add(email);
             }
         }
+        updateLastIdReceive(username, newLastIdReceived);
         return newEmails;
     }
 
     // Returns a list of sent emails for a given username that were sent after the
     // last refresh time.
-    public ArrayList<Email> getNewSEmails(String username, Date lastRefreshTime) {
+    public ArrayList<Email> getNewSEmails(String username) {
         ArrayList<Email> newEmails = new ArrayList<>();
         MailBox mailbox = readUserMailbox(username);
+        Integer newLastIdSent = mailbox.getsEmails().getFirst().getID();
         for (Email email : mailbox.getsEmails()) {
-            if (email.getTime().after(lastRefreshTime)) {
+            if (email.getID() > getLastIdSent(username) ) {
                 newEmails.add(email);
             }
         }
+        updateLastIdSent(username,newLastIdSent);
         return newEmails;
     }
 
@@ -218,9 +236,20 @@ public class UserHandler {
     public void updateLastRefreshTime(String username, Date lastUpdate) {
         lastRefreshTimes.put(username, lastUpdate);
     }
-
+    public void updateLastIdSent(String username, Integer id){
+        lastIdSent.put(username,id);
+    }
+    public void updateLastIdReceive(String username, Integer id){
+        lastIdReceive.put(username,id);
+    }
     // Resets the last refresh time for a given username to the epoch time.
     public void resetRefreshTime(String username) {
         lastRefreshTimes.put(username, new Date(0));
+    }
+    public void resetIdSent(String username){
+        lastIdSent.put(username, -1);
+    }
+    public void resetIdReceive(String username){
+        lastIdReceive.put(username, -1);
     }
 }

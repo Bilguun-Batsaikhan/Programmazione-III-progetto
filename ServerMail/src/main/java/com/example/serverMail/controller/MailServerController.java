@@ -57,14 +57,14 @@ public class MailServerController implements Initializable {
         @FXML
         public void readUsers() {
                 List<String> usernames = userHandler.readUsers();
-                String listUsers = "";
+                StringBuilder listUsers = new StringBuilder();
                 for (String user : usernames) {
-                        listUsers += user + "\n";
+                        listUsers.append(user).append("\n");
                 }
 
                 System.out.println(listUsers);
 
-                userList.setText(listUsers);
+                userList.setText(listUsers.toString());
         }
 
         public void setUserHandler(UserHandler userHandler) {
