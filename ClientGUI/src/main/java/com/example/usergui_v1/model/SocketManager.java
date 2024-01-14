@@ -1,4 +1,5 @@
 package com.example.usergui_v1.model;
+
 import com.example.usergui_v1.controller.ControllerList;
 import com.example.usergui_v1.controller.ControllerPopUp;
 import javafx.application.Platform;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SocketManager {
+public class SocketManager implements AutoCloseable {
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
@@ -29,26 +30,25 @@ public class SocketManager {
     public SocketManager() {
     }
 
-    public void setUsername(String username){
-        this.username=username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public boolean setEmailToSend(Email toSend, SendType sendType){
-            List<String> receiver = toSend.getRecipients();
-            for (String temp : receiver) {
-                if (temp.equals(username))
-                    return false;
-            }
-            this.toSend = toSend;
-            this.sendType = sendType;
-            return startSocket(Operation.SEND);
+    public boolean setEmailToSend(Email toSend, SendType sendType) {
+        List<String> receiver = toSend.getRecipients();
+        for (String temp : receiver) {
+            if (temp.equals(username))
+                return false;
+        }
+        this.toSend = toSend;
+        this.sendType = sendType;
+        return startSocket(Operation.SEND);
     }
 
-    public  boolean setEmailToDelete(Email toDelete){
-        this.toDelete= toDelete;
+    public boolean setEmailToDelete(Email toDelete) {
+        this.toDelete = toDelete;
         return startSocket(Operation.DELETE);
     }
-
 
     public SocketManager(String serverAddress, int port) throws IOException {
         try {
@@ -62,8 +62,6 @@ public class SocketManager {
             // Then create ObjectOutputStream
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             System.out.println("ObjectOutputStream created");
-
-            System.out.println("reached here");
 
             String signal;
             try {
@@ -96,102 +94,64 @@ public class SocketManager {
         }
     }
 
-
     public String getResponseMessageRegister() {
         return responseRegister;
     }
 
-    public boolean startSocket(Operation LogReg){
-        switch (LogReg) {
-            case LOGIN:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations askAuthentication = new UserOperations(Operation.LOGIN, username);
-                    System.out.println(username);
-                    askAuthentication.sendRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = askAuthentication.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(!response.isSuccess()){
-                        System.out.println(response.getMessage());
-                        return false;
-                    }
-                    socketManager.closeConnection();
-                } catch (UnknownHostException e) {
-                    System.out.println("Login failed " + e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case REGISTER:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName,8080);
-                    UserOperations register = new UserOperations(Operation.REGISTER, new MailBox(new ArrayList<>(), new ArrayList<>(), username), username);
-                    register.sendRequest(socketManager.getObjectOutputStream());
-                    ServerResponse response = register.receiveServerResponse(socketManager.getObjectInputStream());
-                    if(!response.isSuccess()) {
-                        System.out.println(response.getMessage());
-                        responseRegister = response.getMessage();
-                        return false;
-                    } else
-                        return true;
-
-                } catch (IOException e) {
-                    System.out.println("Registration failed " + e);
-                }
-                break;
-            case EXIT:
-                try {
-                    String hostName = InetAddress.getLocalHost().getHostName();
-                    SocketManager socketManager = new SocketManager(hostName, 8080);
-                    UserOperations left = new UserOperations(Operation.EXIT, username);
-                    left.sendRequest(socketManager.getObjectOutputStream()); //request log out
-                    socketManager.closeConnection();
-                } catch (UnknownHostException e) {
-                    System.out.println("Log out failed " + e);
-                } catch (IOException | NullPointerException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-             case SEND: {
-                 try {
-                     String hostName = InetAddress.getLocalHost().getHostName();
-                     SocketManager socketManager = new SocketManager(hostName, 8080);
-                     UserOperations sendEmail = new UserOperations(Operation.SEND,this.sendType, username, this.toSend);
-                     sendEmail.sendRequest(socketManager.getObjectOutputStream());
-                     ServerResponse response = sendEmail.receiveServerResponse(socketManager.objectInputStream);
-                     if (!response.isSuccess()) {
-                         System.out.println(response.getMessage());
-                         return false;
-                     }
-                     socketManager.closeConnection();
-                 } catch (IOException e) {
-                     System.out.println("Error while sending email" + e);
-                 }
-                 catch (NullPointerException e){
-                     throw new NullPointerException();
-                 }
-                 break;
-             }
-            case DELETE: {
-                try{
-                String hostName = InetAddress.getLocalHost().getHostName();
-                SocketManager socketManager = new SocketManager(hostName, 8080);
-                UserOperations deleteEmail = new UserOperations(Operation.DELETE,null, username, null, null, this.toDelete, false, null, type, null);
-                deleteEmail.sendRequest(socketManager.getObjectOutputStream());
-                ServerResponse response = deleteEmail.receiveServerResponse(socketManager.objectInputStream);
-                if (!response.isSuccess()) {
-                    System.out.println(response.getMessage());
-                    return false;
-                }
-                socketManager.closeConnection();
-            } catch (IOException | NullPointerException e) {
-                    System.out.println("There is a problem while deleting email" + e);
-            }
-            }
-            default:
-                break;
+    public boolean startSocket(Operation operationType) {
+        String hostName;
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            System.out.println("Failed to get host name: " + e);
+            return false;
         }
+
+        try (SocketManager socketManager = new SocketManager(hostName, 8080)) {
+            UserOperations userOperations;
+            switch (operationType) {
+                case LOGIN:
+                    userOperations = new UserOperations(Operation.LOGIN, username);
+                    break;
+                case REGISTER:
+                    userOperations = new UserOperations(Operation.REGISTER,
+                            new MailBox(new ArrayList<>(), new ArrayList<>(), username), username);
+                    break;
+                case EXIT:
+                    userOperations = new UserOperations(Operation.EXIT, username);
+                    //userOperations.sendRequest(objectOutputStream); //request log out
+                    break;
+                case SEND:
+                    userOperations = new UserOperations(Operation.SEND, this.sendType, username, this.toSend);
+                    break;
+                case DELETE:
+                    userOperations = new UserOperations(Operation.DELETE, null, username, null, null, this.toDelete,
+                            false, null, type, null);
+                    break;
+                default:
+                    return true;
+            }
+
+            userOperations.sendRequest(socketManager.getObjectOutputStream());
+            if (operationType == Operation.EXIT) {
+                return true;
+            }
+            ServerResponse response = userOperations.receiveServerResponse(socketManager.getObjectInputStream());
+
+            if (!response.isSuccess()) {
+                System.out.println(response.getMessage());
+                if (operationType == Operation.REGISTER) {
+                    responseRegister = response.getMessage();
+                }
+                return false;
+            }
+        } catch (IOException e) {
+            System.out.println("Operation failed: " + e);
+            return false;
+        } catch (Exception e) {
+            System.out.println("Operation failed: " + e);
+        }
+
         return true;
     }
 
@@ -206,19 +166,23 @@ public class SocketManager {
     public MailBox getUpdatedMailbox(boolean first_load) {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
-            SocketManager socketManager = new SocketManager(hostName, 8080);
-            UserOperations mailboxRequest;
-            if(first_load){
-                mailboxRequest = new UserOperations(Operation.UPDATE, this.username, new Date (0));
-            }
-            else{
-                mailboxRequest = new UserOperations(Operation.UPDATE, this.username , new Date());
-            }
-            mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
+            try (SocketManager socketManager = new SocketManager(hostName, 8080)) {
+                UserOperations mailboxRequest;
+                if (first_load) {
+                    mailboxRequest = new UserOperations(Operation.UPDATE, this.username, new Date(0));
+                } else {
+                    mailboxRequest = new UserOperations(Operation.UPDATE, this.username, new Date());
+                }
+                mailboxRequest.sendRequest(socketManager.getObjectOutputStream());
 
-            MailBox updatedMailbox = mailboxRequest.receiveUpdatedMailbox(socketManager.getObjectInputStream());
-            socketManager.closeConnection();
-            return updatedMailbox;
+                MailBox updatedMailbox = mailboxRequest.receiveUpdatedMailbox(socketManager.getObjectInputStream());
+                socketManager.closeConnection();
+                return updatedMailbox;
+            } catch (IOException e) {
+                throw e;
+            } catch (Exception e) {
+                System.out.println("Error in getting updated mailbox: " + e.getMessage());
+            }
 
         } catch (IOException | NullPointerException e) {
             System.out.println("Error in getting updated mailbox: " + e.getMessage());
@@ -226,9 +190,10 @@ public class SocketManager {
         return null;
     }
 
-
-    //email recived or send -> see server socket, true = recive, false = send
-    public void setType(Boolean type){this.type = type;}
+    // email recived or send -> see server socket, true = recive, false = send
+    public void setType(Boolean type) {
+        this.type = type;
+    }
 
     public void Refresh(ControllerList temp, String username) {
         try {
@@ -238,11 +203,9 @@ public class SocketManager {
                 while (true) {
                     try {
                         MailBox updated;
-                        if(count == 0){
+                        if (count == 0) {
                             updated = getUpdatedMailbox(true);
-
-                        }
-                        else{
+                        } else {
                             updated = getUpdatedMailbox(false);
                         }
                         count++;
@@ -258,6 +221,20 @@ public class SocketManager {
             }).start();
         } catch (NullPointerException e) {
             System.out.println("There was a problem while refreshing" + e);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+
+        if (socket != null) {
+            socket.close();
+        }
+        if (objectInputStream != null) {
+            objectInputStream.close();
+        }
+        if (objectOutputStream != null) {
+            objectOutputStream.close();
         }
     }
 

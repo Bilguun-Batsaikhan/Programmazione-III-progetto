@@ -57,7 +57,6 @@
             <children>
                <Label fx:id="DataText" prefHeight="17.0" prefWidth="88.0" style="-fx-text-fill: #0598ff; -fx-font-weight: bold; -fx-spacing: 5px;" />
                <Label fx:id="Data" />
-
             </children>
          </HBox>
          <Pane fx:id="contentPane" VBox.vgrow="ALWAYS">
