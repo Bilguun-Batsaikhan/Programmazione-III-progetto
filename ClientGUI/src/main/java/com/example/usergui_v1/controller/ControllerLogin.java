@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class ControllerLogin {
+
     @FXML
     private Text errorMessage;
     @FXML
@@ -64,7 +65,7 @@ public class ControllerLogin {
                 }
                 feedback.setFill(Color.RED);
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             System.out.println("Registration Failed");
         }
     }
@@ -75,7 +76,7 @@ public class ControllerLogin {
     }
 
     @FXML
-    private void login() throws IOException {
+    private void login() {
         try {
             socket.setUsername(username.getText());
             boolean loginAuthorized = socket.startSocket(Operation.LOGIN);
@@ -111,7 +112,7 @@ public class ControllerLogin {
                 errorMessage.setText("Wrong credentials, try again");
             }
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             System.out.println("The file doesn't exist" + e);
         }
     }

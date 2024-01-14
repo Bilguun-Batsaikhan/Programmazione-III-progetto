@@ -4,7 +4,7 @@ public enum Operation {
     REGISTER(2),
     EXIT(3),
     SEND(4),
-    RECEIVE(5),
+    //RECEIVE(5),
     DELETE(6),
     UPDATE(7);
 

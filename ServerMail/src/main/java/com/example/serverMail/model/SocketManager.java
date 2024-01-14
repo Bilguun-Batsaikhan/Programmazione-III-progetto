@@ -59,7 +59,7 @@ public class SocketManager implements Runnable {
     public void doOperation(UserOperations userOperations, ServerResponse response)
             throws InterruptedException, IOException {
         String username;
-        boolean result = false;
+        boolean result;
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         Date currentData = new Date();
         String currentTime = timeFormat.format(currentData);
@@ -96,6 +96,8 @@ public class SocketManager implements Runnable {
                 username = userOperations.getUsername();
                 serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.EXIT));
                 userHandler.resetRefreshTime(username);
+                userHandler.resetIdReceive(username);
+                userHandler.resetIdSent(username);
                 response.setSuccess(true);
                 response.setMessage("Bye");
                 break;
@@ -104,7 +106,7 @@ public class SocketManager implements Runnable {
                 username = userOperations.getUsername();
                 Email emailToBeSent = userOperations.getToSend();
                 List<String> usersToSend = emailToBeSent.getRecipients();
-                boolean control = true;
+                boolean control;
                 for (String user : usersToSend) {
                     control = userHandler.checkUserExists(user);
                     if (!control) {
@@ -117,8 +119,8 @@ public class SocketManager implements Runnable {
                         //System.out.println(user);
                         MailBox userToSend = userHandler.readUserMailbox(user);
                         //System.out.println("Aggiungo email a " + userToSend.getMailBoxOwner());
-                        PersistentCounter ID = counter;
-                        emailToBeSent.setID(ID.increment());
+                        emailToBeSent.setID(counter.increment());
+
                         userToSend.addReceivedEmail(emailToBeSent);
                         userHandler.writeMailbox(userToSend);
                         //System.out.println("Aggiunta");
@@ -144,15 +146,28 @@ public class SocketManager implements Runnable {
                 Date lastRefreshTime = userHandler.getLastRefreshTime(username);
                 Date newRefreshTime = userOperations.getLastUpdate();
                 Date firstTime = new Date(0);
-                if(newRefreshTime.after(firstTime) && lastRefreshTime.equals(firstTime)){
-                    lastRefreshTime = new Date(newRefreshTime.getTime() - 6000);
+                if(lastRefreshTime.equals(firstTime) && !newRefreshTime.equals(firstTime) && lastRefreshTime.equals(firstTime)){
+                    userHandler.updateLastRefreshTime(username, newRefreshTime);
+                    MailBox user = userHandler.readUserMailbox(username);
+                    if(user.getsEmails().isEmpty()){
+                        userHandler.updateLastIdSent(username, 0);
+                    }
+                    else {
+                        userHandler.updateLastIdSent(username, user.getsEmails().getFirst().getID());
+                    }
+                    if(user.getrEmails().isEmpty()){
+                        userHandler.updateLastIdReceive(username, 0);
+                    }
+                    else {
+                        userHandler.updateLastIdReceive(username, user.getrEmails().getFirst().getID());
+                    }
                 }
-                ArrayList<Email> newREmails = userHandler.getNewREmails(username, lastRefreshTime);
-                ArrayList<Email> newSEmails = userHandler.getNewSEmails(username, lastRefreshTime);
+                else{
+                ArrayList<Email> newSEmails = userHandler.getNewSEmails(username);
+                ArrayList<Email> newREmails = userHandler.getNewREmails(username);
+                userHandler.updateLastRefreshTime(username, newRefreshTime);
                 if ((newREmails != null && !newREmails.isEmpty()) || (newSEmails != null && !newSEmails.isEmpty())) {
                     response.sendMailbox(new MailBox(newREmails, newSEmails, username), objectOutputStream);
-
-                    userHandler.updateLastRefreshTime(username, newRefreshTime);
                     response.setSuccess(true);
                     if((newREmails != null && !newREmails.isEmpty()) && !firstTime.equals(newRefreshTime)) {
                         serverGui.submit(new ThreadGui(controllerView, username, currentTime, Operation.RECEIVE));
@@ -160,7 +175,7 @@ public class SocketManager implements Runnable {
                 } else {
                     response.setMessage("No new emails since last refresh");
                     response.setSuccess(false);
-                }
+                }}
                 break;
             }
             case DELETE:

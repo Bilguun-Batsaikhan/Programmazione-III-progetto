@@ -12,58 +12,57 @@
 <?import javafx.scene.layout.StackPane?>
 <BorderPane fx:id="loginRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.usergui_v1.controller.ControllerLogin">
    <left>
-      <VBox prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff; -fx-background-radius: 10px 0 0 10px; -fx-alignment: CENTER; -fx-spacing: 12;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-         <children>
-            <FontAwesomeIconView fill="WHITE" glyphName="ENVELOPE" layoutX="150.0" layoutY="204.0" size="50" />
-            <Text fill="WHITE" layoutX="66.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connecting Words, Crafting Worlds">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-            <Text fill="WHITE" layoutX="104.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Your Inbox, Your Story">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-         </children>
+      <VBox prefHeight="500.0" prefWidth="350.0"
+            style="-fx-background-color: #0598ff; -fx-background-radius: 10px 0 0 10px; -fx-alignment: CENTER; -fx-spacing: 12;"
+            BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+         <FontAwesomeIconView fill="WHITE" glyphName="ENVELOPE" layoutX="150.0" layoutY="204.0" size="50"/>
+         <Text fill="WHITE" layoutX="66.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0"
+               text="Connecting Words, Crafting Worlds">
+            <font>
+               <Font size="14.0"/>
+            </font>
+         </Text>
+         <Text fill="WHITE" layoutX="104.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0"
+               text=" Your Inbox, Your Story">
+            <font>
+               <Font size="14.0"/>
+            </font>
+         </Text>
       </VBox>
    </left>
    <center>
-      <VBox prefHeight="445.0" prefWidth="739.0" style="-fx-spacing: 10; -fx-alignment: TOP_CENTER; -fx-padding: 10;" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-         <children>
-            <HBox prefHeight="131.0" prefWidth="350.0" style="-fx-alignment: TOP_RIGHT; -fx-padding: 10; -fx-spacing: 10;" VBox.vgrow="ALWAYS">
-               <children>
-                  <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#handleResize" size="16" />
-                  <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" onMouseClicked="#exit" size="18" text="" />
-               </children>
-            </HBox>
-            <FontAwesomeIconView fx:id="icon" fill="#0598ff" glyphName="USERS" size="27" />
-            <HBox prefHeight="55.0" prefWidth="350.0" style="-fx-alignment: BOTTOM_CENTER; -fx-spacing: 10; -fx-padding: 10;" VBox.vgrow="ALWAYS">
-               <children>
-                  <FontAwesomeIconView fill="#0598ff" glyphName="USER" selectionFill="#0598ff" size="15" />
-                  <TextField fx:id="username" onAction="#login" promptText="User Name" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
-               </children>
-            </HBox>
-            <VBox prefHeight="63.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER; -fx-spacing: 10;" VBox.vgrow="ALWAYS">
-               <children>
-                  <Text fx:id="register" fill="#0598ff" onMouseClicked="#register" strokeType="OUTSIDE" strokeWidth="0.0" text="You don't have an account yet? Click here" />
-               </children>
-               <children>
-                  <Text fx:id="feedback" text="" />
-               </children>
+      <VBox prefHeight="445.0" prefWidth="739.0" style="-fx-spacing: 10; -fx-alignment: TOP_CENTER; -fx-padding: 10;"
+            BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+         <HBox prefHeight="131.0" prefWidth="350.0" style="-fx-alignment: TOP_RIGHT; -fx-padding: 10; -fx-spacing: 10;"
+               VBox.vgrow="ALWAYS">
+            <FontAwesomeIconView fill="#0598ff" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#handleResize"
+                                 size="16"/>
+            <FontAwesomeIconView fill="#0598ff" glyphName="CLOSE" onMouseClicked="#exit" size="18" text=""/>
+         </HBox>
+         <FontAwesomeIconView fill="#0598ff" glyphName="USERS" size="27"/>
+         <HBox prefHeight="55.0" prefWidth="350.0"
+               style="-fx-alignment: BOTTOM_CENTER; -fx-spacing: 10; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+            <FontAwesomeIconView fill="#0598ff" glyphName="USER" selectionFill="#0598ff" size="15"/>
+            <TextField fx:id="username" onAction="#login" promptText="User Name"
+                       style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;"/>
+         </HBox>
+         <VBox prefHeight="63.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER; -fx-spacing: 10;"
+               VBox.vgrow="ALWAYS">
+            <Text fx:id="register" fill="#0598ff" onMouseClicked="#register" strokeType="OUTSIDE" strokeWidth="0.0"
+                  text="You don't have an account yet? Click here"/>
+            <Text fx:id="feedback"/>
+         </VBox>
+         <HBox prefHeight="125.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER;" VBox.vgrow="ALWAYS">
+            <VBox spacing="5">
+               <StackPane HBox.hgrow="ALWAYS">
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="32.0"
+                          prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE"/>
+               </StackPane>
+               <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0"/>
             </VBox>
-            <HBox prefHeight="125.0" prefWidth="350.0" style="-fx-alignment: TOP_CENTER;" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox spacing="5">
-                     <StackPane HBox.hgrow="ALWAYS">
-                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Login" textFill="WHITE" />
-                     </StackPane>
-                     <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
-                  </VBox>
-               </children>
-            </HBox>
-            <Text fx:id="welcome" fill="#0598ff" layoutX="114.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to our Email!" />
-         </children>
+         </HBox>
+         <Text fx:id="welcome" fill="#0598ff" layoutX="114.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0"
+               text="Welcome to our Email!"/>
       </VBox>
    </center>
 </BorderPane>

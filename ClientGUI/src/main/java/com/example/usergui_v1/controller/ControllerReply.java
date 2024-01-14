@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -104,7 +106,7 @@ public class ControllerReply {
                     handleClose();
                 }
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             System.out.println("There was a problem while replying an email " + e);
         }
     }
