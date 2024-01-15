@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocketManager implements AutoCloseable {
     private ObjectInputStream objectInputStream;
@@ -208,16 +209,16 @@ public class SocketManager implements AutoCloseable {
         try {
             this.username = username;
             ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            final AtomicInteger count = new AtomicInteger(0); // Use AtomicInteger for thread safety
             executorService.scheduleAtFixedRate(() -> {
-                int count = 0;
                 try {
                     MailBox updated;
-                    if (count == 0) {
+                    if (count.get() == 0) {
                         updated = getUpdatedMailbox(true);
                     } else {
                         updated = getUpdatedMailbox(false);
                     }
-                    count++;
+                    count.incrementAndGet(); // Increment the count
                     if (updated != null) {
                         System.out.println(updated);
                         Platform.runLater(() -> temp.setMailBox(updated));
