@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class SocketManager implements AutoCloseable {
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
@@ -26,6 +30,7 @@ public class SocketManager implements AutoCloseable {
     private Email toDelete;
     private boolean type;
     private String responseRegister;
+
 
     public SocketManager() {
     }
@@ -202,27 +207,25 @@ public class SocketManager implements AutoCloseable {
     public void Refresh(ControllerList temp, String username) {
         try {
             this.username = username;
-            new Thread(() -> {
+            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(() -> {
                 int count = 0;
-                while (true) {
-                    try {
-                        MailBox updated;
-                        if (count == 0) {
-                            updated = getUpdatedMailbox(true);
-                        } else {
-                            updated = getUpdatedMailbox(false);
-                        }
-                        count++;
-                        if (updated != null) {
-                            System.out.println(updated);
-                            Platform.runLater(() -> temp.setMailBox(updated));
-                        }
-                        Thread.sleep(6000);
-                    } catch (InterruptedException | NullPointerException e) {
-                        System.out.println("Error in update thread " + e);
+                try {
+                    MailBox updated;
+                    if (count == 0) {
+                        updated = getUpdatedMailbox(true);
+                    } else {
+                        updated = getUpdatedMailbox(false);
                     }
+                    count++;
+                    if (updated != null) {
+                        System.out.println(updated);
+                        Platform.runLater(() -> temp.setMailBox(updated));
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Error in update thread " + e);
                 }
-            }).start();
+            }, 0, 6, TimeUnit.SECONDS);
         } catch (NullPointerException e) {
             System.out.println("There was a problem while refreshing" + e);
         }
